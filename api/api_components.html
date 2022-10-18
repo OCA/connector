@@ -10,7 +10,9 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Models" href="api_backend.html" />
@@ -19,10 +21,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js "></script>
-<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
 
 <script>
   (function(i, s, o, g, r, a, m) {
@@ -161,8 +163,27 @@
 <li class="toctree-l2"><a class="reference internal" href="api_queue.html#module-odoo.addons.queue_job.models.base">Models</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api_exception.html">Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_exception.html">Exceptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_exception.html#connector.exception.ConnectorException"><code class="docutils literal notranslate"><span class="pre">ConnectorException</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_exception.html#connector.exception.NoConnectorUnitError"><code class="docutils literal notranslate"><span class="pre">NoConnectorUnitError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_exception.html#connector.exception.InvalidDataError"><code class="docutils literal notranslate"><span class="pre">InvalidDataError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_exception.html#connector.exception.MappingError"><code class="docutils literal notranslate"><span class="pre">MappingError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_exception.html#connector.exception.NetworkRetryableError"><code class="docutils literal notranslate"><span class="pre">NetworkRetryableError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_exception.html#connector.exception.NoExternalId"><code class="docutils literal notranslate"><span class="pre">NoExternalId</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_exception.html#connector.exception.IDMissingInBackend"><code class="docutils literal notranslate"><span class="pre">IDMissingInBackend</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_exception.html#connector.exception.ManyIDSInBackend"><code class="docutils literal notranslate"><span class="pre">ManyIDSInBackend</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_channels.html">Channels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.PriorityQueue"><code class="docutils literal notranslate"><span class="pre">PriorityQueue</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.SafeSet"><code class="docutils literal notranslate"><span class="pre">SafeSet</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelJob"><code class="docutils literal notranslate"><span class="pre">ChannelJob</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelQueue"><code class="docutils literal notranslate"><span class="pre">ChannelQueue</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel"><code class="docutils literal notranslate"><span class="pre">Channel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.split_strip"><code class="docutils literal notranslate"><span class="pre">split_strip()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager"><code class="docutils literal notranslate"><span class="pre">ChannelManager</span></code></a></li>
+</ul>
+</li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../project/contribute.html">Contribute</a><ul>
@@ -190,24 +211,238 @@
 <li><a class="reference internal" href="#">Components</a><ul>
 <li><a class="reference internal" href="#module-connector.components.core">Core Components</a><ul>
 <li><a class="reference internal" href="#base-component">Base Component</a></li>
+<li><a class="reference internal" href="#connector.components.core.BaseConnectorComponent"><code class="docutils literal notranslate"><span class="pre">BaseConnectorComponent</span></code></a><ul>
+<li><a class="reference internal" href="#connector.components.core.BaseConnectorComponent._name"><code class="docutils literal notranslate"><span class="pre">BaseConnectorComponent._name</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.core.BaseConnectorComponent.backend_record"><code class="docutils literal notranslate"><span class="pre">BaseConnectorComponent.backend_record</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.core.BaseConnectorComponent.binder_for"><code class="docutils literal notranslate"><span class="pre">BaseConnectorComponent.binder_for()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.core.BaseConnectorComponent.advisory_lock_or_retry"><code class="docutils literal notranslate"><span class="pre">BaseConnectorComponent.advisory_lock_or_retry()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-connector.components.binder">Connector Components</a><ul>
 <li><a class="reference internal" href="#binders">Binders</a></li>
+<li><a class="reference internal" href="#connector.components.binder.Binder"><code class="docutils literal notranslate"><span class="pre">Binder</span></code></a><ul>
+<li><a class="reference internal" href="#connector.components.binder.Binder._name"><code class="docutils literal notranslate"><span class="pre">Binder._name</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.binder.Binder._inherit"><code class="docutils literal notranslate"><span class="pre">Binder._inherit</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.binder.Binder._usage"><code class="docutils literal notranslate"><span class="pre">Binder._usage</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.binder.Binder._external_field"><code class="docutils literal notranslate"><span class="pre">Binder._external_field</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.binder.Binder._backend_field"><code class="docutils literal notranslate"><span class="pre">Binder._backend_field</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.binder.Binder._odoo_field"><code class="docutils literal notranslate"><span class="pre">Binder._odoo_field</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.binder.Binder._sync_date_field"><code class="docutils literal notranslate"><span class="pre">Binder._sync_date_field</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.binder.Binder.to_internal"><code class="docutils literal notranslate"><span class="pre">Binder.to_internal()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.binder.Binder.to_external"><code class="docutils literal notranslate"><span class="pre">Binder.to_external()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.binder.Binder.bind"><code class="docutils literal notranslate"><span class="pre">Binder.bind()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.binder.Binder.unwrap_binding"><code class="docutils literal notranslate"><span class="pre">Binder.unwrap_binding()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.binder.Binder.unwrap_model"><code class="docutils literal notranslate"><span class="pre">Binder.unwrap_model()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#mappers">Mappers</a></li>
+<li><a class="reference internal" href="#connector.components.mapper.Mapper"><code class="docutils literal notranslate"><span class="pre">Mapper</span></code></a><ul>
+<li><a class="reference internal" href="#connector.components.mapper.Mapper._name"><code class="docutils literal notranslate"><span class="pre">Mapper._name</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.Mapper._inherit"><code class="docutils literal notranslate"><span class="pre">Mapper._inherit</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.Mapper._usage"><code class="docutils literal notranslate"><span class="pre">Mapper._usage</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.Mapper.map_methods"><code class="docutils literal notranslate"><span class="pre">Mapper.map_methods</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.Mapper.options"><code class="docutils literal notranslate"><span class="pre">Mapper.options</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.Mapper.changed_by_fields"><code class="docutils literal notranslate"><span class="pre">Mapper.changed_by_fields()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.Mapper.map_record"><code class="docutils literal notranslate"><span class="pre">Mapper.map_record()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.Mapper.finalize"><code class="docutils literal notranslate"><span class="pre">Mapper.finalize()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connector.components.mapper.ImportMapper"><code class="docutils literal notranslate"><span class="pre">ImportMapper</span></code></a><ul>
+<li><a class="reference internal" href="#connector.components.mapper.ImportMapper._name"><code class="docutils literal notranslate"><span class="pre">ImportMapper._name</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.ImportMapper._inherit"><code class="docutils literal notranslate"><span class="pre">ImportMapper._inherit</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.ImportMapper._usage"><code class="docutils literal notranslate"><span class="pre">ImportMapper._usage</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connector.components.mapper.ExportMapper"><code class="docutils literal notranslate"><span class="pre">ExportMapper</span></code></a><ul>
+<li><a class="reference internal" href="#connector.components.mapper.ExportMapper._name"><code class="docutils literal notranslate"><span class="pre">ExportMapper._name</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.ExportMapper._inherit"><code class="docutils literal notranslate"><span class="pre">ExportMapper._inherit</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.ExportMapper._usage"><code class="docutils literal notranslate"><span class="pre">ExportMapper._usage</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connector.components.mapper.MapChild"><code class="docutils literal notranslate"><span class="pre">MapChild</span></code></a><ul>
+<li><a class="reference internal" href="#connector.components.mapper.MapChild._name"><code class="docutils literal notranslate"><span class="pre">MapChild._name</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.MapChild._inherit"><code class="docutils literal notranslate"><span class="pre">MapChild._inherit</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.MapChild._usage"><code class="docutils literal notranslate"><span class="pre">MapChild._usage</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.MapChild.skip_item"><code class="docutils literal notranslate"><span class="pre">MapChild.skip_item()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.MapChild.get_items"><code class="docutils literal notranslate"><span class="pre">MapChild.get_items()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.MapChild.get_item_values"><code class="docutils literal notranslate"><span class="pre">MapChild.get_item_values()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.MapChild.format_items"><code class="docutils literal notranslate"><span class="pre">MapChild.format_items()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connector.components.mapper.ImportMapChild"><code class="docutils literal notranslate"><span class="pre">ImportMapChild</span></code></a><ul>
+<li><a class="reference internal" href="#connector.components.mapper.ImportMapChild._name"><code class="docutils literal notranslate"><span class="pre">ImportMapChild._name</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.ImportMapChild._inherit"><code class="docutils literal notranslate"><span class="pre">ImportMapChild._inherit</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.ImportMapChild._usage"><code class="docutils literal notranslate"><span class="pre">ImportMapChild._usage</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.ImportMapChild.format_items"><code class="docutils literal notranslate"><span class="pre">ImportMapChild.format_items()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connector.components.mapper.ExportMapChild"><code class="docutils literal notranslate"><span class="pre">ExportMapChild</span></code></a><ul>
+<li><a class="reference internal" href="#connector.components.mapper.ExportMapChild._name"><code class="docutils literal notranslate"><span class="pre">ExportMapChild._name</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.ExportMapChild._inherit"><code class="docutils literal notranslate"><span class="pre">ExportMapChild._inherit</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.ExportMapChild._usage"><code class="docutils literal notranslate"><span class="pre">ExportMapChild._usage</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connector.components.mapper.MapRecord"><code class="docutils literal notranslate"><span class="pre">MapRecord</span></code></a><ul>
+<li><a class="reference internal" href="#connector.components.mapper.MapRecord.update"><code class="docutils literal notranslate"><span class="pre">MapRecord.update()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.MapRecord.values"><code class="docutils literal notranslate"><span class="pre">MapRecord.values()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.MapRecord.parent"><code class="docutils literal notranslate"><span class="pre">MapRecord.parent</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.MapRecord.source"><code class="docutils literal notranslate"><span class="pre">MapRecord.source</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connector.components.mapper.changed_by"><code class="docutils literal notranslate"><span class="pre">changed_by()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.convert"><code class="docutils literal notranslate"><span class="pre">convert()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.external_to_m2o"><code class="docutils literal notranslate"><span class="pre">external_to_m2o()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.follow_m2o_relations"><code class="docutils literal notranslate"><span class="pre">follow_m2o_relations()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.m2o_to_external"><code class="docutils literal notranslate"><span class="pre">m2o_to_external()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.mapping"><code class="docutils literal notranslate"><span class="pre">mapping()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.none"><code class="docutils literal notranslate"><span class="pre">none()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.mapper.only_create"><code class="docutils literal notranslate"><span class="pre">only_create()</span></code></a></li>
 <li><a class="reference internal" href="#backend-adapter">Backend Adapter</a></li>
+<li><a class="reference internal" href="#connector.components.backend_adapter.BackendAdapter"><code class="docutils literal notranslate"><span class="pre">BackendAdapter</span></code></a><ul>
+<li><a class="reference internal" href="#connector.components.backend_adapter.BackendAdapter._name"><code class="docutils literal notranslate"><span class="pre">BackendAdapter._name</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.backend_adapter.BackendAdapter._inherit"><code class="docutils literal notranslate"><span class="pre">BackendAdapter._inherit</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.backend_adapter.BackendAdapter._usage"><code class="docutils literal notranslate"><span class="pre">BackendAdapter._usage</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connector.components.backend_adapter.CRUDAdapter"><code class="docutils literal notranslate"><span class="pre">CRUDAdapter</span></code></a><ul>
+<li><a class="reference internal" href="#connector.components.backend_adapter.CRUDAdapter._name"><code class="docutils literal notranslate"><span class="pre">CRUDAdapter._name</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.backend_adapter.CRUDAdapter._inherit"><code class="docutils literal notranslate"><span class="pre">CRUDAdapter._inherit</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.backend_adapter.CRUDAdapter._usage"><code class="docutils literal notranslate"><span class="pre">CRUDAdapter._usage</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.backend_adapter.CRUDAdapter.search"><code class="docutils literal notranslate"><span class="pre">CRUDAdapter.search()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.backend_adapter.CRUDAdapter.read"><code class="docutils literal notranslate"><span class="pre">CRUDAdapter.read()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.backend_adapter.CRUDAdapter.search_read"><code class="docutils literal notranslate"><span class="pre">CRUDAdapter.search_read()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.backend_adapter.CRUDAdapter.create"><code class="docutils literal notranslate"><span class="pre">CRUDAdapter.create()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.backend_adapter.CRUDAdapter.write"><code class="docutils literal notranslate"><span class="pre">CRUDAdapter.write()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.backend_adapter.CRUDAdapter.delete"><code class="docutils literal notranslate"><span class="pre">CRUDAdapter.delete()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#synchronizer">Synchronizer</a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Synchronizer"><code class="docutils literal notranslate"><span class="pre">Synchronizer</span></code></a><ul>
+<li><a class="reference internal" href="#connector.components.synchronizer.Synchronizer._name"><code class="docutils literal notranslate"><span class="pre">Synchronizer._name</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Synchronizer._inherit"><code class="docutils literal notranslate"><span class="pre">Synchronizer._inherit</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Synchronizer._base_mapper_usage"><code class="docutils literal notranslate"><span class="pre">Synchronizer._base_mapper_usage</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Synchronizer._base_backend_adapter_usage"><code class="docutils literal notranslate"><span class="pre">Synchronizer._base_backend_adapter_usage</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Synchronizer.run"><code class="docutils literal notranslate"><span class="pre">Synchronizer.run()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Synchronizer.mapper"><code class="docutils literal notranslate"><span class="pre">Synchronizer.mapper</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Synchronizer.binder"><code class="docutils literal notranslate"><span class="pre">Synchronizer.binder</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Synchronizer.backend_adapter"><code class="docutils literal notranslate"><span class="pre">Synchronizer.backend_adapter</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Exporter"><code class="docutils literal notranslate"><span class="pre">Exporter</span></code></a><ul>
+<li><a class="reference internal" href="#connector.components.synchronizer.Exporter._name"><code class="docutils literal notranslate"><span class="pre">Exporter._name</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Exporter._inherit"><code class="docutils literal notranslate"><span class="pre">Exporter._inherit</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Exporter._usage"><code class="docutils literal notranslate"><span class="pre">Exporter._usage</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Exporter._base_mapper_usage"><code class="docutils literal notranslate"><span class="pre">Exporter._base_mapper_usage</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter"><code class="docutils literal notranslate"><span class="pre">GenericExporter</span></code></a><ul>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._name"><code class="docutils literal notranslate"><span class="pre">GenericExporter._name</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._inherit"><code class="docutils literal notranslate"><span class="pre">GenericExporter._inherit</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._default_binding_field"><code class="docutils literal notranslate"><span class="pre">GenericExporter._default_binding_field</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._should_import"><code class="docutils literal notranslate"><span class="pre">GenericExporter._should_import()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._delay_import"><code class="docutils literal notranslate"><span class="pre">GenericExporter._delay_import()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter.run"><code class="docutils literal notranslate"><span class="pre">GenericExporter.run()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._run"><code class="docutils literal notranslate"><span class="pre">GenericExporter._run()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._after_export"><code class="docutils literal notranslate"><span class="pre">GenericExporter._after_export()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._lock"><code class="docutils literal notranslate"><span class="pre">GenericExporter._lock()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._has_to_skip"><code class="docutils literal notranslate"><span class="pre">GenericExporter._has_to_skip()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._retry_unique_violation"><code class="docutils literal notranslate"><span class="pre">GenericExporter._retry_unique_violation()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._export_dependency"><code class="docutils literal notranslate"><span class="pre">GenericExporter._export_dependency()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._export_dependencies"><code class="docutils literal notranslate"><span class="pre">GenericExporter._export_dependencies()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._map_data"><code class="docutils literal notranslate"><span class="pre">GenericExporter._map_data()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._validate_create_data"><code class="docutils literal notranslate"><span class="pre">GenericExporter._validate_create_data()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._validate_update_data"><code class="docutils literal notranslate"><span class="pre">GenericExporter._validate_update_data()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._create_data"><code class="docutils literal notranslate"><span class="pre">GenericExporter._create_data()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._create"><code class="docutils literal notranslate"><span class="pre">GenericExporter._create()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._update_data"><code class="docutils literal notranslate"><span class="pre">GenericExporter._update_data()</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.GenericExporter._update"><code class="docutils literal notranslate"><span class="pre">GenericExporter._update()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Importer"><code class="docutils literal notranslate"><span class="pre">Importer</span></code></a><ul>
+<li><a class="reference internal" href="#connector.components.synchronizer.Importer._name"><code class="docutils literal notranslate"><span class="pre">Importer._name</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Importer._inherit"><code class="docutils literal notranslate"><span class="pre">Importer._inherit</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Importer._usage"><code class="docutils literal notranslate"><span class="pre">Importer._usage</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Importer._base_mapper_usage"><code class="docutils literal notranslate"><span class="pre">Importer._base_mapper_usage</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Deleter"><code class="docutils literal notranslate"><span class="pre">Deleter</span></code></a><ul>
+<li><a class="reference internal" href="#connector.components.synchronizer.Deleter._name"><code class="docutils literal notranslate"><span class="pre">Deleter._name</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Deleter._inherit"><code class="docutils literal notranslate"><span class="pre">Deleter._inherit</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.synchronizer.Deleter._usage"><code class="docutils literal notranslate"><span class="pre">Deleter._usage</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#listeners">Listeners</a></li>
+<li><a class="reference internal" href="#connector.components.listener.ConnectorListener"><code class="docutils literal notranslate"><span class="pre">ConnectorListener</span></code></a><ul>
+<li><a class="reference internal" href="#connector.components.listener.ConnectorListener._name"><code class="docutils literal notranslate"><span class="pre">ConnectorListener._name</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.listener.ConnectorListener._inherit"><code class="docutils literal notranslate"><span class="pre">ConnectorListener._inherit</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.listener.ConnectorListener.no_connector_export"><code class="docutils literal notranslate"><span class="pre">ConnectorListener.no_connector_export()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connector.components.locker.RecordLocker"><code class="docutils literal notranslate"><span class="pre">RecordLocker</span></code></a><ul>
+<li><a class="reference internal" href="#connector.components.locker.RecordLocker._name"><code class="docutils literal notranslate"><span class="pre">RecordLocker._name</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.locker.RecordLocker._inherit"><code class="docutils literal notranslate"><span class="pre">RecordLocker._inherit</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.locker.RecordLocker._usage"><code class="docutils literal notranslate"><span class="pre">RecordLocker._usage</span></code></a></li>
+<li><a class="reference internal" href="#connector.components.locker.RecordLocker.lock"><code class="docutils literal notranslate"><span class="pre">RecordLocker.lock()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-odoo.addons.component.models.collection">Components Collection Model</a><ul>
 <li><a class="reference internal" href="#collection-model">Collection Model</a></li>
+<li><a class="reference internal" href="#odoo.addons.component.models.collection.Collection"><code class="docutils literal notranslate"><span class="pre">Collection</span></code></a><ul>
+<li><a class="reference internal" href="#odoo.addons.component.models.collection.Collection.work_on"><code class="docutils literal notranslate"><span class="pre">Collection.work_on()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-odoo.addons.component.exception">Components Exceptions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-odoo.addons.component.exception">Components Exceptions</a><ul>
+<li><a class="reference internal" href="#odoo.addons.component.exception.ComponentException"><code class="docutils literal notranslate"><span class="pre">ComponentException</span></code></a></li>
+<li><a class="reference internal" href="#odoo.addons.component.exception.NoComponentError"><code class="docutils literal notranslate"><span class="pre">NoComponentError</span></code></a></li>
+<li><a class="reference internal" href="#odoo.addons.component.exception.SeveralComponentError"><code class="docutils literal notranslate"><span class="pre">SeveralComponentError</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#components-internals">Components Internals</a><ul>
 <li><a class="reference internal" href="#core">Core</a></li>
+<li><a class="reference internal" href="#odoo.addons.component.core.ComponentDatabases"><code class="docutils literal notranslate"><span class="pre">ComponentDatabases</span></code></a></li>
+<li><a class="reference internal" href="#odoo.addons.component.core.ComponentRegistry"><code class="docutils literal notranslate"><span class="pre">ComponentRegistry</span></code></a><ul>
+<li><a class="reference internal" href="#odoo.addons.component.core.ComponentRegistry.get"><code class="docutils literal notranslate"><span class="pre">ComponentRegistry.get()</span></code></a></li>
+<li><a class="reference internal" href="#odoo.addons.component.core.ComponentRegistry.load_components"><code class="docutils literal notranslate"><span class="pre">ComponentRegistry.load_components()</span></code></a></li>
+<li><a class="reference internal" href="#odoo.addons.component.core.ComponentRegistry.lookup"><code class="docutils literal notranslate"><span class="pre">ComponentRegistry.lookup()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#odoo.addons.component.core.WorkContext"><code class="docutils literal notranslate"><span class="pre">WorkContext</span></code></a><ul>
+<li><a class="reference internal" href="#odoo.addons.component.core.WorkContext.model_name"><code class="docutils literal notranslate"><span class="pre">WorkContext.model_name</span></code></a></li>
+<li><a class="reference internal" href="#odoo.addons.component.core.WorkContext.collection"><code class="docutils literal notranslate"><span class="pre">WorkContext.collection</span></code></a></li>
+<li><a class="reference internal" href="#odoo.addons.component.core.WorkContext.model"><code class="docutils literal notranslate"><span class="pre">WorkContext.model</span></code></a></li>
+<li><a class="reference internal" href="#odoo.addons.component.core.WorkContext.env"><code class="docutils literal notranslate"><span class="pre">WorkContext.env</span></code></a></li>
+<li><a class="reference internal" href="#odoo.addons.component.core.WorkContext.work_on"><code class="docutils literal notranslate"><span class="pre">WorkContext.work_on()</span></code></a></li>
+<li><a class="reference internal" href="#odoo.addons.component.core.WorkContext.component_by_name"><code class="docutils literal notranslate"><span class="pre">WorkContext.component_by_name()</span></code></a></li>
+<li><a class="reference internal" href="#odoo.addons.component.core.WorkContext.component"><code class="docutils literal notranslate"><span class="pre">WorkContext.component()</span></code></a></li>
+<li><a class="reference internal" href="#odoo.addons.component.core.WorkContext.many_components"><code class="docutils literal notranslate"><span class="pre">WorkContext.many_components()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#odoo.addons.component.core.MetaComponent"><code class="docutils literal notranslate"><span class="pre">MetaComponent</span></code></a><ul>
+<li><a class="reference internal" href="#odoo.addons.component.core.MetaComponent.apply_on_models"><code class="docutils literal notranslate"><span class="pre">MetaComponent.apply_on_models</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#odoo.addons.component.core.AbstractComponent"><code class="docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a><ul>
+<li><a class="reference internal" href="#odoo.addons.component.core.AbstractComponent.collection"><code class="docutils literal notranslate"><span class="pre">AbstractComponent.collection</span></code></a></li>
+<li><a class="reference internal" href="#odoo.addons.component.core.AbstractComponent.env"><code class="docutils literal notranslate"><span class="pre">AbstractComponent.env</span></code></a></li>
+<li><a class="reference internal" href="#odoo.addons.component.core.AbstractComponent.model"><code class="docutils literal notranslate"><span class="pre">AbstractComponent.model</span></code></a></li>
+<li><a class="reference internal" href="#odoo.addons.component.core.AbstractComponent.component_by_name"><code class="docutils literal notranslate"><span class="pre">AbstractComponent.component_by_name()</span></code></a></li>
+<li><a class="reference internal" href="#odoo.addons.component.core.AbstractComponent.component"><code class="docutils literal notranslate"><span class="pre">AbstractComponent.component()</span></code></a></li>
+<li><a class="reference internal" href="#odoo.addons.component.core.AbstractComponent.many_components"><code class="docutils literal notranslate"><span class="pre">AbstractComponent.many_components()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#odoo.addons.component.core.Component"><code class="docutils literal notranslate"><span class="pre">Component</span></code></a></li>
 <li><a class="reference internal" href="#components-builder">Components Builder</a></li>
+<li><a class="reference internal" href="#odoo.addons.component.builder.ComponentBuilder"><code class="docutils literal notranslate"><span class="pre">ComponentBuilder</span></code></a><ul>
+<li><a class="reference internal" href="#odoo.addons.component.builder.ComponentBuilder.build_registry"><code class="docutils literal notranslate"><span class="pre">ComponentBuilder.build_registry()</span></code></a></li>
+<li><a class="reference internal" href="#odoo.addons.component.builder.ComponentBuilder.load_components"><code class="docutils literal notranslate"><span class="pre">ComponentBuilder.load_components()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -254,14 +489,14 @@
     <div class="body col-md-12 content" role="main">
       
   <div class="section" id="components">
-<span id="api-component"></span><h1>Components<a class="headerlink" href="#components" title="Permalink to this headline">¶</a></h1>
+<span id="api-component"></span><h1>Components<a class="headerlink" href="#components" title="Permalink to this heading">¶</a></h1>
 <p>Components are the blocks allowing to build a flexible and
 well decoupled code. They are based on the <code class="docutils literal notranslate"><span class="pre">component</span></code> addon, which
 can as well be used separately.</p>
 <div class="section" id="module-connector.components.core">
-<span id="core-components"></span><h2>Core Components<a class="headerlink" href="#module-connector.components.core" title="Permalink to this headline">¶</a></h2>
+<span id="core-components"></span><h2>Core Components<a class="headerlink" href="#module-connector.components.core" title="Permalink to this heading">¶</a></h2>
 <div class="section" id="base-component">
-<h3>Base Component<a class="headerlink" href="#base-component" title="Permalink to this headline">¶</a></h3>
+<h3>Base Component<a class="headerlink" href="#base-component" title="Permalink to this heading">¶</a></h3>
 <p>The connector proposes a ‘base’ Component, which can be used in
 the <code class="docutils literal notranslate"><span class="pre">_inherit</span></code> of your own components.  This is not a
 requirement.  It is already inherited by every component
@@ -313,22 +548,23 @@ Components</p>
 <p>The possibilities for components do not stop there, look at the
 <a class="reference internal" href="#connector.components.locker.RecordLocker" title="connector.components.locker.RecordLocker"><code class="xref py py-class docutils literal notranslate"><span class="pre">RecordLocker</span></code></a> for an example of
 single-purpose, decoupled component.</p>
+</div>
 <dl class="py class">
 <dt class="sig sig-object py" id="connector.components.core.BaseConnectorComponent">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.components.core.</span></span><span class="sig-name descname"><span class="pre">BaseConnectorComponent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/core.html#BaseConnectorComponent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.core.BaseConnectorComponent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.components.core.</span></span><span class="sig-name descname"><span class="pre">BaseConnectorComponent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/core.html#BaseConnectorComponent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.core.BaseConnectorComponent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></p>
 <p>Base component for the connector</p>
 <p>Is inherited by every components of the Connector (Binder, Mapper, …)
 and adds a few methods which are of common usage in the connectors.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.core.BaseConnectorComponent._name">
-<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.connector'</span></em><a class="headerlink" href="#connector.components.core.BaseConnectorComponent._name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.connector'</span></em><a class="headerlink" href="#connector.components.core.BaseConnectorComponent._name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the component</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="connector.components.core.BaseConnectorComponent.backend_record">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">backend_record</span></span><a class="headerlink" href="#connector.components.core.BaseConnectorComponent.backend_record" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">backend_record</span></span><a class="headerlink" href="#connector.components.core.BaseConnectorComponent.backend_record" title="Permalink to this definition">¶</a></dt>
 <dd><p>Backend record we are working with</p>
 </dd></dl>
 
@@ -376,18 +612,18 @@ be retried when the lock cannot be acquired.</p></li>
 </dd></dl>
 
 </div>
-</div>
 <div class="section" id="module-connector.components.binder">
-<span id="connector-components"></span><h2>Connector Components<a class="headerlink" href="#module-connector.components.binder" title="Permalink to this headline">¶</a></h2>
+<span id="connector-components"></span><h2>Connector Components<a class="headerlink" href="#module-connector.components.binder" title="Permalink to this heading">¶</a></h2>
 <div class="section" id="binders">
-<h3>Binders<a class="headerlink" href="#binders" title="Permalink to this headline">¶</a></h3>
+<h3>Binders<a class="headerlink" href="#binders" title="Permalink to this heading">¶</a></h3>
 <p>Binders are components that know how to find the external ID for an
 Odoo ID, how to find the Odoo ID for an external ID and how to
 create the binding between them.</p>
+</div>
 <dl class="py class">
 <dt class="sig sig-object py" id="connector.components.binder.Binder">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.components.binder.</span></span><span class="sig-name descname"><span class="pre">Binder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/binder.html#Binder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.binder.Binder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.components.binder.</span></span><span class="sig-name descname"><span class="pre">Binder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/binder.html#Binder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.binder.Binder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></p>
 <p>For one record of a model, capable to find an external or
 internal id, or create the binding (link) between them</p>
 <p>This is a default implementation that can be inherited or reimplemented
@@ -396,40 +632,40 @@ in the connectors.</p>
 the models they are binding.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.binder.Binder._name">
-<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.binder'</span></em><a class="headerlink" href="#connector.components.binder.Binder._name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.binder'</span></em><a class="headerlink" href="#connector.components.binder.Binder._name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the component</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.binder.Binder._inherit">
-<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.connector'</span></em><a class="headerlink" href="#connector.components.binder.Binder._inherit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.connector'</span></em><a class="headerlink" href="#connector.components.binder.Binder._inherit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name or list of names of the component(s) to inherit from</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.binder.Binder._usage">
-<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'binder'</span></em><a class="headerlink" href="#connector.components.binder.Binder._usage" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'binder'</span></em><a class="headerlink" href="#connector.components.binder.Binder._usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Component purpose (‘import.mapper’, …).</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.binder.Binder._external_field">
-<span class="sig-name descname"><span class="pre">_external_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'external_id'</span></em><a class="headerlink" href="#connector.components.binder.Binder._external_field" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_external_field</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'external_id'</span></em><a class="headerlink" href="#connector.components.binder.Binder._external_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.binder.Binder._backend_field">
-<span class="sig-name descname"><span class="pre">_backend_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'backend_id'</span></em><a class="headerlink" href="#connector.components.binder.Binder._backend_field" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_backend_field</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'backend_id'</span></em><a class="headerlink" href="#connector.components.binder.Binder._backend_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.binder.Binder._odoo_field">
-<span class="sig-name descname"><span class="pre">_odoo_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'odoo_id'</span></em><a class="headerlink" href="#connector.components.binder.Binder._odoo_field" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_odoo_field</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'odoo_id'</span></em><a class="headerlink" href="#connector.components.binder.Binder._odoo_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.binder.Binder._sync_date_field">
-<span class="sig-name descname"><span class="pre">_sync_date_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'sync_date'</span></em><a class="headerlink" href="#connector.components.binder.Binder._sync_date_field" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_sync_date_field</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'sync_date'</span></em><a class="headerlink" href="#connector.components.binder.Binder._sync_date_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -512,15 +748,15 @@ it will return <code class="docutils literal notranslate"><span class="pre">prod
 
 </dd></dl>
 
-</div>
 <span class="target" id="module-connector.components.mapper"></span><div class="section" id="mappers">
-<h3>Mappers<a class="headerlink" href="#mappers" title="Permalink to this headline">¶</a></h3>
+<h3>Mappers<a class="headerlink" href="#mappers" title="Permalink to this heading">¶</a></h3>
 <p>Mappers are the components responsible to transform
 external records into Odoo records and conversely.</p>
+</div>
 <dl class="py class">
 <dt class="sig sig-object py" id="connector.components.mapper.Mapper">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.components.mapper.</span></span><span class="sig-name descname"><span class="pre">Mapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#Mapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.mapper.Mapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.components.mapper.</span></span><span class="sig-name descname"><span class="pre">Mapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#Mapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.mapper.Mapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></p>
 <p>A Mapper translates an external record to an Odoo record and
 conversely. The output of a Mapper is a <code class="docutils literal notranslate"><span class="pre">dict</span></code>.</p>
 <p>3 types of mappings are supported:</p>
@@ -620,31 +856,31 @@ a <a class="reference internal" href="#connector.components.mapper.Mapper" title
 </div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.mapper.Mapper._name">
-<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.mapper'</span></em><a class="headerlink" href="#connector.components.mapper.Mapper._name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.mapper'</span></em><a class="headerlink" href="#connector.components.mapper.Mapper._name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the component</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.mapper.Mapper._inherit">
-<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.connector'</span></em><a class="headerlink" href="#connector.components.mapper.Mapper._inherit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.connector'</span></em><a class="headerlink" href="#connector.components.mapper.Mapper._inherit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name or list of names of the component(s) to inherit from</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.mapper.Mapper._usage">
-<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'mapper'</span></em><a class="headerlink" href="#connector.components.mapper.Mapper._usage" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'mapper'</span></em><a class="headerlink" href="#connector.components.mapper.Mapper._usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Component purpose (‘import.mapper’, …).</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="connector.components.mapper.Mapper.map_methods">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">map_methods</span></span><a class="headerlink" href="#connector.components.mapper.Mapper.map_methods" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">map_methods</span></span><a class="headerlink" href="#connector.components.mapper.Mapper.map_methods" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yield all the methods decorated with <code class="docutils literal notranslate"><span class="pre">&#64;mapping</span></code></p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="connector.components.mapper.Mapper.options">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#connector.components.mapper.Mapper.options" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#connector.components.mapper.Mapper.options" title="Permalink to this definition">¶</a></dt>
 <dd><p>Options can be accessed in the mapping methods with
 <code class="docutils literal notranslate"><span class="pre">self.options</span></code>.</p>
 </dd></dl>
@@ -698,25 +934,25 @@ returning them.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="connector.components.mapper.ImportMapper">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.components.mapper.</span></span><span class="sig-name descname"><span class="pre">ImportMapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#ImportMapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.mapper.ImportMapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.components.mapper.</span></span><span class="sig-name descname"><span class="pre">ImportMapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#ImportMapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.mapper.ImportMapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></p>
 <p><a class="reference internal" href="#connector.components.mapper.Mapper" title="connector.components.mapper.Mapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapper</span></code></a> for imports.</p>
 <p>Transform a record from a backend to an Odoo record</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.mapper.ImportMapper._name">
-<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.import.mapper'</span></em><a class="headerlink" href="#connector.components.mapper.ImportMapper._name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.import.mapper'</span></em><a class="headerlink" href="#connector.components.mapper.ImportMapper._name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the component</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.mapper.ImportMapper._inherit">
-<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.mapper'</span></em><a class="headerlink" href="#connector.components.mapper.ImportMapper._inherit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.mapper'</span></em><a class="headerlink" href="#connector.components.mapper.ImportMapper._inherit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name or list of names of the component(s) to inherit from</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.mapper.ImportMapper._usage">
-<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'import.mapper'</span></em><a class="headerlink" href="#connector.components.mapper.ImportMapper._usage" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'import.mapper'</span></em><a class="headerlink" href="#connector.components.mapper.ImportMapper._usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Component purpose (‘import.mapper’, …).</p>
 </dd></dl>
 
@@ -724,25 +960,25 @@ returning them.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="connector.components.mapper.ExportMapper">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.components.mapper.</span></span><span class="sig-name descname"><span class="pre">ExportMapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#ExportMapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.mapper.ExportMapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.components.mapper.</span></span><span class="sig-name descname"><span class="pre">ExportMapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#ExportMapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.mapper.ExportMapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></p>
 <p><a class="reference internal" href="#connector.components.mapper.Mapper" title="connector.components.mapper.Mapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapper</span></code></a> for exports.</p>
 <p>Transform a record from Odoo to a backend record</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.mapper.ExportMapper._name">
-<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.export.mapper'</span></em><a class="headerlink" href="#connector.components.mapper.ExportMapper._name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.export.mapper'</span></em><a class="headerlink" href="#connector.components.mapper.ExportMapper._name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the component</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.mapper.ExportMapper._inherit">
-<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.mapper'</span></em><a class="headerlink" href="#connector.components.mapper.ExportMapper._inherit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.mapper'</span></em><a class="headerlink" href="#connector.components.mapper.ExportMapper._inherit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name or list of names of the component(s) to inherit from</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.mapper.ExportMapper._usage">
-<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'export.mapper'</span></em><a class="headerlink" href="#connector.components.mapper.ExportMapper._usage" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'export.mapper'</span></em><a class="headerlink" href="#connector.components.mapper.ExportMapper._usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Component purpose (‘import.mapper’, …).</p>
 </dd></dl>
 
@@ -750,8 +986,8 @@ returning them.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="connector.components.mapper.MapChild">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.components.mapper.</span></span><span class="sig-name descname"><span class="pre">MapChild</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#MapChild"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.mapper.MapChild" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.components.mapper.</span></span><span class="sig-name descname"><span class="pre">MapChild</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#MapChild"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.mapper.MapChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></p>
 <p>MapChild is responsible to convert items.</p>
 <p>Items are sub-records of a main record.
 In this example, the items are the records in <code class="docutils literal notranslate"><span class="pre">lines</span></code>:</p>
@@ -791,19 +1027,19 @@ case-by-case basis by inheriting <a class="reference internal" href="#connector.
 <a class="reference internal" href="#connector.components.mapper.MapChild.format_items" title="connector.components.mapper.MapChild.format_items"><code class="xref py py-meth docutils literal notranslate"><span class="pre">format_items()</span></code></a>.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.mapper.MapChild._name">
-<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.map.child'</span></em><a class="headerlink" href="#connector.components.mapper.MapChild._name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.map.child'</span></em><a class="headerlink" href="#connector.components.mapper.MapChild._name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the component</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.mapper.MapChild._inherit">
-<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.connector'</span></em><a class="headerlink" href="#connector.components.mapper.MapChild._inherit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.connector'</span></em><a class="headerlink" href="#connector.components.mapper.MapChild._inherit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name or list of names of the component(s) to inherit from</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.mapper.MapChild._usage">
-<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#connector.components.mapper.MapChild._usage" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#connector.components.mapper.MapChild._usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Component purpose (‘import.mapper’, …).</p>
 </dd></dl>
 
@@ -885,24 +1121,24 @@ command</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="connector.components.mapper.ImportMapChild">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.components.mapper.</span></span><span class="sig-name descname"><span class="pre">ImportMapChild</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#ImportMapChild"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.mapper.ImportMapChild" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.components.mapper.</span></span><span class="sig-name descname"><span class="pre">ImportMapChild</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#ImportMapChild"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.mapper.ImportMapChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></p>
 <p><a class="reference internal" href="#connector.components.mapper.MapChild" title="connector.components.mapper.MapChild"><code class="xref py py-class docutils literal notranslate"><span class="pre">MapChild</span></code></a> for the Imports</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.mapper.ImportMapChild._name">
-<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.map.child.import'</span></em><a class="headerlink" href="#connector.components.mapper.ImportMapChild._name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.map.child.import'</span></em><a class="headerlink" href="#connector.components.mapper.ImportMapChild._name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the component</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.mapper.ImportMapChild._inherit">
-<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.map.child'</span></em><a class="headerlink" href="#connector.components.mapper.ImportMapChild._inherit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.map.child'</span></em><a class="headerlink" href="#connector.components.mapper.ImportMapChild._inherit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name or list of names of the component(s) to inherit from</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.mapper.ImportMapChild._usage">
-<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'import.map.child'</span></em><a class="headerlink" href="#connector.components.mapper.ImportMapChild._usage" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'import.map.child'</span></em><a class="headerlink" href="#connector.components.mapper.ImportMapChild._usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Component purpose (‘import.mapper’, …).</p>
 </dd></dl>
 
@@ -927,24 +1163,24 @@ command</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="connector.components.mapper.ExportMapChild">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.components.mapper.</span></span><span class="sig-name descname"><span class="pre">ExportMapChild</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#ExportMapChild"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.mapper.ExportMapChild" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.components.mapper.</span></span><span class="sig-name descname"><span class="pre">ExportMapChild</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#ExportMapChild"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.mapper.ExportMapChild" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></p>
 <p><a class="reference internal" href="#connector.components.mapper.MapChild" title="connector.components.mapper.MapChild"><code class="xref py py-class docutils literal notranslate"><span class="pre">MapChild</span></code></a> for the Exports</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.mapper.ExportMapChild._name">
-<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.map.child.export'</span></em><a class="headerlink" href="#connector.components.mapper.ExportMapChild._name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.map.child.export'</span></em><a class="headerlink" href="#connector.components.mapper.ExportMapChild._name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the component</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.mapper.ExportMapChild._inherit">
-<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.map.child'</span></em><a class="headerlink" href="#connector.components.mapper.ExportMapChild._inherit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.map.child'</span></em><a class="headerlink" href="#connector.components.mapper.ExportMapChild._inherit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name or list of names of the component(s) to inherit from</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.mapper.ExportMapChild._usage">
-<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'export.map.child'</span></em><a class="headerlink" href="#connector.components.mapper.ExportMapChild._usage" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'export.map.child'</span></em><a class="headerlink" href="#connector.components.mapper.ExportMapChild._usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Component purpose (‘import.mapper’, …).</p>
 </dd></dl>
 
@@ -952,7 +1188,7 @@ command</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="connector.components.mapper.MapRecord">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.components.mapper.</span></span><span class="sig-name descname"><span class="pre">MapRecord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#MapRecord"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.mapper.MapRecord" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.components.mapper.</span></span><span class="sig-name descname"><span class="pre">MapRecord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mapper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/mapper.html#MapRecord"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.mapper.MapRecord" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A record prepared to be converted using a <a class="reference internal" href="#connector.components.mapper.Mapper" title="connector.components.mapper.Mapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mapper</span></code></a>.</p>
 <p>MapRecord instances are prepared by <a class="reference internal" href="#connector.components.mapper.Mapper.map_record" title="connector.components.mapper.Mapper.map_record"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Mapper.map_record()</span></code></a>.</p>
@@ -1025,13 +1261,13 @@ mapping methods</p></li>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="connector.components.mapper.MapRecord.parent">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parent</span></span><a class="headerlink" href="#connector.components.mapper.MapRecord.parent" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parent</span></span><a class="headerlink" href="#connector.components.mapper.MapRecord.parent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parent record if the current record is an item</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="connector.components.mapper.MapRecord.source">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">source</span></span><a class="headerlink" href="#connector.components.mapper.MapRecord.source" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">source</span></span><a class="headerlink" href="#connector.components.mapper.MapRecord.source" title="Permalink to this definition">¶</a></dt>
 <dd><p>Source record to be converted</p>
 </dd></dl>
 
@@ -1200,32 +1436,32 @@ used only for the creation of the records.</p>
 </div>
 </dd></dl>
 
-</div>
 <span class="target" id="module-connector.components.backend_adapter"></span><div class="section" id="backend-adapter">
-<h3>Backend Adapter<a class="headerlink" href="#backend-adapter" title="Permalink to this headline">¶</a></h3>
+<h3>Backend Adapter<a class="headerlink" href="#backend-adapter" title="Permalink to this heading">¶</a></h3>
 <p>An external adapter has a common interface to speak with the backend.
 It translates the basic orders (search, read, write) to the protocol
 used by the backend.</p>
+</div>
 <dl class="py class">
 <dt class="sig sig-object py" id="connector.components.backend_adapter.BackendAdapter">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.components.backend_adapter.</span></span><span class="sig-name descname"><span class="pre">BackendAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/backend_adapter.html#BackendAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.backend_adapter.BackendAdapter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.components.backend_adapter.</span></span><span class="sig-name descname"><span class="pre">BackendAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/backend_adapter.html#BackendAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.backend_adapter.BackendAdapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></p>
 <p>Base Backend Adapter for the connectors</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.backend_adapter.BackendAdapter._name">
-<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.backend.adapter'</span></em><a class="headerlink" href="#connector.components.backend_adapter.BackendAdapter._name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.backend.adapter'</span></em><a class="headerlink" href="#connector.components.backend_adapter.BackendAdapter._name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the component</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.backend_adapter.BackendAdapter._inherit">
-<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.connector'</span></em><a class="headerlink" href="#connector.components.backend_adapter.BackendAdapter._inherit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.connector'</span></em><a class="headerlink" href="#connector.components.backend_adapter.BackendAdapter._inherit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name or list of names of the component(s) to inherit from</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.backend_adapter.BackendAdapter._usage">
-<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'backend.adapter'</span></em><a class="headerlink" href="#connector.components.backend_adapter.BackendAdapter._usage" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'backend.adapter'</span></em><a class="headerlink" href="#connector.components.backend_adapter.BackendAdapter._usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Component purpose (‘import.mapper’, …).</p>
 </dd></dl>
 
@@ -1233,27 +1469,27 @@ used by the backend.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="connector.components.backend_adapter.CRUDAdapter">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.components.backend_adapter.</span></span><span class="sig-name descname"><span class="pre">CRUDAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/backend_adapter.html#CRUDAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.backend_adapter.CRUDAdapter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.components.backend_adapter.</span></span><span class="sig-name descname"><span class="pre">CRUDAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/backend_adapter.html#CRUDAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.backend_adapter.CRUDAdapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></p>
 <p>Base External Adapter specialized in the handling
 of records on external systems.</p>
 <p>This is an empty shell, Components can inherit and implement their own
 implementation for the methods.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.backend_adapter.CRUDAdapter._name">
-<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.backend.adapter.crud'</span></em><a class="headerlink" href="#connector.components.backend_adapter.CRUDAdapter._name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.backend.adapter.crud'</span></em><a class="headerlink" href="#connector.components.backend_adapter.CRUDAdapter._name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the component</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.backend_adapter.CRUDAdapter._inherit">
-<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.backend.adapter'</span></em><a class="headerlink" href="#connector.components.backend_adapter.CRUDAdapter._inherit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.backend.adapter'</span></em><a class="headerlink" href="#connector.components.backend_adapter.CRUDAdapter._inherit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name or list of names of the component(s) to inherit from</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.backend_adapter.CRUDAdapter._usage">
-<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'backend.adapter'</span></em><a class="headerlink" href="#connector.components.backend_adapter.CRUDAdapter._usage" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'backend.adapter'</span></em><a class="headerlink" href="#connector.components.backend_adapter.CRUDAdapter._usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Component purpose (‘import.mapper’, …).</p>
 </dd></dl>
 
@@ -1297,41 +1533,41 @@ and returns their information</p>
 
 </dd></dl>
 
-</div>
 <span class="target" id="module-connector.components.synchronizer"></span><div class="section" id="synchronizer">
-<h3>Synchronizer<a class="headerlink" href="#synchronizer" title="Permalink to this headline">¶</a></h3>
+<h3>Synchronizer<a class="headerlink" href="#synchronizer" title="Permalink to this heading">¶</a></h3>
 <p>A synchronizer orchestrates a synchronization with a backend. It’s the actor
 who runs the flow and glues the logic of an import or export (or else).
 It uses other components for specialized tasks.</p>
 <p>For instance, it will use the mappings to convert the data between both
 systems, the backend adapters to read or write data on the backend and the
 binders to create the link between them.</p>
+</div>
 <dl class="py class">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Synchronizer">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.components.synchronizer.</span></span><span class="sig-name descname"><span class="pre">Synchronizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#Synchronizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.synchronizer.Synchronizer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.components.synchronizer.</span></span><span class="sig-name descname"><span class="pre">Synchronizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#Synchronizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.synchronizer.Synchronizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></p>
 <p>Base class for synchronizers</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Synchronizer._name">
-<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.synchronizer'</span></em><a class="headerlink" href="#connector.components.synchronizer.Synchronizer._name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.synchronizer'</span></em><a class="headerlink" href="#connector.components.synchronizer.Synchronizer._name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the component</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Synchronizer._inherit">
-<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.connector'</span></em><a class="headerlink" href="#connector.components.synchronizer.Synchronizer._inherit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.connector'</span></em><a class="headerlink" href="#connector.components.synchronizer.Synchronizer._inherit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name or list of names of the component(s) to inherit from</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Synchronizer._base_mapper_usage">
-<span class="sig-name descname"><span class="pre">_base_mapper_usage</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'mapper'</span></em><a class="headerlink" href="#connector.components.synchronizer.Synchronizer._base_mapper_usage" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_base_mapper_usage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'mapper'</span></em><a class="headerlink" href="#connector.components.synchronizer.Synchronizer._base_mapper_usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>usage of the component used as mapper, can be customized in sub-classes</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Synchronizer._base_backend_adapter_usage">
-<span class="sig-name descname"><span class="pre">_base_backend_adapter_usage</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'backend.adapter'</span></em><a class="headerlink" href="#connector.components.synchronizer.Synchronizer._base_backend_adapter_usage" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_base_backend_adapter_usage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'backend.adapter'</span></em><a class="headerlink" href="#connector.components.synchronizer.Synchronizer._base_backend_adapter_usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>usage of the component used as backend adapter,
 can be customized in sub-classes</p>
 </dd></dl>
@@ -1344,7 +1580,7 @@ can be customized in sub-classes</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Synchronizer.mapper">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">mapper</span></span><a class="headerlink" href="#connector.components.synchronizer.Synchronizer.mapper" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mapper</span></span><a class="headerlink" href="#connector.components.synchronizer.Synchronizer.mapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an instance of <code class="docutils literal notranslate"><span class="pre">Mapper</span></code> for the synchronization.</p>
 <p>The instanciation is delayed because some synchronisations do
 not need such an unit and the unit may not exist.</p>
@@ -1359,7 +1595,7 @@ not need such an unit and the unit may not exist.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Synchronizer.binder">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">binder</span></span><a class="headerlink" href="#connector.components.synchronizer.Synchronizer.binder" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">binder</span></span><a class="headerlink" href="#connector.components.synchronizer.Synchronizer.binder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an instance of <code class="docutils literal notranslate"><span class="pre">Binder</span></code> for the synchronization.</p>
 <p>The instanciation is delayed because some synchronisations do
 not need such an unit and the unit may not exist.</p>
@@ -1372,7 +1608,7 @@ not need such an unit and the unit may not exist.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Synchronizer.backend_adapter">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">backend_adapter</span></span><a class="headerlink" href="#connector.components.synchronizer.Synchronizer.backend_adapter" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">backend_adapter</span></span><a class="headerlink" href="#connector.components.synchronizer.Synchronizer.backend_adapter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an instance of <code class="docutils literal notranslate"><span class="pre">BackendAdapter</span></code> for the
 synchronization.</p>
 <p>The instanciation is delayed because some synchronisations do
@@ -1390,30 +1626,30 @@ not need such an unit and the unit may not exist.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Exporter">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.components.synchronizer.</span></span><span class="sig-name descname"><span class="pre">Exporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#Exporter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.synchronizer.Exporter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.components.synchronizer.</span></span><span class="sig-name descname"><span class="pre">Exporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#Exporter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.synchronizer.Exporter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></p>
 <p>Synchronizer for exporting data from Odoo to a backend</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Exporter._name">
-<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.exporter'</span></em><a class="headerlink" href="#connector.components.synchronizer.Exporter._name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.exporter'</span></em><a class="headerlink" href="#connector.components.synchronizer.Exporter._name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the component</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Exporter._inherit">
-<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.synchronizer'</span></em><a class="headerlink" href="#connector.components.synchronizer.Exporter._inherit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.synchronizer'</span></em><a class="headerlink" href="#connector.components.synchronizer.Exporter._inherit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name or list of names of the component(s) to inherit from</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Exporter._usage">
-<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'exporter'</span></em><a class="headerlink" href="#connector.components.synchronizer.Exporter._usage" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'exporter'</span></em><a class="headerlink" href="#connector.components.synchronizer.Exporter._usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Component purpose (‘import.mapper’, …).</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Exporter._base_mapper_usage">
-<span class="sig-name descname"><span class="pre">_base_mapper_usage</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'export.mapper'</span></em><a class="headerlink" href="#connector.components.synchronizer.Exporter._base_mapper_usage" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_base_mapper_usage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'export.mapper'</span></em><a class="headerlink" href="#connector.components.synchronizer.Exporter._base_mapper_usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>usage of the component used as mapper, can be customized in sub-classes</p>
 </dd></dl>
 
@@ -1421,24 +1657,24 @@ not need such an unit and the unit may not exist.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="connector.components.synchronizer.GenericExporter">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.components.synchronizer.</span></span><span class="sig-name descname"><span class="pre">GenericExporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">working_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.components.synchronizer.</span></span><span class="sig-name descname"><span class="pre">GenericExporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">working_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#GenericExporter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.synchronizer.GenericExporter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></p>
 <p>Generic Synchronizer for exporting data from Odoo to a backend</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.synchronizer.GenericExporter._name">
-<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'generic.exporter'</span></em><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'generic.exporter'</span></em><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the component</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.synchronizer.GenericExporter._inherit">
-<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.exporter'</span></em><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._inherit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.exporter'</span></em><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._inherit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name or list of names of the component(s) to inherit from</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.synchronizer.GenericExporter._default_binding_field">
-<span class="sig-name descname"><span class="pre">_default_binding_field</span></span><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._default_binding_field" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_default_binding_field</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#connector.components.synchronizer.GenericExporter._default_binding_field" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -1619,30 +1855,30 @@ are missing or invalid</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Importer">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.components.synchronizer.</span></span><span class="sig-name descname"><span class="pre">Importer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#Importer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.synchronizer.Importer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.components.synchronizer.</span></span><span class="sig-name descname"><span class="pre">Importer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#Importer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.synchronizer.Importer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></p>
 <p>Synchronizer for importing data from a backend to Odoo</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Importer._name">
-<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.importer'</span></em><a class="headerlink" href="#connector.components.synchronizer.Importer._name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.importer'</span></em><a class="headerlink" href="#connector.components.synchronizer.Importer._name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the component</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Importer._inherit">
-<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.synchronizer'</span></em><a class="headerlink" href="#connector.components.synchronizer.Importer._inherit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.synchronizer'</span></em><a class="headerlink" href="#connector.components.synchronizer.Importer._inherit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name or list of names of the component(s) to inherit from</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Importer._usage">
-<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'importer'</span></em><a class="headerlink" href="#connector.components.synchronizer.Importer._usage" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'importer'</span></em><a class="headerlink" href="#connector.components.synchronizer.Importer._usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Component purpose (‘import.mapper’, …).</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Importer._base_mapper_usage">
-<span class="sig-name descname"><span class="pre">_base_mapper_usage</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'import.mapper'</span></em><a class="headerlink" href="#connector.components.synchronizer.Importer._base_mapper_usage" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_base_mapper_usage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'import.mapper'</span></em><a class="headerlink" href="#connector.components.synchronizer.Importer._base_mapper_usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>usage of the component used as mapper, can be customized in sub-classes</p>
 </dd></dl>
 
@@ -1650,51 +1886,51 @@ are missing or invalid</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Deleter">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.components.synchronizer.</span></span><span class="sig-name descname"><span class="pre">Deleter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#Deleter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.synchronizer.Deleter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.components.synchronizer.</span></span><span class="sig-name descname"><span class="pre">Deleter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/synchronizer.html#Deleter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.synchronizer.Deleter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></p>
 <p>Synchronizer for deleting a record on the backend</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Deleter._name">
-<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.deleter'</span></em><a class="headerlink" href="#connector.components.synchronizer.Deleter._name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.deleter'</span></em><a class="headerlink" href="#connector.components.synchronizer.Deleter._name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the component</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Deleter._inherit">
-<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.synchronizer'</span></em><a class="headerlink" href="#connector.components.synchronizer.Deleter._inherit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.synchronizer'</span></em><a class="headerlink" href="#connector.components.synchronizer.Deleter._inherit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name or list of names of the component(s) to inherit from</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.synchronizer.Deleter._usage">
-<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'deleter'</span></em><a class="headerlink" href="#connector.components.synchronizer.Deleter._usage" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'deleter'</span></em><a class="headerlink" href="#connector.components.synchronizer.Deleter._usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>usage of the component used as mapper, can be customized in sub-classes</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
 <span class="target" id="module-connector.components.listener"></span><div class="section" id="listeners">
-<h3>Listeners<a class="headerlink" href="#listeners" title="Permalink to this headline">¶</a></h3>
+<h3>Listeners<a class="headerlink" href="#listeners" title="Permalink to this heading">¶</a></h3>
 <p>Listeners are Components notified when events happen.
 Documentation in <a class="reference internal" href="api_event.html#module-odoo.addons.component_event.components.event" title="odoo.addons.component_event.components.event"><code class="xref py py-mod docutils literal notranslate"><span class="pre">odoo.addons.component_event.components.event</span></code></a></p>
 <p>The base listener for the connectors add a method
 <a class="reference internal" href="#connector.components.listener.ConnectorListener.no_connector_export" title="connector.components.listener.ConnectorListener.no_connector_export"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ConnectorListener.no_connector_export()</span></code></a> which can be used with
 <code class="xref py py-func docutils literal notranslate"><span class="pre">odoo.addons.component_event.skip_if()</span></code>.</p>
+</div>
 <dl class="py class">
 <dt class="sig sig-object py" id="connector.components.listener.ConnectorListener">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.components.listener.</span></span><span class="sig-name descname"><span class="pre">ConnectorListener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/listener.html#ConnectorListener"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.listener.ConnectorListener" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.components.listener.</span></span><span class="sig-name descname"><span class="pre">ConnectorListener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/listener.html#ConnectorListener"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.listener.ConnectorListener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></p>
 <p>Base Backend Adapter for the connectors</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.listener.ConnectorListener._name">
-<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.connector.listener'</span></em><a class="headerlink" href="#connector.components.listener.ConnectorListener._name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.connector.listener'</span></em><a class="headerlink" href="#connector.components.listener.ConnectorListener._name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the component</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.listener.ConnectorListener._inherit">
-<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"> <span class="pre">=</span> <span class="pre">['base.connector',</span> <span class="pre">'base.event.listener']</span></em><a class="headerlink" href="#connector.components.listener.ConnectorListener._inherit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['base.connector',</span> <span class="pre">'base.event.listener']</span></em><a class="headerlink" href="#connector.components.listener.ConnectorListener._inherit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name or list of names of the component(s) to inherit from</p>
 </dd></dl>
 
@@ -1723,11 +1959,10 @@ on Events:</p>
 
 </dd></dl>
 
-</div>
 <span class="target" id="module-connector.components.locker"></span><dl class="py class">
 <dt class="sig sig-object py" id="connector.components.locker.RecordLocker">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">connector.components.locker.</span></span><span class="sig-name descname"><span class="pre">RecordLocker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/locker.html#RecordLocker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.locker.RecordLocker" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.Component" title="odoo.addons.component.core.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.Component</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.components.locker.</span></span><span class="sig-name descname"><span class="pre">RecordLocker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/components/locker.html#RecordLocker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.components.locker.RecordLocker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.Component" title="odoo.addons.component.core.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code></a></p>
 <p>Component allowing to lock record(s) for the current transaction</p>
 <p>Example of usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">component</span><span class="p">(</span><span class="s1">&#39;record.locker&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">lock</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">records</span><span class="p">)</span>
@@ -1736,19 +1971,19 @@ on Events:</p>
 <p>See the definition of <a class="reference internal" href="#connector.components.locker.RecordLocker.lock" title="connector.components.locker.RecordLocker.lock"><code class="xref py py-meth docutils literal notranslate"><span class="pre">lock()</span></code></a> for details.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.locker.RecordLocker._name">
-<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'base.record.locker'</span></em><a class="headerlink" href="#connector.components.locker.RecordLocker._name" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'base.record.locker'</span></em><a class="headerlink" href="#connector.components.locker.RecordLocker._name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the component</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.locker.RecordLocker._inherit">
-<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"> <span class="pre">=</span> <span class="pre">['base.connector']</span></em><a class="headerlink" href="#connector.components.locker.RecordLocker._inherit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_inherit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['base.connector']</span></em><a class="headerlink" href="#connector.components.locker.RecordLocker._inherit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name or list of names of the component(s) to inherit from</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="connector.components.locker.RecordLocker._usage">
-<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'record.locker'</span></em><a class="headerlink" href="#connector.components.locker.RecordLocker._usage" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_usage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'record.locker'</span></em><a class="headerlink" href="#connector.components.locker.RecordLocker._usage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Component purpose (‘import.mapper’, …).</p>
 </dd></dl>
 
@@ -1785,17 +2020,18 @@ increased.</p></li>
 
 </div>
 <div class="section" id="module-odoo.addons.component.models.collection">
-<span id="components-collection-model"></span><h2>Components Collection Model<a class="headerlink" href="#module-odoo.addons.component.models.collection" title="Permalink to this headline">¶</a></h2>
+<span id="components-collection-model"></span><h2>Components Collection Model<a class="headerlink" href="#module-odoo.addons.component.models.collection" title="Permalink to this heading">¶</a></h2>
 <div class="section" id="collection-model">
-<h3>Collection Model<a class="headerlink" href="#collection-model" title="Permalink to this headline">¶</a></h3>
+<h3>Collection Model<a class="headerlink" href="#collection-model" title="Permalink to this heading">¶</a></h3>
 <p>This is the base Model shared by all the Collections.
 In the context of the Connector, a collection is the Backend.
 The <cite>_name</cite> given to the Collection Model will be the name
 to use in the <cite>_collection</cite> of the Components usable for the Backend.</p>
+</div>
 <dl class="py class">
 <dt class="sig sig-object py" id="odoo.addons.component.models.collection.Collection">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.models.collection.</span></span><span class="sig-name descname"><span class="pre">Collection</span></span><a class="reference internal" href="../_modules/odoo/addons/component/models/collection.html#Collection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.models.collection.Collection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.models.BaseModel</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.models.collection.</span></span><span class="sig-name descname"><span class="pre">Collection</span></span><a class="reference internal" href="../_modules/odoo/addons/component/models/collection.html#Collection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.models.collection.Collection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
 <p>The model on which components are subscribed</p>
 <p>It would be for instance the <code class="docutils literal notranslate"><span class="pre">backend</span></code> for the connectors.</p>
 <p>Example:</p>
@@ -1861,36 +2097,35 @@ at the end of the work session, such as:</p>
 </dd></dl>
 
 </div>
-</div>
 <div class="section" id="module-odoo.addons.component.exception">
-<span id="components-exceptions"></span><h2>Components Exceptions<a class="headerlink" href="#module-odoo.addons.component.exception" title="Permalink to this headline">¶</a></h2>
+<span id="components-exceptions"></span><h2>Components Exceptions<a class="headerlink" href="#module-odoo.addons.component.exception" title="Permalink to this heading">¶</a></h2>
 <dl class="py exception">
 <dt class="sig sig-object py" id="odoo.addons.component.exception.ComponentException">
-<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.exception.</span></span><span class="sig-name descname"><span class="pre">ComponentException</span></span><a class="reference internal" href="../_modules/odoo/addons/component/exception.html#ComponentException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.exception.ComponentException" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.exception.</span></span><span class="sig-name descname"><span class="pre">ComponentException</span></span><a class="reference internal" href="../_modules/odoo/addons/component/exception.html#ComponentException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.exception.ComponentException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
 <p>Base Exception for the components</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="odoo.addons.component.exception.NoComponentError">
-<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.exception.</span></span><span class="sig-name descname"><span class="pre">NoComponentError</span></span><a class="reference internal" href="../_modules/odoo/addons/component/exception.html#NoComponentError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.exception.NoComponentError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.exception.ComponentException" title="odoo.addons.component.exception.ComponentException"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.exception.ComponentException</span></code></a></p>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.exception.</span></span><span class="sig-name descname"><span class="pre">NoComponentError</span></span><a class="reference internal" href="../_modules/odoo/addons/component/exception.html#NoComponentError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.exception.NoComponentError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.exception.ComponentException" title="odoo.addons.component.exception.ComponentException"><code class="xref py py-class docutils literal notranslate"><span class="pre">ComponentException</span></code></a></p>
 <p>No component has been found</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="odoo.addons.component.exception.SeveralComponentError">
-<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.exception.</span></span><span class="sig-name descname"><span class="pre">SeveralComponentError</span></span><a class="reference internal" href="../_modules/odoo/addons/component/exception.html#SeveralComponentError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.exception.SeveralComponentError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.exception.ComponentException" title="odoo.addons.component.exception.ComponentException"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.exception.ComponentException</span></code></a></p>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.exception.</span></span><span class="sig-name descname"><span class="pre">SeveralComponentError</span></span><a class="reference internal" href="../_modules/odoo/addons/component/exception.html#SeveralComponentError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.exception.SeveralComponentError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.exception.ComponentException" title="odoo.addons.component.exception.ComponentException"><code class="xref py py-class docutils literal notranslate"><span class="pre">ComponentException</span></code></a></p>
 <p>More than one component have been found</p>
 </dd></dl>
 
 </div>
 <div class="section" id="components-internals">
-<h2>Components Internals<a class="headerlink" href="#components-internals" title="Permalink to this headline">¶</a></h2>
+<h2>Components Internals<a class="headerlink" href="#components-internals" title="Permalink to this heading">¶</a></h2>
 <p>Low-level APIs of the Components.</p>
 <span class="target" id="module-odoo.addons.component.core"></span><div class="section" id="core">
-<h3>Core<a class="headerlink" href="#core" title="Permalink to this headline">¶</a></h3>
+<h3>Core<a class="headerlink" href="#core" title="Permalink to this heading">¶</a></h3>
 <p>Core classes for the components.
 The most common classes used publicly are:</p>
 <ul class="simple">
@@ -1898,16 +2133,17 @@ The most common classes used publicly are:</p>
 <li><p><a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></p></li>
 <li><p><a class="reference internal" href="#odoo.addons.component.core.WorkContext" title="odoo.addons.component.core.WorkContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">WorkContext</span></code></a></p></li>
 </ul>
+</div>
 <dl class="py class">
 <dt class="sig sig-object py" id="odoo.addons.component.core.ComponentDatabases">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.core.</span></span><span class="sig-name descname"><span class="pre">ComponentDatabases</span></span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#ComponentDatabases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.core.ComponentDatabases" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.core.</span></span><span class="sig-name descname"><span class="pre">ComponentDatabases</span></span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#ComponentDatabases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.core.ComponentDatabases" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
 <p>Holds a registry of components for each database</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="odoo.addons.component.core.ComponentRegistry">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.core.</span></span><span class="sig-name descname"><span class="pre">ComponentRegistry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cachesize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">512</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#ComponentRegistry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.core.ComponentRegistry" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.core.</span></span><span class="sig-name descname"><span class="pre">ComponentRegistry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cachesize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">512</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#ComponentRegistry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.core.ComponentRegistry" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Store all the components and allow to find them using criteria</p>
 <p>The key is the <code class="docutils literal notranslate"><span class="pre">_name</span></code> of the components.</p>
@@ -1960,7 +2196,7 @@ registered into.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="odoo.addons.component.core.WorkContext">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.core.</span></span><span class="sig-name descname"><span class="pre">WorkContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">components_registry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#WorkContext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.core.WorkContext" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.core.</span></span><span class="sig-name descname"><span class="pre">WorkContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">components_registry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#WorkContext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.core.WorkContext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Transport the context required to work with components</p>
 <p>It is propagated through all the components, so any
@@ -2026,7 +2262,7 @@ happens under the hood:</p>
 </div>
 <dl class="py property">
 <dt class="sig sig-object py" id="odoo.addons.component.core.WorkContext.env">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">env</span></span><a class="headerlink" href="#odoo.addons.component.core.WorkContext.env" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">env</span></span><a class="headerlink" href="#odoo.addons.component.core.WorkContext.env" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the current Odoo env</p>
 <p>This is the environment of the current collection.</p>
 </dd></dl>
@@ -2092,21 +2328,21 @@ list.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="odoo.addons.component.core.MetaComponent">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.core.</span></span><span class="sig-name descname"><span class="pre">MetaComponent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#MetaComponent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.core.MetaComponent" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.core.</span></span><span class="sig-name descname"><span class="pre">MetaComponent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#MetaComponent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.core.MetaComponent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></a></p>
 <p>Metaclass for Components</p>
 <p>Every new <a class="reference internal" href="#odoo.addons.component.core.Component" title="odoo.addons.component.core.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code></a> will be added to <code class="docutils literal notranslate"><span class="pre">_modules_components</span></code>,
 that will be used by the component builder.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="odoo.addons.component.core.MetaComponent.apply_on_models">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">apply_on_models</span></span><a class="headerlink" href="#odoo.addons.component.core.MetaComponent.apply_on_models" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">apply_on_models</span></span><a class="headerlink" href="#odoo.addons.component.core.MetaComponent.apply_on_models" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="odoo.addons.component.core.AbstractComponent">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.core.</span></span><span class="sig-name descname"><span class="pre">AbstractComponent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#AbstractComponent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.core.</span></span><span class="sig-name descname"><span class="pre">AbstractComponent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#AbstractComponent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Main Component Model</p>
 <p>All components have a Python inheritance either on
@@ -2250,19 +2486,19 @@ with a matching or a not set <code class="docutils literal notranslate"><span cl
 </ul>
 <dl class="py property">
 <dt class="sig sig-object py" id="odoo.addons.component.core.AbstractComponent.collection">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">collection</span></span><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent.collection" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">collection</span></span><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent.collection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collection we are working with</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="odoo.addons.component.core.AbstractComponent.env">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">env</span></span><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent.env" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">env</span></span><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent.env" title="Permalink to this definition">¶</a></dt>
 <dd><p>Current Odoo environment, the one of the collection record</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="odoo.addons.component.core.AbstractComponent.model">
-<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent.model" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#odoo.addons.component.core.AbstractComponent.model" title="Permalink to this definition">¶</a></dt>
 <dd><p>The model instance we are working with</p>
 </dd></dl>
 
@@ -2291,22 +2527,22 @@ with a matching or a not set <code class="docutils literal notranslate"><span cl
 
 <dl class="py class">
 <dt class="sig sig-object py" id="odoo.addons.component.core.Component">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.core.</span></span><span class="sig-name descname"><span class="pre">Component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#Component"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.core.Component" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.component.core.AbstractComponent</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.core.</span></span><span class="sig-name descname"><span class="pre">Component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">work_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component/core.html#Component"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.core.Component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a></p>
 <p>Concrete Component class</p>
 <p>This is the class you inherit from when you want your component to
 be registered in the component collections.</p>
 <p>Look in <a class="reference internal" href="#odoo.addons.component.core.AbstractComponent" title="odoo.addons.component.core.AbstractComponent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractComponent</span></code></a> for more details.</p>
 </dd></dl>
 
-</div>
 <span class="target" id="module-odoo.addons.component.builder"></span><div class="section" id="components-builder">
-<h3>Components Builder<a class="headerlink" href="#components-builder" title="Permalink to this headline">¶</a></h3>
+<h3>Components Builder<a class="headerlink" href="#components-builder" title="Permalink to this heading">¶</a></h3>
 <p>Build the components at the build of a registry.</p>
+</div>
 <dl class="py class">
 <dt class="sig sig-object py" id="odoo.addons.component.builder.ComponentBuilder">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.builder.</span></span><span class="sig-name descname"><span class="pre">ComponentBuilder</span></span><a class="reference internal" href="../_modules/odoo/addons/component/builder.html#ComponentBuilder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.builder.ComponentBuilder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.models.BaseModel</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component.builder.</span></span><span class="sig-name descname"><span class="pre">ComponentBuilder</span></span><a class="reference internal" href="../_modules/odoo/addons/component/builder.html#ComponentBuilder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component.builder.ComponentBuilder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
 <p>Build the component classes</p>
 <p>And register them in a global registry.</p>
 <p>Every time an Odoo registry is built, the know components are cleared and
@@ -2345,7 +2581,6 @@ the components</p></li>
 
 </div>
 </div>
-</div>
 
 
     </div>
@@ -2367,7 +2602,7 @@ the components</p></li>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br/>
     </p>
   </div>
 </footer>

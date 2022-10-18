@@ -10,7 +10,9 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/translations.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Recherche" href="../search.html" />
@@ -20,10 +22,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js "></script>
-<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
 
 <script>
   (function(i, s, o, g, r, a, m) {
@@ -162,8 +164,27 @@
 <li class="toctree-l2"><a class="reference internal" href="api_queue.html#module-odoo.addons.queue_job.models.base">Modèles</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_channels.html">Channels</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Exceptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#connector.exception.ConnectorException"><code class="docutils literal notranslate"><span class="pre">ConnectorException</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connector.exception.NoConnectorUnitError"><code class="docutils literal notranslate"><span class="pre">NoConnectorUnitError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connector.exception.InvalidDataError"><code class="docutils literal notranslate"><span class="pre">InvalidDataError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connector.exception.MappingError"><code class="docutils literal notranslate"><span class="pre">MappingError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connector.exception.NetworkRetryableError"><code class="docutils literal notranslate"><span class="pre">NetworkRetryableError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connector.exception.NoExternalId"><code class="docutils literal notranslate"><span class="pre">NoExternalId</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connector.exception.IDMissingInBackend"><code class="docutils literal notranslate"><span class="pre">IDMissingInBackend</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connector.exception.ManyIDSInBackend"><code class="docutils literal notranslate"><span class="pre">ManyIDSInBackend</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_channels.html">Channels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.PriorityQueue"><code class="docutils literal notranslate"><span class="pre">PriorityQueue</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.SafeSet"><code class="docutils literal notranslate"><span class="pre">SafeSet</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelJob"><code class="docutils literal notranslate"><span class="pre">ChannelJob</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelQueue"><code class="docutils literal notranslate"><span class="pre">ChannelQueue</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel"><code class="docutils literal notranslate"><span class="pre">Channel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.split_strip"><code class="docutils literal notranslate"><span class="pre">split_strip()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager"><code class="docutils literal notranslate"><span class="pre">ChannelManager</span></code></a></li>
+</ul>
+</li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../project/contribute.html">Contribuer</a><ul>
@@ -188,7 +209,17 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Exceptions</a></li>
+<li><a class="reference internal" href="#">Exceptions</a><ul>
+<li><a class="reference internal" href="#connector.exception.ConnectorException"><code class="docutils literal notranslate"><span class="pre">ConnectorException</span></code></a></li>
+<li><a class="reference internal" href="#connector.exception.NoConnectorUnitError"><code class="docutils literal notranslate"><span class="pre">NoConnectorUnitError</span></code></a></li>
+<li><a class="reference internal" href="#connector.exception.InvalidDataError"><code class="docutils literal notranslate"><span class="pre">InvalidDataError</span></code></a></li>
+<li><a class="reference internal" href="#connector.exception.MappingError"><code class="docutils literal notranslate"><span class="pre">MappingError</span></code></a></li>
+<li><a class="reference internal" href="#connector.exception.NetworkRetryableError"><code class="docutils literal notranslate"><span class="pre">NetworkRetryableError</span></code></a></li>
+<li><a class="reference internal" href="#connector.exception.NoExternalId"><code class="docutils literal notranslate"><span class="pre">NoExternalId</span></code></a></li>
+<li><a class="reference internal" href="#connector.exception.IDMissingInBackend"><code class="docutils literal notranslate"><span class="pre">IDMissingInBackend</span></code></a></li>
+<li><a class="reference internal" href="#connector.exception.ManyIDSInBackend"><code class="docutils literal notranslate"><span class="pre">ManyIDSInBackend</span></code></a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -231,60 +262,60 @@
     <div class="body col-md-12 content" role="main">
       
   <div class="section" id="module-connector.exception">
-<span id="exceptions"></span><h1>Exceptions<a class="headerlink" href="#module-connector.exception" title="Lien permanent vers ce titre">¶</a></h1>
+<span id="exceptions"></span><h1>Exceptions<a class="headerlink" href="#module-connector.exception" title="Lien permanent vers cette rubrique">¶</a></h1>
 <dl class="py exception">
 <dt class="sig sig-object py" id="connector.exception.ConnectorException">
-<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">connector.exception.</span></span><span class="sig-name descname"><span class="pre">ConnectorException</span></span><a class="reference internal" href="../_modules/connector/exception.html#ConnectorException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.exception.ConnectorException" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.exception.</span></span><span class="sig-name descname"><span class="pre">ConnectorException</span></span><a class="reference internal" href="../_modules/connector/exception.html#ConnectorException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.exception.ConnectorException" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(disponible dans Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
 <p>Exception de base pour les connecteurs</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="connector.exception.NoConnectorUnitError">
-<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">connector.exception.</span></span><span class="sig-name descname"><span class="pre">NoConnectorUnitError</span></span><a class="reference internal" href="../_modules/connector/exception.html#NoConnectorUnitError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.exception.NoConnectorUnitError" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference internal" href="#connector.exception.ConnectorException" title="connector.exception.ConnectorException"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.exception.ConnectorException</span></code></a></p>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.exception.</span></span><span class="sig-name descname"><span class="pre">NoConnectorUnitError</span></span><a class="reference internal" href="../_modules/connector/exception.html#NoConnectorUnitError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.exception.NoConnectorUnitError" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <a class="reference internal" href="#connector.exception.ConnectorException" title="connector.exception.ConnectorException"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorException</span></code></a></p>
 <p>Aucune ConnectorUnit n’a été trouvé</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="connector.exception.InvalidDataError">
-<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">connector.exception.</span></span><span class="sig-name descname"><span class="pre">InvalidDataError</span></span><a class="reference internal" href="../_modules/connector/exception.html#InvalidDataError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.exception.InvalidDataError" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference internal" href="#connector.exception.ConnectorException" title="connector.exception.ConnectorException"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.exception.ConnectorException</span></code></a></p>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.exception.</span></span><span class="sig-name descname"><span class="pre">InvalidDataError</span></span><a class="reference internal" href="../_modules/connector/exception.html#InvalidDataError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.exception.InvalidDataError" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <a class="reference internal" href="#connector.exception.ConnectorException" title="connector.exception.ConnectorException"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorException</span></code></a></p>
 <p>Donnée incorrecte</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="connector.exception.MappingError">
-<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">connector.exception.</span></span><span class="sig-name descname"><span class="pre">MappingError</span></span><a class="reference internal" href="../_modules/connector/exception.html#MappingError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.exception.MappingError" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference internal" href="#connector.exception.ConnectorException" title="connector.exception.ConnectorException"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.exception.ConnectorException</span></code></a></p>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.exception.</span></span><span class="sig-name descname"><span class="pre">MappingError</span></span><a class="reference internal" href="../_modules/connector/exception.html#MappingError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.exception.MappingError" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <a class="reference internal" href="#connector.exception.ConnectorException" title="connector.exception.ConnectorException"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectorException</span></code></a></p>
 <p>Une erreur est survenue pendant une transformation de mapping</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="connector.exception.NetworkRetryableError">
-<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">connector.exception.</span></span><span class="sig-name descname"><span class="pre">NetworkRetryableError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_retry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/exception.html#NetworkRetryableError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.exception.NetworkRetryableError" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.queue_job.exception.RetryableJobError</span></code></p>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.exception.</span></span><span class="sig-name descname"><span class="pre">NetworkRetryableError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_retry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/exception.html#NetworkRetryableError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.exception.NetworkRetryableError" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">RetryableJobError</span></code></p>
 <p>Une erreur de réseau a causé l’échec du job, il peut être réessayé plus tard.</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="connector.exception.NoExternalId">
-<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">connector.exception.</span></span><span class="sig-name descname"><span class="pre">NoExternalId</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_retry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/exception.html#NoExternalId"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.exception.NoExternalId" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.queue_job.exception.RetryableJobError</span></code></p>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.exception.</span></span><span class="sig-name descname"><span class="pre">NoExternalId</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_retry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/connector/exception.html#NoExternalId"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.exception.NoExternalId" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">RetryableJobError</span></code></p>
 <p>Aucun ID Externe trouvé. Peut être réessayé plus tard.</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="connector.exception.IDMissingInBackend">
-<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">connector.exception.</span></span><span class="sig-name descname"><span class="pre">IDMissingInBackend</span></span><a class="reference internal" href="../_modules/connector/exception.html#IDMissingInBackend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.exception.IDMissingInBackend" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.queue_job.exception.JobError</span></code></p>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.exception.</span></span><span class="sig-name descname"><span class="pre">IDMissingInBackend</span></span><a class="reference internal" href="../_modules/connector/exception.html#IDMissingInBackend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.exception.IDMissingInBackend" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">JobError</span></code></p>
 <p>L’ID n’existe pas dans le backend</p>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="connector.exception.ManyIDSInBackend">
-<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">connector.exception.</span></span><span class="sig-name descname"><span class="pre">ManyIDSInBackend</span></span><a class="reference internal" href="../_modules/connector/exception.html#ManyIDSInBackend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.exception.ManyIDSInBackend" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.queue_job.exception.JobError</span></code></p>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">connector.exception.</span></span><span class="sig-name descname"><span class="pre">ManyIDSInBackend</span></span><a class="reference internal" href="../_modules/connector/exception.html#ManyIDSInBackend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#connector.exception.ManyIDSInBackend" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">JobError</span></code></p>
 <p>Une clé unique existe plusieurs fois dans le backend</p>
 </dd></dl>
 
@@ -310,7 +341,7 @@
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br/>
     </p>
   </div>
 </footer>

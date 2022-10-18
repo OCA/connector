@@ -10,7 +10,9 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Boostrapping a connector" href="bootstrap_connector.html" />
@@ -19,10 +21,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js "></script>
-<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
 
 <script>
   (function(i, s, o, g, r, a, m) {
@@ -161,8 +163,27 @@
 <li class="toctree-l2"><a class="reference internal" href="../api/api_queue.html#module-odoo.addons.queue_job.models.base">Models</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../api/api_exception.html">Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api/api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_exception.html">Exceptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_exception.html#connector.exception.ConnectorException"><code class="docutils literal notranslate"><span class="pre">ConnectorException</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_exception.html#connector.exception.NoConnectorUnitError"><code class="docutils literal notranslate"><span class="pre">NoConnectorUnitError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_exception.html#connector.exception.InvalidDataError"><code class="docutils literal notranslate"><span class="pre">InvalidDataError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_exception.html#connector.exception.MappingError"><code class="docutils literal notranslate"><span class="pre">MappingError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_exception.html#connector.exception.NetworkRetryableError"><code class="docutils literal notranslate"><span class="pre">NetworkRetryableError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_exception.html#connector.exception.NoExternalId"><code class="docutils literal notranslate"><span class="pre">NoExternalId</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_exception.html#connector.exception.IDMissingInBackend"><code class="docutils literal notranslate"><span class="pre">IDMissingInBackend</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_exception.html#connector.exception.ManyIDSInBackend"><code class="docutils literal notranslate"><span class="pre">ManyIDSInBackend</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api/api_channels.html">Channels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.PriorityQueue"><code class="docutils literal notranslate"><span class="pre">PriorityQueue</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.SafeSet"><code class="docutils literal notranslate"><span class="pre">SafeSet</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelJob"><code class="docutils literal notranslate"><span class="pre">ChannelJob</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelQueue"><code class="docutils literal notranslate"><span class="pre">ChannelQueue</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel"><code class="docutils literal notranslate"><span class="pre">Channel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.split_strip"><code class="docutils literal notranslate"><span class="pre">split_strip()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager"><code class="docutils literal notranslate"><span class="pre">ChannelManager</span></code></a></li>
+</ul>
+</li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../project/contribute.html">Contribute</a><ul>
@@ -246,7 +267,7 @@
     <div class="body col-md-12 content" role="main">
       
   <div class="section" id="connector-concepts">
-<span id="concepts"></span><h1>Connector Concepts<a class="headerlink" href="#connector-concepts" title="Permalink to this headline">¶</a></h1>
+<span id="concepts"></span><h1>Connector Concepts<a class="headerlink" href="#connector-concepts" title="Permalink to this heading">¶</a></h1>
 <p>The framework to develop connectors is decoupled in small pieces of
 codes interacting together. Each of them can be used or not in an
 implementation.</p>
@@ -254,7 +275,7 @@ implementation.</p>
 <p>This document describes them from a high-level point of view and gives
 pointers to more concrete ‘how-to’ or small tutorials.</p>
 <div class="section" id="events">
-<h2>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h2>
+<h2>Events<a class="headerlink" href="#events" title="Permalink to this heading">¶</a></h2>
 <p>Reference: <a class="reference internal" href="../api/api_event.html#api-event"><span class="std std-ref">Events</span></a></p>
 <p>Events are hooks in Odoo on which we can plug some actions. They are
 based on an Observer pattern.</p>
@@ -269,7 +290,7 @@ common to e-commerce.</p>
 </ul>
 </div>
 <div class="section" id="jobs-queue">
-<span id="id1"></span><h2>Jobs Queue<a class="headerlink" href="#jobs-queue" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>Jobs Queue<a class="headerlink" href="#jobs-queue" title="Permalink to this heading">¶</a></h2>
 <p>Reference: <a class="reference internal" href="../api/api_queue.html#api-queue"><span class="std std-ref">Queue</span></a></p>
 <p>This feature is part of a standalone addon, but is a prerequisite for
 the connector framework.</p>
@@ -280,7 +301,7 @@ the connector framework.</p>
 </ul>
 </div>
 <div class="section" id="backend">
-<h2>Backend<a class="headerlink" href="#backend" title="Permalink to this headline">¶</a></h2>
+<h2>Backend<a class="headerlink" href="#backend" title="Permalink to this heading">¶</a></h2>
 <p>Reference: <a class="reference internal" href="../api/api_backend.html#api-backend-model"><span class="std std-ref">Backend Model</span></a></p>
 <p>The Backend Model is what represents the external service / system we
 synchronize with. The name on the backend indicates what is the collection the
@@ -294,7 +315,7 @@ used as entrypoint for the component system.  This method returns a
 <a class="reference internal" href="../api/api_components.html#odoo.addons.component.core.WorkContext" title="odoo.addons.component.core.WorkContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">WorkContext</span></code></a></p>
 </div>
 <div class="section" id="workcontext">
-<h2>WorkContext<a class="headerlink" href="#workcontext" title="Permalink to this headline">¶</a></h2>
+<h2>WorkContext<a class="headerlink" href="#workcontext" title="Permalink to this heading">¶</a></h2>
 <p>Reference: <a class="reference internal" href="../api/api_components.html#odoo.addons.component.core.WorkContext" title="odoo.addons.component.core.WorkContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">WorkContext</span></code></a></p>
 <p>A <a class="reference internal" href="../api/api_components.html#odoo.addons.component.core.WorkContext" title="odoo.addons.component.core.WorkContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">WorkContext</span></code></a> is the work environment or
 context that will be passed transversally through all the components. This is
@@ -305,7 +326,7 @@ also the entrypoint to the component system.</p>
 </ul>
 </div>
 <div class="section" id="component">
-<h2>Component<a class="headerlink" href="#component" title="Permalink to this headline">¶</a></h2>
+<h2>Component<a class="headerlink" href="#component" title="Permalink to this heading">¶</a></h2>
 <p>Reference: <a class="reference internal" href="../api/api_components.html#api-component"><span class="std std-ref">Components</span></a></p>
 <p><a class="reference internal" href="../api/api_components.html#odoo.addons.component.core.Component" title="odoo.addons.component.core.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code></a> are pluggable classes used
 for the synchronizations with the external systems (or anything!)</p>
@@ -314,7 +335,7 @@ which means it can really be used in a totally different way.</p>
 <p>The connector defines some base components, which you can find below.  Note
 that you can and are encouraged to define your own Components as well.</p>
 <div class="section" id="mappings">
-<h3>Mappings<a class="headerlink" href="#mappings" title="Permalink to this headline">¶</a></h3>
+<h3>Mappings<a class="headerlink" href="#mappings" title="Permalink to this heading">¶</a></h3>
 <p>The base class is <a class="reference internal" href="../api/api_components.html#connector.components.mapper.Mapper" title="connector.components.mapper.Mapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.components.mapper.Mapper</span></code></a>.</p>
 <p>In your components, you probably want to inherit from:</p>
 <ul class="simple">
@@ -344,7 +365,7 @@ Mapper</p>
 <p>See the documentation of the class for more details.</p>
 </div>
 <div class="section" id="synchronizers">
-<h3>Synchronizers<a class="headerlink" href="#synchronizers" title="Permalink to this headline">¶</a></h3>
+<h3>Synchronizers<a class="headerlink" href="#synchronizers" title="Permalink to this heading">¶</a></h3>
 <p>The base class is <a class="reference internal" href="../api/api_components.html#connector.components.synchronizer.Synchronizer" title="connector.components.synchronizer.Synchronizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.components.synchronizer.Synchronizer</span></code></a>.</p>
 <p>In your components, you probably want to inherit from:</p>
 <ul class="simple">
@@ -372,7 +393,7 @@ the backend adapters to read or write data on the backend and the binders to
 create the link between them.</p>
 </div>
 <div class="section" id="backend-adapters">
-<h3>Backend Adapters<a class="headerlink" href="#backend-adapters" title="Permalink to this headline">¶</a></h3>
+<h3>Backend Adapters<a class="headerlink" href="#backend-adapters" title="Permalink to this heading">¶</a></h3>
 <p>The base class is
 <a class="reference internal" href="../api/api_components.html#connector.components.backend_adapter.BackendAdapter" title="connector.components.backend_adapter.BackendAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.components.backend_adapter.BackendAdapter</span></code></a>.</p>
 <p>In your components, you probably want to inherit from:</p>
@@ -389,7 +410,7 @@ It translates the basic orders (search, read, write) to the protocol
 used by the backend.</p>
 </div>
 <div class="section" id="binders">
-<h3>Binders<a class="headerlink" href="#binders" title="Permalink to this headline">¶</a></h3>
+<h3>Binders<a class="headerlink" href="#binders" title="Permalink to this heading">¶</a></h3>
 <p>The base class is
 <a class="reference internal" href="../api/api_components.html#connector.components.binder.Binder" title="connector.components.binder.Binder"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.components.binder.Binder</span></code></a>.</p>
 <p>In your components, you probably want to inherit from:</p>
@@ -406,7 +427,7 @@ create the binding between them. A default implementation is
 available and can be inherited if needed.</p>
 </div>
 <div class="section" id="listeners">
-<h3>Listeners<a class="headerlink" href="#listeners" title="Permalink to this headline">¶</a></h3>
+<h3>Listeners<a class="headerlink" href="#listeners" title="Permalink to this heading">¶</a></h3>
 <p>The base class is
 <a class="reference internal" href="../api/api_components.html#connector.components.listener.ConnectorListener" title="connector.components.listener.ConnectorListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">connector.components.listener.ConnectorListener</span></code></a>.</p>
 <p>In your components, you probably want to inherit from:</p>
@@ -418,7 +439,7 @@ See <code class="xref py py-mod docutils literal notranslate"><span class="pre">
 </div>
 </div>
 <div class="section" id="bindings">
-<span id="binding"></span><h2>Bindings<a class="headerlink" href="#bindings" title="Permalink to this headline">¶</a></h2>
+<span id="binding"></span><h2>Bindings<a class="headerlink" href="#bindings" title="Permalink to this heading">¶</a></h2>
 <p>Reference: <a class="reference internal" href="../api/api_backend.html#api-binding-model"><span class="std std-ref">Binding Model</span></a></p>
 <p>A binding represents the link of a record between Odoo and a backend.</p>
 <p>The proposed implementation for the connectors widely use the
@@ -432,7 +453,7 @@ Odoo, the ID in Magento and the relation to the backend model.</p>
 coming from Magento.</p>
 </div>
 <div class="section" id="checkpoint">
-<span id="id2"></span><h2>Checkpoint<a class="headerlink" href="#checkpoint" title="Permalink to this headline">¶</a></h2>
+<span id="id2"></span><h2>Checkpoint<a class="headerlink" href="#checkpoint" title="Permalink to this heading">¶</a></h2>
 <p>A checkpoint is a record in the model <cite>connector.checkpoint</cite> linked to a
 model and a record, the connectors can create a new one when the user
 needs to review imported documents.</p>
@@ -459,7 +480,7 @@ needs to review imported documents.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br/>
     </p>
   </div>
 </footer>

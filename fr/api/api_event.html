@@ -10,7 +10,9 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/translations.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Recherche" href="../search.html" />
@@ -20,10 +22,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js "></script>
-<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
 
 <script>
   (function(i, s, o, g, r, a, m) {
@@ -162,8 +164,27 @@
 <li class="toctree-l2"><a class="reference internal" href="api_queue.html#module-odoo.addons.queue_job.models.base">Modèles</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api_exception.html">Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_channels.html">Channels</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_exception.html">Exceptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_exception.html#connector.exception.ConnectorException"><code class="docutils literal notranslate"><span class="pre">ConnectorException</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_exception.html#connector.exception.NoConnectorUnitError"><code class="docutils literal notranslate"><span class="pre">NoConnectorUnitError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_exception.html#connector.exception.InvalidDataError"><code class="docutils literal notranslate"><span class="pre">InvalidDataError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_exception.html#connector.exception.MappingError"><code class="docutils literal notranslate"><span class="pre">MappingError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_exception.html#connector.exception.NetworkRetryableError"><code class="docutils literal notranslate"><span class="pre">NetworkRetryableError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_exception.html#connector.exception.NoExternalId"><code class="docutils literal notranslate"><span class="pre">NoExternalId</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_exception.html#connector.exception.IDMissingInBackend"><code class="docutils literal notranslate"><span class="pre">IDMissingInBackend</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_exception.html#connector.exception.ManyIDSInBackend"><code class="docutils literal notranslate"><span class="pre">ManyIDSInBackend</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_channels.html">Channels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.PriorityQueue"><code class="docutils literal notranslate"><span class="pre">PriorityQueue</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.SafeSet"><code class="docutils literal notranslate"><span class="pre">SafeSet</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelJob"><code class="docutils literal notranslate"><span class="pre">ChannelJob</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelQueue"><code class="docutils literal notranslate"><span class="pre">ChannelQueue</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel"><code class="docutils literal notranslate"><span class="pre">Channel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.split_strip"><code class="docutils literal notranslate"><span class="pre">split_strip()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelManager"><code class="docutils literal notranslate"><span class="pre">ChannelManager</span></code></a></li>
+</ul>
+</li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../project/contribute.html">Contribuer</a><ul>
@@ -196,10 +217,12 @@
 <li><a class="reference internal" href="#collection-and-models">Collection and models</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#odoo.addons.component_event.components.event.skip_if"><code class="docutils literal notranslate"><span class="pre">skip_if()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-odoo.addons.component_event.models.base">Odoo Models Extensions</a><ul>
 <li><a class="reference internal" href="#base-model">Base Model</a></li>
+<li><a class="reference internal" href="#odoo.addons.component_event.models.base.Base"><code class="docutils literal notranslate"><span class="pre">Base</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -246,12 +269,12 @@
     <div class="body col-md-12 content" role="main">
       
   <div class="section" id="events">
-<span id="api-event"></span><h1>Events<a class="headerlink" href="#events" title="Lien permanent vers ce titre">¶</a></h1>
+<span id="api-event"></span><h1>Events<a class="headerlink" href="#events" title="Lien permanent vers cette rubrique">¶</a></h1>
 <p>Events is an implementation of an Observer pattern for Odoo.</p>
 <div class="section" id="module-odoo.addons.component_event.components.event">
-<span id="components"></span><h2>Components<a class="headerlink" href="#module-odoo.addons.component_event.components.event" title="Lien permanent vers ce titre">¶</a></h2>
+<span id="components"></span><h2>Components<a class="headerlink" href="#module-odoo.addons.component_event.components.event" title="Lien permanent vers cette rubrique">¶</a></h2>
 <div class="section" id="id1">
-<h3>Events<a class="headerlink" href="#id1" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>Events<a class="headerlink" href="#id1" title="Lien permanent vers cette rubrique">¶</a></h3>
 <p>Events are a notification system.</p>
 <p>On one side, one or many listeners await for an event to happen. On
 the other side, when such event happen, a notification is sent to
@@ -262,7 +285,7 @@ one Odoo addon, and to write as many listeners as we want, in different places,
 different addons.</p>
 <p>We’ll see below how the <code class="docutils literal notranslate"><span class="pre">on_record_create</span></code> is implemented.</p>
 <div class="section" id="notifier">
-<h4>Notifier<a class="headerlink" href="#notifier" title="Lien permanent vers ce titre">¶</a></h4>
+<h4>Notifier<a class="headerlink" href="#notifier" title="Lien permanent vers cette rubrique">¶</a></h4>
 <p>The first thing is to find where/when the notification should be sent.
 For the creation of a record, it is in <code class="xref py py-meth docutils literal notranslate"><span class="pre">odoo.models.BaseModel.create()</span></code>.
 We can inherit from the <cite>“base”</cite> model to add this line:</p>
@@ -284,7 +307,7 @@ arguments to the listeners.</p>
 events that are implemented in the <cite>“base”</cite> model.</p>
 </div>
 <div class="section" id="listeners">
-<h4>Listeners<a class="headerlink" href="#listeners" title="Lien permanent vers ce titre">¶</a></h4>
+<h4>Listeners<a class="headerlink" href="#listeners" title="Lien permanent vers cette rubrique">¶</a></h4>
 <p>Listeners are Components that respond to the event names.
 The components must have a <code class="docutils literal notranslate"><span class="pre">_usage</span></code> equals to <code class="docutils literal notranslate"><span class="pre">'event.listener'</span></code>, but it
 doesn’t to be set manually if the component inherits from
@@ -301,7 +324,7 @@ doesn’t to be set manually if the component inherits from
 <p>Many listeners such as this one could be added for the same event.</p>
 </div>
 <div class="section" id="collection-and-models">
-<h4>Collection and models<a class="headerlink" href="#collection-and-models" title="Lien permanent vers ce titre">¶</a></h4>
+<h4>Collection and models<a class="headerlink" href="#collection-and-models" title="Lien permanent vers cette rubrique">¶</a></h4>
 <p>In the example above, the listeners is global. It will be executed for any
 model and collection. You can also restrict a listener to only a collection or
 model, using the <code class="docutils literal notranslate"><span class="pre">_collection</span></code> or <code class="docutils literal notranslate"><span class="pre">_apply_on</span></code> attributes.</p>
@@ -332,6 +355,8 @@ will be executed:</p>
 </div>
 <p>An event can be skipped based on a condition evaluated from the notified
 arguments. See <a class="reference internal" href="#odoo.addons.component_event.components.event.skip_if" title="odoo.addons.component_event.components.event.skip_if"><code class="xref py py-func docutils literal notranslate"><span class="pre">skip_if()</span></code></a></p>
+</div>
+</div>
 <dl class="py function">
 <dt class="sig sig-object py" id="odoo.addons.component_event.components.event.skip_if">
 <span class="sig-prename descclassname"><span class="pre">odoo.addons.component_event.components.event.</span></span><span class="sig-name descname"><span class="pre">skip_if</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cond</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/component_event/components/event.html#skip_if"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component_event.components.event.skip_if" title="Lien permanent vers cette définition">¶</a></dt>
@@ -355,17 +380,16 @@ same arguments than the event.</p>
 </dd></dl>
 
 </div>
-</div>
-</div>
 <div class="section" id="module-odoo.addons.component_event.models.base">
-<span id="odoo-models-extensions"></span><h2>Odoo Models Extensions<a class="headerlink" href="#module-odoo.addons.component_event.models.base" title="Lien permanent vers ce titre">¶</a></h2>
+<span id="odoo-models-extensions"></span><h2>Odoo Models Extensions<a class="headerlink" href="#module-odoo.addons.component_event.models.base" title="Lien permanent vers cette rubrique">¶</a></h2>
 <div class="section" id="base-model">
-<h3>Base Model<a class="headerlink" href="#base-model" title="Lien permanent vers ce titre">¶</a></h3>
+<h3>Base Model<a class="headerlink" href="#base-model" title="Lien permanent vers cette rubrique">¶</a></h3>
 <p>Extend the “base” Odoo Model to add Events related features.</p>
+</div>
 <dl class="py class">
 <dt class="sig sig-object py" id="odoo.addons.component_event.models.base.Base">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component_event.models.base.</span></span><span class="sig-name descname"><span class="pre">Base</span></span><a class="reference internal" href="../_modules/odoo/addons/component_event/models/base.html#Base"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component_event.models.base.Base" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.models.BaseModel</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">odoo.addons.component_event.models.base.</span></span><span class="sig-name descname"><span class="pre">Base</span></span><a class="reference internal" href="../_modules/odoo/addons/component_event/models/base.html#Base"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.component_event.models.base.Base" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Bases : <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
 <p>The base model, which is implicitly inherited by all models.</p>
 <p>Add an <code class="xref py py-meth docutils literal notranslate"><span class="pre">_event()</span></code> method to all Models. This method allows to
 trigger events.</p>
@@ -378,7 +402,6 @@ trigger events.</p>
 <p><code class="docutils literal notranslate"><span class="pre">on_record_unlink</span></code> is notified just <em>before</em> the unlink is done.</p>
 </dd></dl>
 
-</div>
 </div>
 </div>
 
@@ -402,7 +425,7 @@ trigger events.</p>
     </p>
     <p>
         &copy; Copyright 2013, Camptocamp SA.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.2.0.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br/>
     </p>
   </div>
 </footer>

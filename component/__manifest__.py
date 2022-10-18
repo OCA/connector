@@ -5,7 +5,7 @@
     "name": "Components",
     "summary": "Add capabilities to register and use decoupled components,"
     " as an alternative to model classes",
-    "version": "14.0.1.1.1",
+    "version": "14.0.1.1.2",
     "author": "Camptocamp," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/connector",
     "license": "LGPL-3",

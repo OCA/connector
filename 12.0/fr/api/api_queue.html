@@ -22,10 +22,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js "></script>
-<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -252,21 +252,75 @@ postpone the execution of a job method in an asynchronous process.</p>
 <dt id="odoo.addons.queue_job.models.base.Base.with_delay">
 <code class="descname"><span class="pre">with_delay</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">priority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">eta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">max_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">identity_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/base.html#Base.with_delay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.models.base.Base.with_delay" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Return a <code class="docutils literal notranslate"><span class="pre">DelayableRecordset</span></code></p>
-<p>The returned instance allows to enqueue any method of the recordset’s
-Model.</p>
-<p>Utilisation</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;res.users&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">with_delay</span><span class="p">()</span><span class="o">.</span><span class="n">write</span><span class="p">({</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;test&#39;</span><span class="p">})</span>
+<p>It is a shortcut for the longer form as shown below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">with_delay</span><span class="p">(</span><span class="n">priority</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">action_done</span><span class="p">()</span>
+<span class="c1"># is equivalent to:</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">delayable</span><span class="p">()</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">priority</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">action_done</span><span class="p">()</span><span class="o">.</span><span class="n">delay</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">with_delay()</span></code> accepts job properties which specify how the job will
 be executed.</p>
 <p>Usage with job properties:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">delayable</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="s1">&#39;a.model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">with_delay</span><span class="p">(</span><span class="n">priority</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">5</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">env</span><span class="p">[</span><span class="s1">&#39;a.model&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">with_delay</span><span class="p">(</span><span class="n">priority</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">action_done</span><span class="p">()</span>
 <span class="n">delayable</span><span class="o">.</span><span class="n">export_one_thing</span><span class="p">(</span><span class="n">the_thing_to_export</span><span class="p">)</span>
 <span class="c1"># =&gt; the job will be executed with a low priority and not before a</span>
 <span class="c1"># delay of 5 hours from now</span>
 </pre></div>
 </div>
+<p>When using :meth:<code class="docutils literal notranslate"><span class="pre">with_delay</span></code>, the final <code class="docutils literal notranslate"><span class="pre">delay()</span></code> is implicit.
+See the documentation of :meth:<code class="docutils literal notranslate"><span class="pre">delayable</span></code> for more details.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Renvoie:</th><td class="field-body">instance of a DelayableRecordset</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type renvoyé:</th><td class="field-body"><a class="reference internal" href="#odoo.addons.queue_job.job.DelayableRecordset" title="odoo.addons.queue_job.job.DelayableRecordset"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.queue_job.job.DelayableRecordset</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="py method">
+<dt id="odoo.addons.queue_job.models.base.Base.delayable">
+<code class="descname"><span class="pre">delayable</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">priority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">eta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">max_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">identity_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/models/base.html#Base.delayable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.models.base.Base.delayable" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Return a <code class="docutils literal notranslate"><span class="pre">Delayable</span></code></p>
+<p>The returned instance allows to enqueue any method of the recordset’s
+Model.</p>
+<p>Utilisation</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">delayable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;res.users&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">delayable</span><span class="p">(</span><span class="n">priority</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">delayable</span><span class="o">.</span><span class="n">do_work</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">})</span><span class="o">.</span><span class="n">delay</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>In this example, the <code class="docutils literal notranslate"><span class="pre">do_work</span></code> method will not be executed directly.
+It will be executed in an asynchronous job.</p>
+<p>Method calls on a Delayable generally return themselves, so calls can
+be chained together:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">delayable</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">priority</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span><span class="o">.</span><span class="n">do_work</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">})</span><span class="o">.</span><span class="n">delay</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The order of the calls that build the job is not relevant, beside
+the call to <code class="docutils literal notranslate"><span class="pre">delay()</span></code> that must happen at the very end. This is
+equivalent to the example above:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">delayable</span><span class="o">.</span><span class="n">do_work</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">})</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">priority</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span><span class="o">.</span><span class="n">delay</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Very importantly, <code class="docutils literal notranslate"><span class="pre">delay()</span></code> must be called on the top-most parent
+of a chain of jobs, so if you have this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">job1</span> <span class="o">=</span> <span class="n">record1</span><span class="o">.</span><span class="n">delayable</span><span class="p">()</span><span class="o">.</span><span class="n">do_work</span><span class="p">()</span>
+<span class="n">job2</span> <span class="o">=</span> <span class="n">record2</span><span class="o">.</span><span class="n">delayable</span><span class="p">()</span><span class="o">.</span><span class="n">do_work</span><span class="p">()</span>
+<span class="n">job1</span><span class="o">.</span><span class="n">on_done</span><span class="p">(</span><span class="n">job2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">delay()</span></code> call must be made on <code class="docutils literal notranslate"><span class="pre">job1</span></code>, otherwise <code class="docutils literal notranslate"><span class="pre">job2</span></code> will
+be delayed, but <code class="docutils literal notranslate"><span class="pre">job1</span></code> will never be. When done on <code class="docutils literal notranslate"><span class="pre">job1</span></code>, the
+<code class="docutils literal notranslate"><span class="pre">delay()</span></code> call will traverse the graph of jobs and delay all of
+them:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">job1</span><span class="o">.</span><span class="n">delay</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For more details on the graph dependencies, read the documentation of
+<a href="#id1"><span class="problematic" id="id2">:module:`~odoo.addons.queue_job.delay`</span></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -287,29 +341,19 @@ defined on the function</li>
 and a job with the same key has not yet been run,
 the new job will not be added. It is either a
 string, either a function that takes the job as
-argument (see <code class="xref py py-func docutils literal notranslate"><span class="pre">job.identity_exact()</span></code>).</li>
+argument (see <code class="xref py py-func docutils literal notranslate"><span class="pre">job.identity_exact()</span></code>).
+the new job will not be added.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Renvoie:</th><td class="field-body"><p class="first">instance of a DelayableRecordset</p>
+<tr class="field-even field"><th class="field-name">Renvoie:</th><td class="field-body"><p class="first">instance of a Delayable</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Type renvoyé:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#odoo.addons.queue_job.job.DelayableRecordset" title="odoo.addons.queue_job.job.DelayableRecordset"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.queue_job.job.DelayableRecordset</span></code></a></p>
+<tr class="field-odd field"><th class="field-name">Type renvoyé:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">odoo.addons.queue_job.job.Delayable</span></code></p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>Note for developers: if you want to run tests or simply disable
-jobs queueing for debugging purposes, you can:</p>
-<blockquote>
-<div><ol class="loweralpha simple">
-<li>set the env var <cite>TEST_QUEUE_JOB_NO_DELAY=1</cite></li>
-<li>pass a ctx key <cite>test_queue_job_no_delay=1</cite></li>
-</ol>
-</div></blockquote>
-<p>In tests you’ll have to mute the logger like:</p>
-<blockquote>
-<div>&#64;mute_logger(“odoo.addons.queue_job.models.base”)</div></blockquote>
 </dd></dl>
 
 </dd></dl>
@@ -483,19 +527,8 @@ values are the delay to postpone a job.</p>
 <h4>Internals<a class="headerlink" href="#internals" title="Lien permanent vers ce titre">¶</a></h4>
 <dl class="py class">
 <dt id="odoo.addons.queue_job.job.DelayableRecordset">
-<em class="property"><span class="pre">class</span> </em><code class="descclassname"><span class="pre">odoo.addons.queue_job.job.</span></code><code class="descname"><span class="pre">DelayableRecordset</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">recordset</span></span></em>, <em><span class="n"><span class="pre">priority</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">eta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">max_retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">identity_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#DelayableRecordset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.DelayableRecordset" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Bases : <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(disponible dans Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Allow to delay a method for a recordset</p>
-<p>Utilisation</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">delayable</span> <span class="o">=</span> <span class="n">DelayableRecordset</span><span class="p">(</span><span class="n">recordset</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<span class="n">delayable</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>The method call will be processed asynchronously in the job queue, with
-the passed arguments.</p>
-<p>This class will generally not be used directly, it is used internally
-by <a class="reference internal" href="#odoo.addons.queue_job.models.base.Base.with_delay" title="odoo.addons.queue_job.models.base.Base.with_delay"><code class="xref py py-meth docutils literal notranslate"><span class="pre">with_delay()</span></code></a></p>
-</dd></dl>
+<em class="property"><span class="pre">class</span> </em><code class="descclassname"><span class="pre">odoo.addons.queue_job.job.</span></code><code class="descname"><span class="pre">DelayableRecordset</span></code><span class="sig-paren">(</span><em><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#DelayableRecordset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.DelayableRecordset" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py class">
 <dt id="odoo.addons.queue_job.job.Job">
@@ -508,6 +541,12 @@ through this class.</p>
 <dt id="odoo.addons.queue_job.job.Job.uuid">
 <code class="descname"><span class="pre">uuid</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.uuid" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Id (UUID) du job.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="odoo.addons.queue_job.job.Job.graph_uuid">
+<code class="descname"><span class="pre">graph_uuid</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.graph_uuid" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Shared UUID of the job’s graph. Empty if the job is a single job.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -633,7 +672,15 @@ through this class.</p>
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.load">
 <em class="property"><span class="pre">classmethod</span> </em><code class="descname"><span class="pre">load</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">env</span></span></em>, <em><span class="n"><span class="pre">job_uuid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.load" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Lit un job depuis la base de données</p>
+<dd><p>Read a single job from the Database</p>
+<p>Raise an error if the job is not found.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="odoo.addons.queue_job.job.Job.load_many">
+<em class="property"><span class="pre">classmethod</span> </em><code class="descname"><span class="pre">load_many</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">env</span></span></em>, <em><span class="n"><span class="pre">job_uuids</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.load_many"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.load_many" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Read jobs in batch from the Database</p>
+<p>Jobs not found are ignored.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -657,11 +704,26 @@ no job is created and the existing job is returned</p>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt id="odoo.addons.queue_job.job.Job.db_records_from_uuids">
+<em class="property"><span class="pre">static</span> </em><code class="descname"><span class="pre">db_records_from_uuids</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">env</span></span></em>, <em><span class="n"><span class="pre">job_uuids</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.db_records_from_uuids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.db_records_from_uuids" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="odoo.addons.queue_job.job.Job.add_depends">
+<code class="descname"><span class="pre">add_depends</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">jobs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.add_depends"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.add_depends" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.perform">
 <code class="descname"><span class="pre">perform</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.perform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.perform" title="Lien permanent vers cette définition">¶</a></dt>
 <dd><p>Exécute le job.</p>
 <p>Le job est exécuté avec l’utilisateur qui l’a initié.</p>
 </dd></dl>
+
+<dl class="py method">
+<dt id="odoo.addons.queue_job.job.Job.enqueue_waiting">
+<code class="descname"><span class="pre">enqueue_waiting</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.enqueue_waiting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.enqueue_waiting" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.store">
@@ -672,6 +734,11 @@ no job is created and the existing job is returned</p>
 <dl class="py method">
 <dt id="odoo.addons.queue_job.job.Job.func_string">
 <em class="property"><span class="pre">property</span> </em><code class="descname"><span class="pre">func_string</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.func_string" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="odoo.addons.queue_job.job.Job.sorting_key">
+<code class="descname"><span class="pre">sorting_key</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/odoo/addons/queue_job/job.html#Job.sorting_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#odoo.addons.queue_job.job.Job.sorting_key" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -695,29 +762,39 @@ no job is created and the existing job is returned</p>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="id1">
-<em class="property"><span class="pre">property</span> </em><code class="descname"><span class="pre">description</span></code><a class="headerlink" href="#id1" title="Lien permanent vers cette définition">¶</a></dt>
+<dt id="odoo.addons.queue_job.job.Job.depends_on">
+<em class="property"><span class="pre">property</span> </em><code class="descname"><span class="pre">depends_on</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.depends_on" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="id2">
-<em class="property"><span class="pre">property</span> </em><code class="descname"><span class="pre">uuid</span></code><a class="headerlink" href="#id2" title="Lien permanent vers cette définition">¶</a></dt>
-<dd><p>Id du job, c’est un UUID</p>
-</dd></dl>
+<dt id="odoo.addons.queue_job.job.Job.reverse_depends_on">
+<em class="property"><span class="pre">property</span> </em><code class="descname"><span class="pre">reverse_depends_on</span></code><a class="headerlink" href="#odoo.addons.queue_job.job.Job.reverse_depends_on" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="id3">
-<em class="property"><span class="pre">property</span> </em><code class="descname"><span class="pre">model_name</span></code><a class="headerlink" href="#id3" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="descname"><span class="pre">description</span></code><a class="headerlink" href="#id3" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="id4">
-<em class="property"><span class="pre">property</span> </em><code class="descname"><span class="pre">user_id</span></code><a class="headerlink" href="#id4" title="Lien permanent vers cette définition">¶</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">property</span> </em><code class="descname"><span class="pre">uuid</span></code><a class="headerlink" href="#id4" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Id du job, c’est un UUID</p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="id5">
-<em class="property"><span class="pre">property</span> </em><code class="descname"><span class="pre">eta</span></code><a class="headerlink" href="#id5" title="Lien permanent vers cette définition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="descname"><span class="pre">model_name</span></code><a class="headerlink" href="#id5" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="id6">
+<em class="property"><span class="pre">property</span> </em><code class="descname"><span class="pre">user_id</span></code><a class="headerlink" href="#id6" title="Lien permanent vers cette définition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="id7">
+<em class="property"><span class="pre">property</span> </em><code class="descname"><span class="pre">eta</span></code><a class="headerlink" href="#id7" title="Lien permanent vers cette définition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">

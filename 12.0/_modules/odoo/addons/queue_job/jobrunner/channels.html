@@ -19,10 +19,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../../../../../_static/js/jquery-1.12.4.min.js "></script>
-<script type="text/javascript" src="../../../../../_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="../../../../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="../../../../../_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="../../../../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../../../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../../../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../../../_static/bootstrap-sphinx.js"></script>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -223,8 +223,10 @@
 <span class="kn">from</span> <span class="nn">weakref</span> <span class="kn">import</span> <span class="n">WeakValueDictionary</span>
 
 <span class="kn">from</span> <span class="nn">..exception</span> <span class="kn">import</span> <span class="n">ChannelNotFound</span>
-<span class="kn">from</span> <span class="nn">..job</span> <span class="kn">import</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">ENQUEUED</span><span class="p">,</span> <span class="n">STARTED</span><span class="p">,</span> <span class="n">FAILED</span><span class="p">,</span> <span class="n">DONE</span>
-<span class="n">NOT_DONE</span> <span class="o">=</span> <span class="p">(</span><span class="n">PENDING</span><span class="p">,</span> <span class="n">ENQUEUED</span><span class="p">,</span> <span class="n">STARTED</span><span class="p">,</span> <span class="n">FAILED</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">..job</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">PENDING</span><span class="p">,</span> <span class="n">ENQUEUED</span><span class="p">,</span> <span class="n">STARTED</span><span class="p">,</span> <span class="n">FAILED</span><span class="p">,</span> <span class="n">DONE</span><span class="p">,</span> <span class="n">WAIT_DEPENDENCIES</span>
+<span class="p">)</span>
+<span class="n">NOT_DONE</span> <span class="o">=</span> <span class="p">(</span><span class="n">WAIT_DEPENDENCIES</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">ENQUEUED</span><span class="p">,</span> <span class="n">STARTED</span><span class="p">,</span> <span class="n">FAILED</span><span class="p">)</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -1251,6 +1253,9 @@
             <span class="n">job</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">set_running</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="n">FAILED</span><span class="p">:</span>
             <span class="n">job</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">set_failed</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="n">WAIT_DEPENDENCIES</span><span class="p">:</span>
+            <span class="c1"># wait until all parent jobs are done</span>
+            <span class="k">pass</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">_logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;unexpected state </span><span class="si">%s</span><span class="s2"> for job </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">job</span><span class="p">)</span></div>
 

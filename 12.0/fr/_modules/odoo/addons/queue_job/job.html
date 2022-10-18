@@ -20,10 +20,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../../../../_static/js/jquery-1.12.4.min.js "></script>
-<script type="text/javascript" src="../../../../_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="../../../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="../../../../_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="../../../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../../_static/bootstrap-sphinx.js"></script>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -225,7 +225,10 @@
 <span class="kn">import</span> <span class="nn">uuid</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">weakref</span>
+
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">total_ordering</span>
 
 <span class="kn">import</span> <span class="nn">odoo</span>
 
@@ -234,6 +237,7 @@
                         <span class="n">RetryableJobError</span><span class="p">)</span>
 
 
+<span class="n">WAIT_DEPENDENCIES</span> <span class="o">=</span> <span class="s1">&#39;wait_dependencies&#39;</span>
 <span class="n">PENDING</span> <span class="o">=</span> <span class="s1">&#39;pending&#39;</span>
 <span class="n">ENQUEUED</span> <span class="o">=</span> <span class="s1">&#39;enqueued&#39;</span>
 <span class="n">CANCELLED</span> <span class="o">=</span> <span class="s1">&#39;cancelled&#39;</span>
@@ -241,7 +245,8 @@
 <span class="n">STARTED</span> <span class="o">=</span> <span class="s1">&#39;started&#39;</span>
 <span class="n">FAILED</span> <span class="o">=</span> <span class="s1">&#39;failed&#39;</span>
 
-<span class="n">STATES</span> <span class="o">=</span> <span class="p">[(</span><span class="n">PENDING</span><span class="p">,</span> <span class="s1">&#39;Pending&#39;</span><span class="p">),</span>
+<span class="n">STATES</span> <span class="o">=</span> <span class="p">[(</span><span class="n">WAIT_DEPENDENCIES</span><span class="p">,</span> <span class="s1">&#39;Wait Dependencies&#39;</span><span class="p">),</span>
+          <span class="p">(</span><span class="n">PENDING</span><span class="p">,</span> <span class="s1">&#39;Pending&#39;</span><span class="p">),</span>
           <span class="p">(</span><span class="n">ENQUEUED</span><span class="p">,</span> <span class="s1">&#39;Enqueued&#39;</span><span class="p">),</span>
           <span class="p">(</span><span class="n">STARTED</span><span class="p">,</span> <span class="s1">&#39;Started&#39;</span><span class="p">),</span>
           <span class="p">(</span><span class="n">DONE</span><span class="p">,</span> <span class="s1">&#39;Done&#39;</span><span class="p">),</span>
@@ -255,59 +260,14 @@
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="DelayableRecordset"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.DelayableRecordset">[docs]</a><span class="k">class</span> <span class="nc">DelayableRecordset</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Allow to delay a method for a recordset</span>
-
-<span class="sd">    Usage::</span>
-
-<span class="sd">        delayable = DelayableRecordset(recordset, priority=20)</span>
-<span class="sd">        delayable.method(args, kwargs)</span>
-
-<span class="sd">    The method call will be processed asynchronously in the job queue, with</span>
-<span class="sd">    the passed arguments.</span>
-
-<span class="sd">    This class will generally not be used directly, it is used internally</span>
-<span class="sd">    by :meth:`~odoo.addons.queue_job.models.base.Base.with_delay`</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recordset</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">max_retries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">identity_key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">recordset</span> <span class="o">=</span> <span class="n">recordset</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">priority</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="o">=</span> <span class="n">eta</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span> <span class="o">=</span> <span class="n">max_retries</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="n">channel</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">identity_key</span> <span class="o">=</span> <span class="n">identity_key</span>
-
-    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
-                <span class="s1">&#39;only methods can be delayed (</span><span class="si">%s</span><span class="s1"> called on </span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span>
-                <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="p">)</span>
-            <span class="p">)</span>
-        <span class="n">recordset_method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-
-        <span class="k">def</span> <span class="nf">delay</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">enqueue</span><span class="p">(</span><span class="n">recordset_method</span><span class="p">,</span>
-                               <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span>
-                               <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">,</span>
-                               <span class="n">priority</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span>
-                               <span class="n">max_retries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span><span class="p">,</span>
-                               <span class="n">eta</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="p">,</span>
-                               <span class="n">description</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
-                               <span class="n">channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">,</span>
-                               <span class="n">identity_key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">identity_key</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">delay</span>
-
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;DelayableRecordset(</span><span class="si">%s%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span>
-            <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="p">,</span> <span class="s1">&#39;_ids&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="p">)</span>
-
-    <span class="fm">__repr__</span> <span class="o">=</span> <span class="fm">__str__</span></div>
+<span class="c1"># TODO remove in 13.0 or 14.0, used to keep compatibility as the</span>
+<span class="c1"># class has been moved in &#39;delay&#39;.</span>
+<div class="viewcode-block" id="DelayableRecordset"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.DelayableRecordset">[docs]</a><span class="k">def</span> <span class="nf">DelayableRecordset</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># prevent circular import</span>
+    <span class="kn">from</span> <span class="nn">.delay</span> <span class="kn">import</span> <span class="n">DelayableRecordset</span> <span class="k">as</span> <span class="n">dr</span>
+    <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;DelayableRecordset moved from the queue_job.job&quot;</span>
+                  <span class="s2">&quot; to the queue_job.delay python module&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dr</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">identity_exact</span><span class="p">(</span><span class="n">job_</span><span class="p">):</span>
@@ -355,7 +315,8 @@
     <span class="k">return</span> <span class="n">hasher</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="Job"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job">[docs]</a><span class="k">class</span> <span class="nc">Job</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Job"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job">[docs]</a><span class="nd">@total_ordering</span>
+<span class="k">class</span> <span class="nc">Job</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A Job is a task to execute. It is the in-memory representation of a job.</span>
 
 <span class="sd">    Jobs are stored in the ``queue.job`` Odoo Model, but they are handled</span>
@@ -364,6 +325,10 @@
 <span class="sd">    .. attribute:: uuid</span>
 
 <span class="sd">        Id (UUID) of the job.</span>
+
+<span class="sd">    .. attribute:: graph_uuid</span>
+
+<span class="sd">        Shared UUID of the job&#39;s graph. Empty if the job is a single job.</span>
 
 <span class="sd">    .. attribute:: state</span>
 
@@ -463,12 +428,24 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Job.load"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.load">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Read a job from the Database&quot;&quot;&quot;</span>
-        <span class="n">stored</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">db_record_from_uuid</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Read a single job from the Database</span>
+
+<span class="sd">        Raise an error if the job is not found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">stored</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">db_records_from_uuids</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="p">[</span><span class="n">job_uuid</span><span class="p">])</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">stored</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">NoSuchJobError</span><span class="p">(</span>
                 <span class="s1">&#39;Job </span><span class="si">%s</span><span class="s1"> does no longer exist in the storage.&#39;</span> <span class="o">%</span> <span class="n">job_uuid</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_load_from_db_record</span><span class="p">(</span><span class="n">stored</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Job.load_many"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.load_many">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">load_many</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">env</span><span class="p">,</span> <span class="n">job_uuids</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read jobs in batch from the Database</span>
+
+<span class="sd">        Jobs not found are ignored.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">recordset</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">db_records_from_uuids</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">job_uuids</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">_load_from_db_record</span><span class="p">(</span><span class="n">record</span><span class="p">)</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">recordset</span><span class="p">}</span></div>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_load_from_db_record</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">job_db_record</span><span class="p">):</span>
@@ -506,6 +483,7 @@
             <span class="n">job_</span><span class="o">.</span><span class="n">date_cancelled</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">date_cancelled</span>
 
         <span class="n">job_</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">state</span>
+        <span class="n">job_</span><span class="o">.</span><span class="n">graph_uuid</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">graph_uuid</span> <span class="k">if</span> <span class="n">stored</span><span class="o">.</span><span class="n">graph_uuid</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="n">job_</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">result</span> <span class="k">if</span> <span class="n">stored</span><span class="o">.</span><span class="n">result</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="n">job_</span><span class="o">.</span><span class="n">exc_info</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">exc_info</span> <span class="k">if</span> <span class="n">stored</span><span class="o">.</span><span class="n">exc_info</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="n">job_</span><span class="o">.</span><span class="n">retry</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">retry</span>
@@ -514,6 +492,13 @@
             <span class="n">job_</span><span class="o">.</span><span class="n">company_id</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">company_id</span><span class="o">.</span><span class="n">id</span>
         <span class="n">job_</span><span class="o">.</span><span class="n">identity_key</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">identity_key</span>
         <span class="n">job_</span><span class="o">.</span><span class="n">worker_pid</span> <span class="o">=</span> <span class="n">stored</span><span class="o">.</span><span class="n">worker_pid</span>
+
+        <span class="n">job_</span><span class="o">.</span><span class="n">__depends_on_uuids</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">stored</span><span class="o">.</span><span class="n">dependencies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;depends_on&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="p">)</span>
+        <span class="n">job_</span><span class="o">.</span><span class="n">__reverse_depends_on_uuids</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">stored</span><span class="o">.</span><span class="n">dependencies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;reverse_depends_on&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">job_</span>
 
 <div class="viewcode-block" id="Job.job_record_with_same_identity_key"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.job_record_with_same_identity_key">[docs]</a>    <span class="k">def</span> <span class="nf">job_record_with_same_identity_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -525,6 +510,7 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">existing</span></div>
 
+    <span class="c1"># TODO to deprecate (not called anymore)</span>
 <div class="viewcode-block" id="Job.enqueue"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.enqueue">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">enqueue</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">priority</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_retries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -542,31 +528,41 @@
                       <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">priority</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="n">eta</span><span class="p">,</span>
                       <span class="n">max_retries</span><span class="o">=</span><span class="n">max_retries</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
                       <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span> <span class="n">identity_key</span><span class="o">=</span><span class="n">identity_key</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">new_job</span><span class="o">.</span><span class="n">identity_key</span><span class="p">:</span>
-            <span class="n">existing</span> <span class="o">=</span> <span class="n">new_job</span><span class="o">.</span><span class="n">job_record_with_same_identity_key</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">new_job</span><span class="o">.</span><span class="n">_enqueue_job</span><span class="p">()</span></div>
+
+    <span class="c1"># TODO to deprecate (not called anymore)</span>
+    <span class="k">def</span> <span class="nf">_enqueue_job</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">identity_key</span><span class="p">:</span>
+            <span class="n">existing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_record_with_same_identity_key</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">existing</span><span class="p">:</span>
                 <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                     <span class="s1">&#39;a job has not been enqueued due to having &#39;</span>
                     <span class="s1">&#39;the same identity key (</span><span class="si">%s</span><span class="s1">) than job </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
-                    <span class="n">new_job</span><span class="o">.</span><span class="n">identity_key</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">identity_key</span><span class="p">,</span>
                     <span class="n">existing</span><span class="o">.</span><span class="n">uuid</span>
                 <span class="p">)</span>
                 <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">_load_from_db_record</span><span class="p">(</span><span class="n">existing</span><span class="p">)</span>
-        <span class="n">new_job</span><span class="o">.</span><span class="n">store</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">store</span><span class="p">()</span>
         <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="s2">&quot;enqueued </span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">(*</span><span class="si">%r</span><span class="s2">, **</span><span class="si">%r</span><span class="s2">) with uuid: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="n">new_job</span><span class="o">.</span><span class="n">recordset</span><span class="p">,</span>
-            <span class="n">new_job</span><span class="o">.</span><span class="n">method_name</span><span class="p">,</span>
-            <span class="n">new_job</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
-            <span class="n">new_job</span><span class="o">.</span><span class="n">kwargs</span><span class="p">,</span>
-            <span class="n">new_job</span><span class="o">.</span><span class="n">uuid</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">recordset</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">method_name</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="n">new_job</span></div>
+        <span class="k">return</span> <span class="bp">self</span>
 
 <div class="viewcode-block" id="Job.db_record_from_uuid"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.db_record_from_uuid">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">db_record_from_uuid</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">):</span>
+        <span class="c1"># TODO remove in 13.0 or 14.0</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;deprecated, use &#39;db_records_from_uuids&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Job</span><span class="o">.</span><span class="n">db_records_from_uuids</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="p">[</span><span class="n">job_uuid</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Job.db_records_from_uuids"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.db_records_from_uuids">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">db_records_from_uuids</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">job_uuids</span><span class="p">):</span>
         <span class="n">model</span> <span class="o">=</span> <span class="n">env</span><span class="p">[</span><span class="s1">&#39;queue.job&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span>
-        <span class="n">record</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s1">&#39;uuid&#39;</span><span class="p">,</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">job_uuid</span><span class="p">)],</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s1">&#39;uuid&#39;</span><span class="p">,</span> <span class="s1">&#39;in&#39;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">job_uuids</span><span class="p">))])</span>
         <span class="k">return</span> <span class="n">record</span><span class="o">.</span><span class="n">with_env</span><span class="p">(</span><span class="n">env</span><span class="p">)</span><span class="o">.</span><span class="n">sudo</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span>
@@ -596,6 +592,7 @@
 <span class="sd">        :param identity_key: A hash to uniquely identify a job, or a function</span>
 <span class="sd">                             that returns this hash (the function takes the job</span>
 <span class="sd">                             as argument)</span>
+<span class="sd">        :param graph_uuid: Shared UUID of the job&#39;s graph</span>
 <span class="sd">        :param env: Odoo Environment</span>
 <span class="sd">        :type env: :class:`odoo.api.Environment`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -634,9 +631,15 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">max_retries</span> <span class="o">=</span> <span class="n">max_retries</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_uuid</span> <span class="o">=</span> <span class="n">job_uuid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_uuid</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__depends_on_uuids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__reverse_depends_on_uuids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_depends_on</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reverse_depends_on</span> <span class="o">=</span> <span class="n">weakref</span><span class="o">.</span><span class="n">WeakSet</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">priority</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">priority</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -679,6 +682,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="n">channel</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">worker_pid</span> <span class="o">=</span> <span class="kc">None</span>
 
+<div class="viewcode-block" id="Job.add_depends"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.add_depends">[docs]</a>    <span class="k">def</span> <span class="nf">add_depends</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jobs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;job cannot depend on itself&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__depends_on_uuids</span> <span class="o">|=</span> <span class="p">{</span><span class="n">j</span><span class="o">.</span><span class="n">uuid</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_depends_on</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">jobs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">:</span>
+            <span class="n">parent</span><span class="o">.</span><span class="n">__reverse_depends_on_uuids</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span>
+            <span class="n">parent</span><span class="o">.</span><span class="n">_reverse_depends_on</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">state</span> <span class="o">!=</span> <span class="n">DONE</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">WAIT_DEPENDENCIES</span></div>
+
 <div class="viewcode-block" id="Job.perform"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.perform">[docs]</a>    <span class="k">def</span> <span class="nf">perform</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Execute the job.</span>
 
@@ -703,7 +717,39 @@
                                          <span class="p">)</span>
                 <span class="k">raise</span> <span class="n">new_exc</span> <span class="kn">from</span> <span class="nn">err</span>
             <span class="k">raise</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span></div>
+
+<div class="viewcode-block" id="Job.enqueue_waiting"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.enqueue_waiting">[docs]</a>    <span class="k">def</span> <span class="nf">enqueue_waiting</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            UPDATE queue_job</span>
+<span class="s2">            SET state = </span><span class="si">%s</span><span class="s2"></span>
+<span class="s2">            FROM (</span>
+<span class="s2">            SELECT child.id, array_agg(parent.state) as parent_states</span>
+<span class="s2">            FROM queue_job job</span>
+<span class="s2">            JOIN LATERAL</span>
+<span class="s2">              json_array_elements_text(</span>
+<span class="s2">                  job.dependencies::json-&gt;&#39;reverse_depends_on&#39;</span>
+<span class="s2">              ) child_deps ON true</span>
+<span class="s2">            JOIN queue_job child</span>
+<span class="s2">            ON child.graph_uuid = job.graph_uuid</span>
+<span class="s2">            AND child.uuid = child_deps</span>
+<span class="s2">            JOIN LATERAL</span>
+<span class="s2">                json_array_elements_text(</span>
+<span class="s2">                  child.dependencies::json-&gt;&#39;depends_on&#39;</span>
+<span class="s2">                ) parent_deps ON true</span>
+<span class="s2">            JOIN queue_job parent</span>
+<span class="s2">            ON parent.graph_uuid = job.graph_uuid</span>
+<span class="s2">            AND parent.uuid = parent_deps</span>
+<span class="s2">            WHERE job.uuid = </span><span class="si">%s</span><span class="s2"></span>
+<span class="s2">            GROUP BY child.id</span>
+<span class="s2">            ) jobs</span>
+<span class="s2">            WHERE</span>
+<span class="s2">            queue_job.id = jobs.id</span>
+<span class="s2">            AND </span><span class="si">%s</span><span class="s2"> = ALL(jobs.parent_states)</span>
+<span class="s2">            AND state = </span><span class="si">%s</span><span class="s2">;</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">cr</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">,</span> <span class="p">(</span><span class="n">PENDING</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">,</span> <span class="n">DONE</span><span class="p">,</span> <span class="n">WAIT_DEPENDENCIES</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Job.store"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.store">[docs]</a>    <span class="k">def</span> <span class="nf">store</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Store the Job&quot;&quot;&quot;</span>
@@ -741,6 +787,7 @@
                 <span class="s1">&#39;eta&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
                 <span class="s1">&#39;identity_key&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
                 <span class="s2">&quot;worker_pid&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">worker_pid</span><span class="p">,</span>
+                <span class="s1">&#39;graph_uuid&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_uuid</span><span class="p">,</span>
                 <span class="p">}</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_enqueued</span><span class="p">:</span>
@@ -757,6 +804,16 @@
             <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;eta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">identity_key</span><span class="p">:</span>
             <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;identity_key&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">identity_key</span>
+
+        <span class="n">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;depends_on&#39;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="n">parent</span><span class="o">.</span><span class="n">uuid</span> <span class="k">for</span> <span class="n">parent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">depends_on</span>
+            <span class="p">],</span>
+            <span class="s1">&#39;reverse_depends_on&#39;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="n">children</span><span class="o">.</span><span class="n">uuid</span> <span class="k">for</span> <span class="n">children</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse_depends_on</span>
+            <span class="p">],</span>
+        <span class="p">}</span>
+        <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;dependencies&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dependencies</span>
 
         <span class="k">if</span> <span class="n">create</span><span class="p">:</span>
             <span class="n">vals</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
@@ -805,8 +862,24 @@
         <span class="n">all_args</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span> <span class="o">+</span> <span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.</span><span class="si">{}</span><span class="s2">(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">method_name</span><span class="p">,</span> <span class="n">all_args</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">uuid</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="o">.</span><span class="fm">__hash__</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Job.sorting_key"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.sorting_key">[docs]</a>    <span class="k">def</span> <span class="nf">sorting_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">date_created</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span></div>
+
+    <span class="k">def</span> <span class="fm">__lt__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">other</span><span class="o">.</span><span class="n">eta</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">eta</span> <span class="ow">and</span> <span class="n">other</span><span class="o">.</span><span class="n">eta</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sorting_key</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">sorting_key</span><span class="p">()</span>
+
 <div class="viewcode-block" id="Job.db_record"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.db_record">[docs]</a>    <span class="k">def</span> <span class="nf">db_record</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_record_from_uuid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db_records_from_uuids</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">uuid</span><span class="p">])</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -836,6 +909,22 @@
             <span class="c1"># from the function</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_identity_key</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_identity_key_func</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">depends_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_depends_on</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_depends_on</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="n">load_many</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__depends_on_uuids</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_depends_on</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">reverse_depends_on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reverse_depends_on</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reverse_depends_on</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="n">load_many</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__reverse_depends_on_uuids</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_reverse_depends_on</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -891,7 +980,10 @@
         <span class="k">return</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="Job.set_pending"><a class="viewcode-back" href="../../../../api/api_queue.html#odoo.addons.queue_job.job.Job.set_pending">[docs]</a>    <span class="k">def</span> <span class="nf">set_pending</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reset_retry</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">PENDING</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">state</span> <span class="o">!=</span> <span class="n">DONE</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">depends_on</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">WAIT_DEPENDENCIES</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">PENDING</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">date_enqueued</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">date_started</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">date_done</span> <span class="o">=</span> <span class="kc">None</span>

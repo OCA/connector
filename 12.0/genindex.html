@@ -19,10 +19,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js "></script>
-<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -418,6 +418,8 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.add_depends">add_depends() (odoo.addons.queue_job.job.Job method)</a>
+</li>
       <li><a href="api/api_components.html#connector.components.core.BaseConnectorComponent.advisory_lock_or_retry">advisory_lock_or_retry() (connector.components.core.BaseConnectorComponent method)</a>
 </li>
       <li><a href="api/api_components.html#odoo.addons.component.core.MetaComponent.apply_on_models">apply_on_models() (odoo.addons.component.core.MetaComponent property)</a>
@@ -592,9 +594,13 @@
 </li>
       <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.db_record">db_record() (odoo.addons.queue_job.job.Job method)</a>
 </li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.db_record_from_uuid">db_record_from_uuid() (odoo.addons.queue_job.job.Job static method)</a>
+</li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.db_records_from_uuids">db_records_from_uuids() (odoo.addons.queue_job.job.Job static method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.db_record_from_uuid">db_record_from_uuid() (odoo.addons.queue_job.job.Job static method)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.models.base.Base.delayable">delayable() (odoo.addons.queue_job.models.base.Base method)</a>
 </li>
       <li><a href="api/api_queue.html#odoo.addons.queue_job.job.DelayableRecordset">DelayableRecordset (class in odoo.addons.queue_job.job)</a>
 </li>
@@ -602,9 +608,11 @@
 </li>
       <li><a href="api/api_components.html#connector.components.synchronizer.Deleter">Deleter (class in connector.components.synchronizer)</a>
 </li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.depends_on">depends_on() (odoo.addons.queue_job.job.Job property)</a>
+</li>
       <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.description">description (odoo.addons.queue_job.job.Job attribute)</a>
 </li>
-      <li><a href="api/api_queue.html#id1">description() (odoo.addons.queue_job.job.Job property)</a>
+      <li><a href="api/api_queue.html#id3">description() (odoo.addons.queue_job.job.Job property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -614,6 +622,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.enqueue">enqueue() (odoo.addons.queue_job.job.Job class method)</a>
 </li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.enqueue_waiting">enqueue_waiting() (odoo.addons.queue_job.job.Job method)</a>
+</li>
       <li><a href="api/api_components.html#odoo.addons.component.core.AbstractComponent.env">env() (odoo.addons.component.core.AbstractComponent property)</a>
 
       <ul>
@@ -622,14 +632,14 @@
       </ul></li>
       <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.eta">eta (odoo.addons.queue_job.job.Job attribute)</a>
 </li>
-      <li><a href="api/api_queue.html#id5">eta() (odoo.addons.queue_job.job.Job property)</a>
+      <li><a href="api/api_queue.html#id7">eta() (odoo.addons.queue_job.job.Job property)</a>
 </li>
       <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.exc_info">exc_info (odoo.addons.queue_job.job.Job attribute)</a>
 </li>
-      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.exc_message">exc_message (odoo.addons.queue_job.job.Job attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.exc_message">exc_message (odoo.addons.queue_job.job.Job attribute)</a>
+</li>
       <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.exc_name">exc_name (odoo.addons.queue_job.job.Job attribute)</a>
 </li>
       <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.exec_time">exec_time() (odoo.addons.queue_job.job.Job property)</a>
@@ -706,6 +716,8 @@
         <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelQueue.get_wakeup_time">(odoo.addons.queue_job.jobrunner.channels.ChannelQueue method)</a>
 </li>
       </ul></li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.graph_uuid">graph_uuid (odoo.addons.queue_job.job.Job attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -774,6 +786,8 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.load_many">load_many() (odoo.addons.queue_job.job.Job class method)</a>
+</li>
       <li><a href="api/api_components.html#connector.components.locker.RecordLocker.lock">lock() (connector.components.locker.RecordLocker method)</a>
 </li>
       <li><a href="api/api_components.html#odoo.addons.component.core.ComponentRegistry.lookup">lookup() (odoo.addons.component.core.ComponentRegistry method)</a>
@@ -828,7 +842,7 @@
         <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.model_name">(odoo.addons.queue_job.job.Job attribute)</a>
 </li>
       </ul></li>
-      <li><a href="api/api_queue.html#id3">model_name() (odoo.addons.queue_job.job.Job property)</a>
+      <li><a href="api/api_queue.html#id5">model_name() (odoo.addons.queue_job.job.Job property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1058,6 +1072,8 @@
 </li>
       <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.retry">retry (odoo.addons.queue_job.job.Job attribute)</a>
 </li>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.reverse_depends_on">reverse_depends_on() (odoo.addons.queue_job.job.Job property)</a>
+</li>
       <li><a href="api/api_components.html#connector.components.synchronizer.GenericExporter.run">run() (connector.components.synchronizer.GenericExporter method)</a>
 
       <ul>
@@ -1100,10 +1116,10 @@
         <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.set_pending">(odoo.addons.queue_job.jobrunner.channels.Channel method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.Channel.set_running">set_running() (odoo.addons.queue_job.jobrunner.channels.Channel method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.set_started">set_started() (odoo.addons.queue_job.job.Job method)</a>
 </li>
       <li><a href="api/api_components.html#odoo.addons.component.exception.SeveralComponentError">SeveralComponentError</a>
@@ -1114,8 +1130,12 @@
 </li>
       <li><a href="api/api_components.html#connector.components.mapper.MapChild.skip_item">skip_item() (connector.components.mapper.MapChild method)</a>
 </li>
-      <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelJob.sorting_key">sorting_key() (odoo.addons.queue_job.jobrunner.channels.ChannelJob method)</a>
+      <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.sorting_key">sorting_key() (odoo.addons.queue_job.job.Job method)</a>
+
+      <ul>
+        <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelJob.sorting_key">(odoo.addons.queue_job.jobrunner.channels.ChannelJob method)</a>
 </li>
+      </ul></li>
       <li><a href="api/api_channels.html#odoo.addons.queue_job.jobrunner.channels.ChannelJob.sorting_key_ignoring_eta">sorting_key_ignoring_eta() (odoo.addons.queue_job.jobrunner.channels.ChannelJob method)</a>
 </li>
       <li><a href="api/api_components.html#connector.components.mapper.MapRecord.source">source() (connector.components.mapper.MapRecord property)</a>
@@ -1156,11 +1176,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.user_id">user_id (odoo.addons.queue_job.job.Job attribute)</a>
 </li>
-      <li><a href="api/api_queue.html#id4">user_id() (odoo.addons.queue_job.job.Job property)</a>
+      <li><a href="api/api_queue.html#id6">user_id() (odoo.addons.queue_job.job.Job property)</a>
 </li>
       <li><a href="api/api_queue.html#odoo.addons.queue_job.job.Job.uuid">uuid (odoo.addons.queue_job.job.Job attribute)</a>
 </li>
-      <li><a href="api/api_queue.html#id2">uuid() (odoo.addons.queue_job.job.Job property)</a>
+      <li><a href="api/api_queue.html#id4">uuid() (odoo.addons.queue_job.job.Job property)</a>
 </li>
   </ul></td>
 </tr></table>

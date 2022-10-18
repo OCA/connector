@@ -20,10 +20,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../../../../../_static/js/jquery-1.12.4.min.js "></script>
-<script type="text/javascript" src="../../../../../_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="../../../../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="../../../../../_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="../../../../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../../../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../../../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../../../_static/bootstrap-sphinx.js"></script>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -221,10 +221,10 @@
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">api</span><span class="p">,</span> <span class="n">models</span>
 <span class="kn">from</span> <span class="nn">..job</span> <span class="kn">import</span> <span class="n">DelayableRecordset</span>
+<span class="kn">from</span> <span class="nn">..delay</span> <span class="kn">import</span> <span class="n">Delayable</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -254,24 +254,81 @@
     <span class="k">def</span> <span class="nf">with_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">max_retries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">identity_key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return a ``DelayableRecordset``</span>
+        <span class="sd">&quot;&quot;&quot;Return a ``DelayableRecordset``</span>
 
-<span class="sd">        The returned instance allows to enqueue any method of the recordset&#39;s</span>
-<span class="sd">        Model.</span>
+<span class="sd">        It is a shortcut for the longer form as shown below::</span>
 
-<span class="sd">        Usage::</span>
-
-<span class="sd">            self.env[&#39;res.users&#39;].with_delay().write({&#39;name&#39;: &#39;test&#39;})</span>
+<span class="sd">            self.with_delay(priority=20).action_done()</span>
+<span class="sd">            # is equivalent to:</span>
+<span class="sd">            self.delayable().set(priority=20).action_done().delay()</span>
 
 <span class="sd">        ``with_delay()`` accepts job properties which specify how the job will</span>
 <span class="sd">        be executed.</span>
 
 <span class="sd">        Usage with job properties::</span>
 
-<span class="sd">            delayable = env[&#39;a.model&#39;].with_delay(priority=30, eta=60*60*5)</span>
+<span class="sd">            env[&#39;a.model&#39;].with_delay(priority=30, eta=60*60*5).action_done()</span>
 <span class="sd">            delayable.export_one_thing(the_thing_to_export)</span>
 <span class="sd">            # =&gt; the job will be executed with a low priority and not before a</span>
 <span class="sd">            # delay of 5 hours from now</span>
+
+<span class="sd">        When using :meth:``with_delay``, the final ``delay()`` is implicit.</span>
+<span class="sd">        See the documentation of :meth:``delayable`` for more details.</span>
+
+<span class="sd">        :return: instance of a DelayableRecordset</span>
+<span class="sd">        :rtype: :class:`odoo.addons.queue_job.job.DelayableRecordset`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">DelayableRecordset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">priority</span><span class="p">,</span>
+                                  <span class="n">eta</span><span class="o">=</span><span class="n">eta</span><span class="p">,</span>
+                                  <span class="n">max_retries</span><span class="o">=</span><span class="n">max_retries</span><span class="p">,</span>
+                                  <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+                                  <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span>
+                                  <span class="n">identity_key</span><span class="o">=</span><span class="n">identity_key</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Base.delayable"><a class="viewcode-back" href="../../../../../api/api_queue.html#odoo.addons.queue_job.models.base.Base.delayable">[docs]</a>    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="k">def</span> <span class="nf">delayable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">max_retries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">channel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">identity_key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a ``Delayable``</span>
+
+<span class="sd">        The returned instance allows to enqueue any method of the recordset&#39;s</span>
+<span class="sd">        Model.</span>
+
+<span class="sd">        Usage::</span>
+
+<span class="sd">            delayable = self.env[&quot;res.users&quot;].browse(10).delayable(priority=20)</span>
+<span class="sd">            delayable.do_work(name=&quot;test&quot;}).delay()</span>
+
+<span class="sd">        In this example, the ``do_work`` method will not be executed directly.</span>
+<span class="sd">        It will be executed in an asynchronous job.</span>
+
+<span class="sd">        Method calls on a Delayable generally return themselves, so calls can</span>
+<span class="sd">        be chained together::</span>
+
+<span class="sd">            delayable.set(priority=15).do_work(name=&quot;test&quot;}).delay()</span>
+
+<span class="sd">        The order of the calls that build the job is not relevant, beside</span>
+<span class="sd">        the call to ``delay()`` that must happen at the very end. This is</span>
+<span class="sd">        equivalent to the example above::</span>
+
+<span class="sd">            delayable.do_work(name=&quot;test&quot;}).set(priority=15).delay()</span>
+
+<span class="sd">        Very importantly, ``delay()`` must be called on the top-most parent</span>
+<span class="sd">        of a chain of jobs, so if you have this::</span>
+
+<span class="sd">            job1 = record1.delayable().do_work()</span>
+<span class="sd">            job2 = record2.delayable().do_work()</span>
+<span class="sd">            job1.on_done(job2)</span>
+
+<span class="sd">        The ``delay()`` call must be made on ``job1``, otherwise ``job2`` will</span>
+<span class="sd">        be delayed, but ``job1`` will never be. When done on ``job1``, the</span>
+<span class="sd">        ``delay()`` call will traverse the graph of jobs and delay all of</span>
+<span class="sd">        them::</span>
+
+<span class="sd">            job1.delay()</span>
+
+<span class="sd">        For more details on the graph dependencies, read the documentation of</span>
+<span class="sd">        :module:`~odoo.addons.queue_job.delay`.</span>
 
 <span class="sd">        :param priority: Priority of the job, 0 being the higher priority.</span>
 <span class="sd">                         Default is 10.</span>
@@ -290,35 +347,16 @@
 <span class="sd">                             the new job will not be added. It is either a</span>
 <span class="sd">                             string, either a function that takes the job as</span>
 <span class="sd">                             argument (see :py:func:`..job.identity_exact`).</span>
-<span class="sd">        :return: instance of a DelayableRecordset</span>
-<span class="sd">        :rtype: :class:`odoo.addons.queue_job.job.DelayableRecordset`</span>
-
-<span class="sd">        Note for developers: if you want to run tests or simply disable</span>
-<span class="sd">        jobs queueing for debugging purposes, you can:</span>
-
-<span class="sd">            a. set the env var `TEST_QUEUE_JOB_NO_DELAY=1`</span>
-<span class="sd">            b. pass a ctx key `test_queue_job_no_delay=1`</span>
-
-<span class="sd">        In tests you&#39;ll have to mute the logger like:</span>
-
-<span class="sd">            @mute_logger(&#39;odoo.addons.queue_job.models.base&#39;)</span>
+<span class="sd">                             the new job will not be added.</span>
+<span class="sd">        :return: instance of a Delayable</span>
+<span class="sd">        :rtype: :class:`odoo.addons.queue_job.job.Delayable`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;TEST_QUEUE_JOB_NO_DELAY&#39;</span><span class="p">):</span>
-            <span class="n">_logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="s1">&#39;`TEST_QUEUE_JOB_NO_DELAY` env var found. NO JOB scheduled.&#39;</span>
-            <span class="p">)</span>
-            <span class="k">return</span> <span class="bp">self</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;test_queue_job_no_delay&#39;</span><span class="p">):</span>
-            <span class="n">_logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="s1">&#39;`test_queue_job_no_delay` ctx key found. NO JOB scheduled.&#39;</span>
-            <span class="p">)</span>
-            <span class="k">return</span> <span class="bp">self</span>
-        <span class="k">return</span> <span class="n">DelayableRecordset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">priority</span><span class="p">,</span>
-                                  <span class="n">eta</span><span class="o">=</span><span class="n">eta</span><span class="p">,</span>
-                                  <span class="n">max_retries</span><span class="o">=</span><span class="n">max_retries</span><span class="p">,</span>
-                                  <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
-                                  <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span>
-                                  <span class="n">identity_key</span><span class="o">=</span><span class="n">identity_key</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">Delayable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="n">priority</span><span class="p">,</span>
+                         <span class="n">eta</span><span class="o">=</span><span class="n">eta</span><span class="p">,</span>
+                         <span class="n">max_retries</span><span class="o">=</span><span class="n">max_retries</span><span class="p">,</span>
+                         <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
+                         <span class="n">channel</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span>
+                         <span class="n">identity_key</span><span class="o">=</span><span class="n">identity_key</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_patch_job_auto_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method_name</span><span class="p">,</span> <span class="n">context_key</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Patch a method to be automatically delayed as job method when called</span>

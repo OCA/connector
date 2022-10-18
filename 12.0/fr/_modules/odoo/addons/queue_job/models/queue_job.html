@@ -20,10 +20,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../../../../../_static/js/jquery-1.12.4.min.js "></script>
-<script type="text/javascript" src="../../../../../_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="../../../../../_static/bootstrap-3.4.1/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="../../../../../_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="../../../../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../../../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../../../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../../../_static/bootstrap-sphinx.js"></script>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -220,15 +220,29 @@
 
 <span class="kn">import</span> <span class="nn">ast</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 
 <span class="kn">from</span> <span class="nn">odoo</span> <span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="n">api</span><span class="p">,</span> <span class="n">exceptions</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">tools</span>
+<span class="kn">from</span> <span class="nn">odoo.addons.base_sparse_field.models.fields</span> <span class="kn">import</span> <span class="n">Serialized</span>
 <span class="kn">from</span> <span class="nn">odoo.osv</span> <span class="kn">import</span> <span class="n">expression</span>
+<span class="kn">from</span> <span class="nn">odoo.tools</span> <span class="kn">import</span> <span class="n">html_escape</span>
 
+<span class="kn">from</span> <span class="nn">..delay</span> <span class="kn">import</span> <span class="n">Graph</span>
+<span class="kn">from</span> <span class="nn">..exception</span> <span class="kn">import</span> <span class="n">JobError</span>
 <span class="kn">from</span> <span class="nn">..fields</span> <span class="kn">import</span> <span class="n">JobSerialized</span>
-<span class="kn">from</span> <span class="nn">..job</span> <span class="kn">import</span> <span class="n">CANCELLED</span><span class="p">,</span> <span class="n">DONE</span><span class="p">,</span> <span class="n">PENDING</span><span class="p">,</span> <span class="n">STATES</span><span class="p">,</span> <span class="n">Job</span>
+<span class="kn">from</span> <span class="nn">..job</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CANCELLED</span><span class="p">,</span>
+    <span class="n">DONE</span><span class="p">,</span>
+    <span class="n">FAILED</span><span class="p">,</span>
+    <span class="n">Job</span><span class="p">,</span>
+    <span class="n">PENDING</span><span class="p">,</span>
+    <span class="n">STARTED</span><span class="p">,</span>
+    <span class="n">STATES</span><span class="p">,</span>
+    <span class="n">WAIT_DEPENDENCIES</span>
+<span class="p">)</span>
 
 <span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -271,6 +285,12 @@
                        <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                        <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">graph_uuid</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span>
+        <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Graph UUID&#39;</span><span class="p">,</span>
+        <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Single shared identifier of a Graph. Empty for a single job.&quot;</span>
+    <span class="p">)</span>
     <span class="n">user_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;res.users&#39;</span><span class="p">,</span>
                               <span class="n">string</span><span class="o">=</span><span class="s1">&#39;User ID&#39;</span><span class="p">)</span>
     <span class="n">company_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;res.company&#39;</span><span class="p">,</span>
@@ -285,6 +305,10 @@
     <span class="n">records</span> <span class="o">=</span> <span class="n">JobSerialized</span><span class="p">(</span>
         <span class="n">string</span><span class="o">=</span><span class="s2">&quot;Record(s)&quot;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">base_type</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">,</span>
     <span class="p">)</span>
+    <span class="n">dependencies</span> <span class="o">=</span> <span class="n">Serialized</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># dependency graph as expected by the field widget</span>
+    <span class="n">dependency_graph</span> <span class="o">=</span> <span class="n">Serialized</span><span class="p">(</span><span class="n">compute</span><span class="o">=</span><span class="s1">&#39;_compute_dependency_graph&#39;</span><span class="p">)</span>
+    <span class="n">graph_jobs_count</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Integer</span><span class="p">(</span><span class="n">compute</span><span class="o">=</span><span class="s2">&quot;_compute_graph_jobs_count&quot;</span><span class="p">)</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">JobSerialized</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">base_type</span><span class="o">=</span><span class="nb">tuple</span><span class="p">)</span>
     <span class="n">kwargs</span> <span class="o">=</span> <span class="n">JobSerialized</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">base_type</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
     <span class="n">func_string</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s2">&quot;Task&quot;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -320,7 +344,7 @@
     <span class="p">)</span>
 
     <span class="c1"># FIXME the name of this field is very confusing</span>
-    <span class="n">channel_method_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">channel_method_name</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Char</span><span class="p">(</span><span class="n">string</span><span class="o">=</span><span class="s2">&quot;Complete Method Name&quot;</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">job_function_id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">Many2one</span><span class="p">(</span><span class="n">comodel_name</span><span class="o">=</span><span class="s1">&#39;queue.job.function&#39;</span><span class="p">,</span>
                                       <span class="n">string</span><span class="o">=</span><span class="s1">&#39;Job Function&#39;</span><span class="p">,</span>
                                       <span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -347,6 +371,92 @@
     <span class="k">def</span> <span class="nf">_compute_record_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">record</span><span class="o">.</span><span class="n">record_ids</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">records</span><span class="o">.</span><span class="n">ids</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">depends</span><span class="p">(</span><span class="s1">&#39;dependencies&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_compute_dependency_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">graph_uuids</span> <span class="o">=</span> <span class="p">[</span><span class="n">uuid</span> <span class="k">for</span> <span class="n">uuid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapped</span><span class="p">(</span><span class="s2">&quot;graph_uuid&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">uuid</span><span class="p">]</span>
+        <span class="n">jobs_groups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;queue.job&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">read_group</span><span class="p">(</span>
+            <span class="p">[(</span><span class="s2">&quot;graph_uuid&quot;</span><span class="p">,</span> <span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">graph_uuids</span><span class="p">)],</span>
+            <span class="p">[</span><span class="s2">&quot;graph_uuid&quot;</span><span class="p">,</span> <span class="s2">&quot;ids:array_agg(id)&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;graph_uuid&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">ids_per_graph_uuid</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">group</span><span class="p">[</span><span class="s2">&quot;graph_uuid&quot;</span><span class="p">]:</span> <span class="n">group</span><span class="p">[</span><span class="s2">&quot;ids&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">jobs_groups</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">record</span><span class="o">.</span><span class="n">graph_uuid</span><span class="p">:</span>
+                <span class="n">record</span><span class="o">.</span><span class="n">dependency_graph</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">continue</span>
+
+            <span class="n">graph_jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">browse</span><span class="p">(</span><span class="n">ids_per_graph_uuid</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">graph_uuid</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[])</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">graph_jobs</span><span class="p">:</span>
+                <span class="n">record</span><span class="o">.</span><span class="n">dependency_graph</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">continue</span>
+
+            <span class="n">graph_ids</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">graph_job</span><span class="o">.</span><span class="n">uuid</span><span class="p">:</span> <span class="n">graph_job</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">graph_job</span> <span class="ow">in</span> <span class="n">graph_jobs</span>
+            <span class="p">}</span>
+            <span class="n">graph_jobs_by_ids</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">graph_job</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="n">graph_job</span> <span class="k">for</span> <span class="n">graph_job</span> <span class="ow">in</span> <span class="n">graph_jobs</span>
+            <span class="p">}</span>
+
+            <span class="n">graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">graph_job</span> <span class="ow">in</span> <span class="n">graph_jobs</span><span class="p">:</span>
+                <span class="n">graph</span><span class="o">.</span><span class="n">add_vertex</span><span class="p">(</span><span class="n">graph_job</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">parent_uuid</span> <span class="ow">in</span> <span class="n">graph_job</span><span class="o">.</span><span class="n">dependencies</span><span class="p">[</span><span class="s1">&#39;depends_on&#39;</span><span class="p">]:</span>
+                    <span class="n">parent_id</span> <span class="o">=</span> <span class="n">graph_ids</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">parent_uuid</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">parent_id</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">parent_id</span><span class="p">,</span> <span class="n">graph_job</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">child_uuid</span> <span class="ow">in</span> <span class="n">graph_job</span><span class="o">.</span><span class="n">dependencies</span><span class="p">[</span><span class="s1">&#39;reverse_depends_on&#39;</span><span class="p">]:</span>
+                    <span class="n">child_id</span> <span class="o">=</span> <span class="n">graph_ids</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">child_uuid</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">child_id</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="n">graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">graph_job</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">child_id</span><span class="p">)</span>
+
+            <span class="n">record</span><span class="o">.</span><span class="n">dependency_graph</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="c1"># list of ids</span>
+                <span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="n">graph_jobs_by_ids</span><span class="p">[</span><span class="n">graph_id</span><span class="p">]</span><span class="o">.</span><span class="n">_dependency_graph_vis_node</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">graph_id</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">()</span>
+                <span class="p">],</span>
+                <span class="c1"># list of tuples (from, to)</span>
+                <span class="s1">&#39;edges&#39;</span><span class="p">:</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">(),</span>
+            <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_dependency_graph_vis_node</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the node as expected by the JobDirectedGraph widget&quot;&quot;&quot;</span>
+        <span class="n">default</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;#D2E5FF&quot;</span><span class="p">,</span> <span class="s2">&quot;#2B7CE9&quot;</span><span class="p">)</span>
+        <span class="n">colors</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">DONE</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;#C2FABC&quot;</span><span class="p">,</span> <span class="s2">&quot;#4AD63A&quot;</span><span class="p">),</span>
+            <span class="n">FAILED</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;#FB7E81&quot;</span><span class="p">,</span> <span class="s2">&quot;#FA0A10&quot;</span><span class="p">),</span>
+            <span class="n">STARTED</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;#FFFF00&quot;</span><span class="p">,</span> <span class="s2">&quot;#FFA500&quot;</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;strong&gt;</span><span class="si">%s</span><span class="s2">&lt;/strong&gt;&lt;br/&gt;</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">html_escape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">display_name</span><span class="p">),</span>
+                <span class="n">html_escape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func_string</span><span class="p">),</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">colors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">default</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s2">&quot;border&quot;</span><span class="p">:</span> <span class="n">colors</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">default</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="s2">&quot;shadow&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="k">def</span> <span class="nf">_compute_graph_jobs_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">graph_uuids</span> <span class="o">=</span> <span class="p">[</span><span class="n">uuid</span> <span class="k">for</span> <span class="n">uuid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapped</span><span class="p">(</span><span class="s2">&quot;graph_uuid&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">uuid</span><span class="p">]</span>
+        <span class="n">jobs_groups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;queue.job&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">read_group</span><span class="p">(</span>
+            <span class="p">[(</span><span class="s2">&quot;graph_uuid&quot;</span><span class="p">,</span> <span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">graph_uuids</span><span class="p">)],</span>
+            <span class="p">[</span><span class="s2">&quot;graph_uuid&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;graph_uuid&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">count_per_graph_uuid</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">group</span><span class="p">[</span><span class="s2">&quot;graph_uuid&quot;</span><span class="p">]:</span> <span class="n">group</span><span class="p">[</span><span class="s2">&quot;graph_uuid_count&quot;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">jobs_groups</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">graph_jobs_count</span> <span class="o">=</span> <span class="n">count_per_graph_uuid</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">graph_uuid</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span>
 
     <span class="nd">@api</span><span class="o">.</span><span class="n">model_create_multi</span>
     <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals_list</span><span class="p">):</span>
@@ -404,6 +514,21 @@
         <span class="k">return</span> <span class="n">action</span>
 
     <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
+    <span class="k">def</span> <span class="nf">open_graph_jobs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return action that opens all jobs of the same graph&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ensure_one</span><span class="p">()</span>
+        <span class="n">jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;queue.job&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">([(</span><span class="s2">&quot;graph_uuid&quot;</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_uuid</span><span class="p">)])</span>
+
+        <span class="n">action_jobs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">ref</span><span class="p">(</span><span class="s1">&#39;queue_job.action_queue_job&#39;</span><span class="p">)</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">action_jobs</span><span class="o">.</span><span class="n">read</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">action</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s2">&quot;Jobs for graph </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_uuid</span><span class="p">),</span>
+            <span class="s2">&quot;context&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;in&quot;</span><span class="p">,</span> <span class="n">jobs</span><span class="o">.</span><span class="n">ids</span><span class="p">)]</span>
+        <span class="p">})</span>
+        <span class="k">return</span> <span class="n">action</span>
+
+    <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">_change_job_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Change the state of the `Job` object</span>
 
@@ -414,13 +539,16 @@
             <span class="n">job_</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="n">record</span><span class="o">.</span><span class="n">uuid</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">state</span> <span class="o">==</span> <span class="n">DONE</span><span class="p">:</span>
                 <span class="n">job_</span><span class="o">.</span><span class="n">set_done</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">)</span>
+                <span class="n">job_</span><span class="o">.</span><span class="n">store</span><span class="p">()</span>
+                <span class="n">job_</span><span class="o">.</span><span class="n">enqueue_waiting</span><span class="p">()</span>
             <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="n">PENDING</span><span class="p">:</span>
                 <span class="n">job_</span><span class="o">.</span><span class="n">set_pending</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">)</span>
+                <span class="n">job_</span><span class="o">.</span><span class="n">store</span><span class="p">()</span>
             <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="n">CANCELLED</span><span class="p">:</span>
                 <span class="n">job_</span><span class="o">.</span><span class="n">set_cancelled</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">)</span>
+                <span class="n">job_</span><span class="o">.</span><span class="n">store</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;State not supported: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">state</span><span class="p">)</span>
-            <span class="n">job_</span><span class="o">.</span><span class="n">store</span><span class="p">()</span>
 
     <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">button_done</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -436,7 +564,10 @@
 
     <span class="nd">@api</span><span class="o">.</span><span class="n">multi</span>
     <span class="k">def</span> <span class="nf">requeue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_change_job_state</span><span class="p">(</span><span class="n">PENDING</span><span class="p">)</span>
+        <span class="n">jobs_to_requeue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">job_</span><span class="p">:</span> <span class="n">job_</span><span class="o">.</span><span class="n">state</span> <span class="o">!=</span> <span class="n">WAIT_DEPENDENCIES</span>
+        <span class="p">)</span>
+        <span class="n">jobs_to_requeue</span><span class="o">.</span><span class="n">_change_job_state</span><span class="p">(</span><span class="n">PENDING</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="nf">_message_post_on_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -586,8 +717,10 @@
             <span class="p">})</span>
         <span class="k">return</span> <span class="n">action</span>
 
-    <span class="k">def</span> <span class="nf">_test_job</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Running test job.&quot;</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">_test_job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">failure_rate</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Running test job.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">failure_rate</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">JobError</span><span class="p">(</span><span class="s2">&quot;Job failed&quot;</span><span class="p">)</span></div>
 
 
 <span class="k">class</span> <span class="nc">RequeueJob</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">TransientModel</span><span class="p">):</span>

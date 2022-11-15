@@ -72,7 +72,8 @@ def pg_try_advisory_lock(env, lock):
     # pg_lock accepts an int8 so we build an hash composed with
     # contextual information and we throw away some bits
     int_lock = struct.unpack("q", hasher.digest()[:8])
-
+    if int_lock[0] < 0:
+        int_lock[0] = int_lock[0] * -1
     env.cr.execute("SELECT pg_try_advisory_xact_lock(%s);", (int_lock,))
     acquired = env.cr.fetchone()[0]
     return acquired

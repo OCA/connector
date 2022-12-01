@@ -17,7 +17,12 @@ TODO: add repo description.
 
 [//]: # (addons)
 
-This part will be replaced when running the oca-gen-addons-table script from OCA/maintainer-tools.
+Available addons
+----------------
+addon | version | maintainers | summary
+--- | --- | --- | ---
+[component](component/) | 16.0.1.0.0 | [![guewen](https://github.com/guewen.png?size=30px)](https://github.com/guewen) | Add capabilities to register and use decoupled components, as an alternative to model classes
+[test_component](test_component/) | 16.0.1.0.0 | [![guewen](https://github.com/guewen.png?size=30px)](https://github.com/guewen) | Automated tests for Components, do not install.
 
 [//]: # (end addons)
 

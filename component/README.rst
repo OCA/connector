@@ -30,6 +30,10 @@ Framework. It can be used without using the full Connector though.
 
 Documentation: http://odoo-connector.com/
 
+You may also want to check the `Introduction to Odoo Components`_ by @guewen.
+
+.. _Introduction to Odoo Components: https://dev.to/guewen/introduction-to-odoo-components-bn0
+
 **Table of contents**
 
 .. contents::
@@ -84,7 +88,12 @@ Changelog
     forbidden and will likely break the structure of the README.rst
     or other documents where this fragment is included. ]
 
-16.0.1.0.0 (2021-11-25)
+16.0.1.0.0 (2022-10-04)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* [MIGRATION] from 15.0
+
+15.0.1.0.0 (2021-11-25)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 * [MIGRATION] from 14.0

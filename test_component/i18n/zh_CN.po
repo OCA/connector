@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* test_component
+# 	* test_component
 #
 msgid ""
 msgstr ""
@@ -58,5 +58,8 @@ msgstr "名称"
 
 #. module: test_component
 #: model:ir.model,name:test_component.model_test_component_collection
-msgid "test.component.collection"
-msgstr "test.component.collection"
+msgid "Test Component Collection"
+msgstr ""
+
+#~ msgid "test.component.collection"
+#~ msgstr "test.component.collection"

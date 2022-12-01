@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* component
+# 	* component
 #
 msgid ""
 msgstr ""
@@ -26,20 +26,11 @@ msgstr "基础抽象集合"
 msgid "Component Builder"
 msgstr "组件构建器"
 
-#. module: component
-#: model:ir.model.fields,field_description:component.field_collection_base__display_name
-#: model:ir.model.fields,field_description:component.field_component_builder__display_name
-msgid "Display Name"
-msgstr "显示名称"
+#~ msgid "Display Name"
+#~ msgstr "显示名称"
 
-#. module: component
-#: model:ir.model.fields,field_description:component.field_collection_base__id
-#: model:ir.model.fields,field_description:component.field_component_builder__id
-msgid "ID"
-msgstr "ID"
+#~ msgid "ID"
+#~ msgstr "ID"
 
-#. module: component
-#: model:ir.model.fields,field_description:component.field_collection_base____last_update
-#: model:ir.model.fields,field_description:component.field_component_builder____last_update
-msgid "Last Modified on"
-msgstr "最后修改时间"
+#~ msgid "Last Modified on"
+#~ msgstr "最后修改时间"

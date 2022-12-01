@@ -30,20 +30,11 @@ msgstr "Abstract Model inital pour une collection"
 msgid "Component Builder"
 msgstr "Constructeur de composants"
 
-#. module: component
-#: model:ir.model.fields,field_description:component.field_collection_base__display_name
-#: model:ir.model.fields,field_description:component.field_component_builder__display_name
-msgid "Display Name"
-msgstr "Nom affiché"
+#~ msgid "Display Name"
+#~ msgstr "Nom affiché"
 
-#. module: component
-#: model:ir.model.fields,field_description:component.field_collection_base__id
-#: model:ir.model.fields,field_description:component.field_component_builder__id
-msgid "ID"
-msgstr "ID"
+#~ msgid "ID"
+#~ msgstr "ID"
 
-#. module: component
-#: model:ir.model.fields,field_description:component.field_collection_base____last_update
-#: model:ir.model.fields,field_description:component.field_component_builder____last_update
-msgid "Last Modified on"
-msgstr "Dernière modification le"
+#~ msgid "Last Modified on"
+#~ msgstr "Dernière modification le"

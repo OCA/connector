@@ -9,14 +9,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-10 03:36+0000\n"
-"PO-Revision-Date: 2017-03-10 03:36+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2017\n"
+"PO-Revision-Date: 2022-12-28 22:47+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #. module: connector
 #: code:addons/connector/models/checkpoint.py:131
@@ -166,7 +167,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint__message_needaction
 msgid "If checked, new messages require your attention."
-msgstr ""
+msgstr "Se selezionata, nuovi messaggi richiedono attenzione."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint__message_has_error

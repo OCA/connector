@@ -100,6 +100,10 @@ class Base(models.AbstractModel):
     @api.model_create_multi
     def create(self, vals_list):
         records = super(Base, self).create(vals_list)
+        if not vals_list:
+            # No vals_list -> no creation. the upstream method returns an empty
+            # recordset.
+            return records
         for idx, vals in enumerate(vals_list):
             fields = list(vals.keys())
             self._event("on_record_create").notify(records[idx], fields=fields)

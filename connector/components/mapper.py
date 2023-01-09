@@ -797,12 +797,14 @@ class Mapper(AbstractComponent):
         assert (
             self.options is not None
         ), "options should be defined with '_mapping_options'"
-        _logger.debug("converting record %s to model %s", map_record.source, self.model)
+        _logger.debug("Converting record %s to model %s", map_record.source, self.model)
 
         fields = self.options.fields
         for_create = self.options.for_create
         result = {}
+        _logger.debug("Mapping direct fields")
         for from_attr, to_attr in self.direct:
+            _logger.debug("Mapping direct to {}".format(to_attr))
             if callable(from_attr):
                 attr_name = self._direct_source_field_name(from_attr)
             else:
@@ -812,7 +814,9 @@ class Mapper(AbstractComponent):
                 value = self._map_direct(map_record.source, from_attr, to_attr)
                 result[to_attr] = value
 
+        _logger.debug("Mapping data with methods")
         for meth, definition in self.map_methods:
+            _logger.debug("Mapping method {}".format(meth))
             mapping_changed_by = definition.changed_by
             if (
                 not fields
@@ -831,13 +835,17 @@ class Mapper(AbstractComponent):
                     )
                 result.update(values)
 
+        _logger.debug("Mapping children")
         for from_attr, to_attr, model_name in self.children:
             if not fields or from_attr in fields:
                 result[to_attr] = self._map_child(
                     map_record, from_attr, to_attr, model_name
                 )
 
-        return self.finalize(map_record, result)
+        _logger.debug("Finalizing")
+        res = self.finalize(map_record, result)
+        _logger.debug("Mapping finalized")
+        return res
 
     def finalize(self, map_record, values):
         """Called at the end of the mapping.

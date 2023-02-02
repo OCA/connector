@@ -9,6 +9,7 @@ setuptools.setup(
     version=version,
     install_requires=[
         'odoo-addon-component>=16.0dev,<16.1dev',
+        'odoo-addon-component_event>=16.0dev,<16.1dev',
         'odoo-addon-test_component>=16.0dev,<16.1dev',
     ],
     classifiers=[

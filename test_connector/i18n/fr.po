@@ -1,0 +1,137 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * test_connector
+#
+# Translators:
+# OCA Transbot <transbot@odoo-community.org>, 2018
+# Nicolas JEUDY <njeudy@panda-chi.io>, 2018
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-01 01:48+0000\n"
+"PO-Revision-Date: 2018-02-01 01:48+0000\n"
+"Last-Translator: Nicolas JEUDY <njeudy@panda-chi.io>, 2018\n"
+"Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: test_connector
+#: model:ir.model.constraint,message:test_connector.constraint_connector_test_binding_test_binding_uniq
+#: model:ir.model.constraint,message:test_connector.constraint_no_inherits_binding_test_binding_uniq
+msgid "A binding already exists for this record"
+msgstr "Une relation existe déjà pour cet enregistrement"
+
+#. module: test_connector
+#: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__backend_id
+#: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__backend_id
+msgid "Backend"
+msgstr "Backend"
+
+#. module: test_connector
+#: model:ir.model,name:test_connector.model_test_backend
+msgid "Backends for testing Connector"
+msgstr ""
+
+#. module: test_connector
+#: model:ir.model,name:test_connector.model_connector_test_binding
+msgid "Bindings for testing Connector"
+msgstr ""
+
+#. module: test_connector
+#: model:ir.model,name:test_connector.model_no_inherits_binding
+msgid "Bindings without inherit for testing Connector"
+msgstr ""
+
+#. module: test_connector
+#: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__create_uid
+#: model:ir.model.fields,field_description:test_connector.field_connector_test_record__create_uid
+#: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__create_uid
+#: model:ir.model.fields,field_description:test_connector.field_test_backend__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: test_connector
+#: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__create_date
+#: model:ir.model.fields,field_description:test_connector.field_connector_test_record__create_date
+#: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__create_date
+#: model:ir.model.fields,field_description:test_connector.field_test_backend__create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: test_connector
+#: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__display_name
+#: model:ir.model.fields,field_description:test_connector.field_connector_test_record__display_name
+#: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__display_name
+#: model:ir.model.fields,field_description:test_connector.field_test_backend__display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: test_connector
+#: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__id
+#: model:ir.model.fields,field_description:test_connector.field_connector_test_record__id
+#: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__id
+#: model:ir.model.fields,field_description:test_connector.field_test_backend__id
+msgid "ID"
+msgstr "ID"
+
+#. module: test_connector
+#: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__external_id
+#: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__external_id
+msgid "ID on External"
+msgstr "ID externe"
+
+#. module: test_connector
+#: model:ir.model.fields,field_description:test_connector.field_connector_test_binding____last_update
+#: model:ir.model.fields,field_description:test_connector.field_connector_test_record____last_update
+#: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding____last_update
+#: model:ir.model.fields,field_description:test_connector.field_test_backend____last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: test_connector
+#: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__write_uid
+#: model:ir.model.fields,field_description:test_connector.field_connector_test_record__write_uid
+#: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__write_uid
+#: model:ir.model.fields,field_description:test_connector.field_test_backend__write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: test_connector
+#: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__write_date
+#: model:ir.model.fields,field_description:test_connector.field_connector_test_record__write_date
+#: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__write_date
+#: model:ir.model.fields,field_description:test_connector.field_test_backend__write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: test_connector
+#: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__sync_date
+#: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__sync_date
+msgid "Last synchronization date"
+msgstr ""
+
+#. module: test_connector
+#: model:ir.model,name:test_connector.model_connector_test_record
+msgid "Records for testing Connector"
+msgstr ""
+
+#. module: test_connector
+#: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__odoo_id
+msgid "Test Record"
+msgstr "Enregistrement de test"
+
+#~ msgid "connector.test.binding"
+#~ msgstr "connector.test.binding"
+
+#~ msgid "connector.test.record"
+#~ msgstr "connector.test.record"
+
+#~ msgid "no.inherits.binding"
+#~ msgstr "no.inherits.binding"
+
+#~ msgid "test.backend"
+#~ msgstr "test.backend"

@@ -10,7 +10,9 @@ setuptools.setup(
     install_requires=[
         'odoo-addon-component>=16.0dev,<16.1dev',
         'odoo-addon-component_event>=16.0dev,<16.1dev',
+        'odoo-addon-connector>=16.0dev,<16.1dev',
         'odoo-addon-test_component>=16.0dev,<16.1dev',
+        'odoo-addon-test_connector>=16.0dev,<16.1dev',
     ],
     classifiers=[
         'Programming Language :: Python',

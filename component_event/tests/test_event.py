@@ -1,10 +1,9 @@
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
-import unittest
 from unittest import mock
 
-from odoo.tests.common import tagged
+from odoo.tests.common import BaseCase, tagged
 
 from odoo.addons.component.core import Component
 from odoo.addons.component.tests.common import (
@@ -15,8 +14,12 @@ from odoo.addons.component_event.components.event import skip_if
 from odoo.addons.component_event.core import EventWorkContext
 
 
+# NOTE: there's no reason for these tests to depend on BaseCase
+# but we cannot depend on `unittest.TestCase`
+# because Odoo's test suite runner expects to find some attributes on the test class
+# which come from `MetaCase`
 @tagged("standard", "at_install")
-class TestEventWorkContext(unittest.TestCase):
+class TestEventWorkContext(BaseCase):
     """Test Events Components"""
 
     def __init__(self, *args, **kwargs):

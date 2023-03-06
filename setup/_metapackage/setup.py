@@ -11,6 +11,7 @@ setuptools.setup(
         'odoo-addon-component>=16.0dev,<16.1dev',
         'odoo-addon-component_event>=16.0dev,<16.1dev',
         'odoo-addon-connector>=16.0dev,<16.1dev',
+        'odoo-addon-connector_base_product>=16.0dev,<16.1dev',
         'odoo-addon-test_component>=16.0dev,<16.1dev',
         'odoo-addon-test_connector>=16.0dev,<16.1dev',
     ],

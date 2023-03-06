@@ -23,7 +23,7 @@ from collections import OrderedDict, defaultdict
 from odoo import models
 from odoo.tools import LastOrderedSet, OrderedSet
 
-from .exception import NoComponentError, SeveralComponentError
+from .exception import NoComponentError, RegistryNotReadyError, SeveralComponentError
 
 _logger = logging.getLogger(__name__)
 
@@ -252,14 +252,17 @@ class WorkContext:
             dbname = self.env.cr.dbname
             try:
                 self.components_registry = _component_databases[dbname]
-            except KeyError:
-                _logger.error(
+            except KeyError as exc:
+                msg = (
                     "No component registry for database %s. "
                     "Probably because the Odoo registry has not been built "
-                    "yet.",
+                    "yet."
+                )
+                _logger.error(
+                    msg,
                     dbname,
                 )
-                raise
+                raise RegistryNotReadyError(msg) from exc
         self._propagate_kwargs = ["collection", "model_name", "components_registry"]
         for attr_name, value in kwargs.items():
             setattr(self, attr_name, value)

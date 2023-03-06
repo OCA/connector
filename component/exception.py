@@ -12,3 +12,7 @@ class NoComponentError(ComponentException):
 
 class SeveralComponentError(ComponentException):
     """More than one component have been found"""
+
+
+class RegistryNotReadyError(ComponentException):
+    """Component registry not ready yet for given DB."""

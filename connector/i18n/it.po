@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-10 03:36+0000\n"
-"PO-Revision-Date: 2022-12-28 22:50+0000\n"
+"PO-Revision-Date: 2023-03-30 14:30+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
 "Language: it\n"
@@ -129,7 +129,7 @@ msgstr "Creato il"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_review__display_name
 #: model:ir.model.fields,field_description:connector.field_external_binding__display_name
 msgid "Display Name"
-msgstr "Nome da visualizzare"
+msgstr "Nome visualizzato"
 
 #. module: connector
 #: model:ir.model,name:connector.model_external_binding

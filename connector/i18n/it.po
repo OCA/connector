@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-23 06:52+0000\n"
-"PO-Revision-Date: 2023-05-09 13:37+0000\n"
+"PO-Revision-Date: 2023-05-22 15:12+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: Italian (http://www.transifex.com/oca/OCA-connector-9-0/"
 "language/it/)\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_queue_job_form
@@ -580,7 +580,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_needaction_counter
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_needaction_counter
 msgid "Number of Actions"
-msgstr "Numero di Azioni"
+msgstr "Numero di azioni"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_needaction_counter
@@ -614,7 +614,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 #: selection:queue.job,state:0
 msgid "Pending"
-msgstr "Attesa"
+msgstr "In attesa"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_func

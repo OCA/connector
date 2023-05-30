@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-23 06:52+0000\n"
-"PO-Revision-Date: 2023-05-24 19:11+0000\n"
-"Last-Translator: Francesco Foresti <francesco.foresti@ooops404.com>\n"
+"PO-Revision-Date: 2023-05-30 18:09+0000\n"
+"Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: Italian (http://www.transifex.com/oca/OCA-connector-9-0/"
 "language/it/)\n"
 "Language: it\n"
@@ -464,7 +464,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:connector.view_queue_job_search
 #: model:ir.ui.view,arch_db:connector.view_queue_job_tree
 msgid "Jobs"
-msgstr "Jobs"
+msgstr "Lavori"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_last_post

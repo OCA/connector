@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-12-22 14:19+0000\n"
-"PO-Revision-Date: 2023-05-25 14:11+0000\n"
+"PO-Revision-Date: 2023-05-30 18:09+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: Italian (http://www.transifex.com/oca/OCA-connector-8-0/"
 "language/it/)\n"
@@ -412,7 +412,7 @@ msgstr ""
 #: view:queue.job:connector.view_queue_job_tree
 #: field:queue.requeue.job,job_ids:0 field:queue.worker,job_ids:0
 msgid "Jobs"
-msgstr "Jobs"
+msgstr "Lavori"
 
 #. module: connector
 #: field:queue.worker,date_alive:0

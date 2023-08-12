@@ -2,7 +2,6 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
 import copy
-import unittest
 from contextlib import contextmanager
 
 import odoo
@@ -82,7 +81,7 @@ class TransactionComponentCase(common.TransactionCase, ComponentMixin):
         )
 
 
-class ComponentRegistryCase(unittest.TestCase, common.MetaCase("DummyCase", (), {})):
+class ComponentRegistryCase:
     """This test case can be used as a base for writings tests on components
 
     This test case is meant to test components in a special component registry,
@@ -209,11 +208,5 @@ class TransactionComponentRegistryCase(common.TransactionCase, ComponentRegistry
     # pylint: disable=W8106
     @classmethod
     def setUpClass(cls):
-        # resolve an inheritance issue (common.TransactionCase does not use
-        # super)
-        common.TransactionCase.setUpClass()
+        super().setUpClass()
         cls.collection = cls.env["collection.base"]
-
-    @classmethod
-    def tearDownClass(cls):
-        common.TransactionCase.tearDownClass()

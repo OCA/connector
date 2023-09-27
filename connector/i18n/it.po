@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-23 06:52+0000\n"
-"PO-Revision-Date: 2023-07-19 17:12+0000\n"
+"PO-Revision-Date: 2023-10-09 09:14+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: Italian (http://www.transifex.com/oca/OCA-connector-9-0/"
 "language/it/)\n"
@@ -324,7 +324,7 @@ msgstr "Fallito"
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_follower_ids
 #: model:ir.model.fields,field_description:connector.field_queue_job_message_follower_ids
 msgid "Followers"
-msgstr "Followers"
+msgstr "Seguito da"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message_channel_ids

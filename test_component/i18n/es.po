@@ -61,5 +61,8 @@ msgstr "nombre"
 
 #. module: test_component
 #: model:ir.model,name:test_component.model_test_component_collection
-msgid "test.component.collection"
-msgstr "prueba.componente.colección"
+msgid "Test Component Collection"
+msgstr ""
+
+#~ msgid "test.component.collection"
+#~ msgstr "prueba.componente.colección"

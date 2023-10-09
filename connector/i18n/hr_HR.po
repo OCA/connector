@@ -45,6 +45,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend__display_name
 #: model:ir.model.fields,field_description:connector.field_external_binding__display_name
+#: model:ir.model.fields,field_description:connector.field_queue_job__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -56,12 +57,14 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend__id
 #: model:ir.model.fields,field_description:connector.field_external_binding__id
+#: model:ir.model.fields,field_description:connector.field_queue_job__id
 msgid "ID"
 msgstr ""
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_backend____last_update
 #: model:ir.model.fields,field_description:connector.field_external_binding____last_update
+#: model:ir.model.fields,field_description:connector.field_queue_job____last_update
 msgid "Last Modified on"
 msgstr ""
 

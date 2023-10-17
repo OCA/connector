@@ -6,6 +6,7 @@ from unittest import mock
 
 from odoo.tests.common import MetaCase, tagged
 
+from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
 from odoo.addons.component.core import Component
 from odoo.addons.component.tests.common import (
     ComponentRegistryCase,
@@ -23,11 +24,13 @@ class TestEventWorkContext(unittest.TestCase, MetaCase("DummyCase", (), {})):
         super().__init__(*args, **kwargs)
         self.test_sequence = 0
 
-    def setUp(self):
-        super().setUp()
-        self.env = mock.MagicMock(name="env")
-        self.record = mock.MagicMock(name="record")
-        self.components_registry = mock.MagicMock(name="ComponentRegistry")
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env = mock.MagicMock(name="env")
+        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
+        cls.record = mock.MagicMock(name="record")
+        cls.components_registry = mock.MagicMock(name="ComponentRegistry")
 
     def test_env(self):
         """WorkContext with env"""

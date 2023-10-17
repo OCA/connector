@@ -8,6 +8,7 @@ import odoo
 from odoo import api
 from odoo.tests import common
 
+from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
 from odoo.addons.component.core import ComponentRegistry, MetaComponent, _get_addon_name
 
 
@@ -67,6 +68,7 @@ class TransactionComponentCase(common.TransactionCase, ComponentMixin):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
         cls.setUpComponent()
 
     # pylint: disable=W8106
@@ -208,5 +210,17 @@ class TransactionComponentRegistryCase(common.TransactionCase, ComponentRegistry
     # pylint: disable=W8106
     @classmethod
     def setUpClass(cls):
-        super().setUpClass()
+        # resolve an inheritance issue (common.TransactionCase does not use
+        # super)
+        common.TransactionCase.setUpClass()
+        cls.env = cls.env(
+            context=dict(
+                cls.env.context,
+                mail_create_nolog=True,
+                mail_create_nosubscribe=True,
+                mail_notrack=True,
+                no_reset_password=True,
+                tracking_disable=True,
+            )
+        )
         cls.collection = cls.env["collection.base"]

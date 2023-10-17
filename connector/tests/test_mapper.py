@@ -3,6 +3,7 @@
 
 from unittest import mock
 
+from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
 from odoo.addons.component.core import Component, WorkContext
 from odoo.addons.component.tests.common import TransactionComponentRegistryCase
 from odoo.addons.connector.components.mapper import (
@@ -20,10 +21,12 @@ from odoo.addons.connector.components.mapper import (
 
 
 class TestMapper(TransactionComponentRegistryCase):
-    def setUp(self):
-        super().setUp()
-        self._setup_registry(self)
-        self.comp_registry.load_components("connector")
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
+        cls._setup_registry(cls)
+        cls.comp_registry.load_components("connector")
 
     def test_mapping_decorator(self):
         class KifKrokerMapper(Component):

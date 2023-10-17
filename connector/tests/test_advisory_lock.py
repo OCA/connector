@@ -7,6 +7,7 @@ from odoo import api
 from odoo.modules.registry import Registry
 from odoo.tests import common
 
+from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
 from odoo.addons.component.core import WorkContext
 from odoo.addons.component.tests.common import TransactionComponentCase
 from odoo.addons.connector.database import pg_try_advisory_lock
@@ -14,18 +15,20 @@ from odoo.addons.queue_job.exception import RetryableJobError
 
 
 class TestAdvisoryLock(TransactionComponentCase):
-    def setUp(self):
-        super().setUp()
-        self.registry2 = Registry(common.get_db_name())
-        self.cr2 = self.registry2.cursor()
-        self.env2 = api.Environment(self.cr2, self.env.uid, {})
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
+        cls.registry2 = Registry(common.get_db_name())
+        cls.cr2 = cls.registry2.cursor()
+        cls.env2 = api.Environment(cls.cr2, cls.env.uid, {})
 
-        @self.addCleanup
+        @cls.addClassCleanup
         def reset_cr2():
             # rollback and close the cursor, and reset the environments
-            self.env2.reset()
-            self.cr2.rollback()
-            self.cr2.close()
+            cls.env2.reset()
+            cls.cr2.rollback()
+            cls.cr2.close()
 
     def test_concurrent_lock(self):
         """2 concurrent transactions cannot acquire the same lock"""

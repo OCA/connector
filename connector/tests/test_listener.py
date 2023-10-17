@@ -5,6 +5,7 @@ from unittest import mock
 
 from odoo.tools import frozendict
 
+from odoo.addons.base.tests.common import DISABLED_MAIL_CONTEXT
 from odoo.addons.component.core import Component
 from odoo.addons.component.tests.common import TransactionComponentRegistryCase
 from odoo.addons.component_event.components.event import skip_if
@@ -15,9 +16,11 @@ from odoo.addons.connector import components
 class TestEventListener(TransactionComponentRegistryCase):
     """Test Connecter Listener"""
 
-    def setUp(self):
-        super().setUp()
-        self._setup_registry(self)
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env = cls.env(context=dict(cls.env.context, **DISABLED_MAIL_CONTEXT))
+        cls._setup_registry(cls)
 
     def test_skip_if_no_connector_export(self):
         class MyEventListener(Component):

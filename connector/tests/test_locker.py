@@ -13,23 +13,34 @@ from odoo.addons.queue_job.exception import RetryableJobError
 
 
 class TestLocker(TransactionComponentRegistryCase):
-    def setUp(self):
-        super().setUp()
-        self.backend = mock.MagicMock(name="backend")
-        self.backend.env = self.env
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env = cls.env(
+            context=dict(
+                cls.env.context,
+                mail_create_nolog=True,
+                mail_create_nosubscribe=True,
+                mail_notrack=True,
+                no_reset_password=True,
+                tracking_disable=True,
+            )
+        )
+        cls.backend = mock.MagicMock(name="backend")
+        cls.backend.env = cls.env
 
-        self.registry2 = Registry(common.get_db_name())
-        self.cr2 = self.registry2.cursor()
-        self.env2 = api.Environment(self.cr2, self.env.uid, {})
-        self.backend2 = mock.MagicMock(name="backend2")
-        self.backend2.env = self.env2
+        cls.registry2 = Registry(common.get_db_name())
+        cls.cr2 = cls.registry2.cursor()
+        cls.env2 = api.Environment(cls.cr2, cls.env.uid, {})
+        cls.backend2 = mock.MagicMock(name="backend2")
+        cls.backend2.env = cls.env2
 
-        @self.addCleanup
+        @cls.addClassCleanup
         def reset_cr2():
             # rollback and close the cursor, and reset the environments
-            self.env2.reset()
-            self.cr2.rollback()
-            self.cr2.close()
+            cls.env2.reset()
+            cls.cr2.rollback()
+            cls.cr2.close()
 
     def test_lock(self):
         """Lock a record"""

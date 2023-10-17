@@ -15,9 +15,20 @@ from odoo.addons.connector import components
 class TestEventListener(TransactionComponentRegistryCase):
     """Test Connecter Listener"""
 
-    def setUp(self):
-        super().setUp()
-        self._setup_registry(self)
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env = cls.env(
+            context=dict(
+                cls.env.context,
+                mail_create_nolog=True,
+                mail_create_nosubscribe=True,
+                mail_notrack=True,
+                no_reset_password=True,
+                tracking_disable=True,
+            )
+        )
+        cls._setup_registry(cls)
 
     def test_skip_if_no_connector_export(self):
         class MyEventListener(Component):

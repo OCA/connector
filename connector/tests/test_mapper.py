@@ -20,10 +20,21 @@ from odoo.addons.connector.components.mapper import (
 
 
 class TestMapper(TransactionComponentRegistryCase):
-    def setUp(self):
-        super().setUp()
-        self._setup_registry(self)
-        self.comp_registry.load_components("connector")
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env = cls.env(
+            context=dict(
+                cls.env.context,
+                mail_create_nolog=True,
+                mail_create_nosubscribe=True,
+                mail_notrack=True,
+                no_reset_password=True,
+                tracking_disable=True,
+            )
+        )
+        cls._setup_registry(cls)
+        cls.comp_registry.load_components("connector")
 
     def test_mapping_decorator(self):
         class KifKrokerMapper(Component):

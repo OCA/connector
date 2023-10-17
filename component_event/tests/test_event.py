@@ -24,11 +24,22 @@ class TestEventWorkContext(unittest.TestCase):
         super().__init__(*args, **kwargs)
         self.test_sequence = 0
 
-    def setUp(self):
-        super().setUp()
-        self.env = mock.MagicMock(name="env")
-        self.record = mock.MagicMock(name="record")
-        self.components_registry = mock.MagicMock(name="ComponentRegistry")
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env = mock.MagicMock(name="env")
+        cls.env = cls.env(
+            context=dict(
+                cls.env.context,
+                mail_create_nolog=True,
+                mail_create_nosubscribe=True,
+                mail_notrack=True,
+                no_reset_password=True,
+                tracking_disable=True,
+            )
+        )
+        cls.record = mock.MagicMock(name="record")
+        cls.components_registry = mock.MagicMock(name="ComponentRegistry")
 
     def test_env(self):
         """WorkContext with env"""

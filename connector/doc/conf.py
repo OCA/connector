@@ -15,6 +15,7 @@
 import os
 import sys
 
+# pylint: disable=W7936
 import sphinx_bootstrap_theme
 
 # If extensions (or modules to document with autodoc) are in another directory,

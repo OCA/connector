@@ -24,6 +24,8 @@ import odoo
 from odoo import _
 
 from odoo.addons.component.core import AbstractComponent
+
+# pylint: disable=W7950
 from odoo.addons.connector.exception import IDMissingInBackend, RetryableJobError
 
 _logger = logging.getLogger(__name__)

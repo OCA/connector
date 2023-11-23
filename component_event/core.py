@@ -42,7 +42,7 @@ class EventWorkContext(WorkContext):
         collection=None,
         env=None,
         components_registry=None,
-        **kwargs
+        **kwargs,
     ):
         if not (collection is not None or env):
             raise ValueError("collection or env is required")
@@ -56,7 +56,7 @@ class EventWorkContext(WorkContext):
             model_name=model_name,
             collection=collection,
             components_registry=components_registry,
-            **kwargs
+            **kwargs,
         )
         if self._env:
             self._propagate_kwargs.remove("collection")

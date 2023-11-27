@@ -5,7 +5,6 @@ from odoo import fields, models
 
 
 class TestBackend(models.Model):
-
     _name = "test.backend"
     _inherit = ["connector.backend"]
     _description = "Backends for testing Connector"
@@ -50,7 +49,6 @@ class ConnectorTestBinding(models.Model):
 
 
 class NoInheritsBinding(models.Model):
-
     _name = "no.inherits.binding"
     _inherit = "external.binding"
     _description = "Bindings without inherit for testing Connector"

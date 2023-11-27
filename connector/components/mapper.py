@@ -184,7 +184,7 @@ def m2o_to_external(field, binding=None):
         column = self.model._fields[field]
         if column.type != "many2one":
             raise ValueError(
-                "The column {} should be a Many2one, got {}".format(field, type(column))
+                f"The column {field} should be a Many2one, got {type(column)}"
             )
         rel_id = record[field].id
         if binding is None:
@@ -233,9 +233,7 @@ def external_to_m2o(field, binding=None):
         column = self.model._fields[to_attr]
         if column.type != "many2one":
             raise ValueError(
-                "The column {} should be a Many2one, got {}".format(
-                    to_attr, type(column)
-                )
+                f"The column {to_attr} should be a Many2one, got {type(column)}"
             )
         rel_id = record[field]
         if binding is None:

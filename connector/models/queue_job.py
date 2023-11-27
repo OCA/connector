@@ -5,7 +5,6 @@ from odoo import _, models
 
 
 class QueueJob(models.Model):
-
     _inherit = "queue.job"
 
     def related_action_unwrap_binding(self, component_usage="binder"):

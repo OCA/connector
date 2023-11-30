@@ -333,9 +333,9 @@ class WorkContext:
             and work_model not in component_class.apply_on_models
         ):
             if len(component_class.apply_on_models) == 1:
-                hint_models = "'{}'".format(component_class.apply_on_models[0])
+                hint_models = f"'{component_class.apply_on_models[0]}'"
             else:
-                hint_models = "<one of {!r}>".format(component_class.apply_on_models)
+                hint_models = f"<one of {component_class.apply_on_models!r}>"
             raise NoComponentError(
                 "Component with name '%s' can't be used for model '%s'.\n"
                 "Hint: you might want to use: "
@@ -473,7 +473,7 @@ class WorkContext:
         return [comp(work_context) for comp in component_classes]
 
     def __str__(self):
-        return "WorkContext({}, {})".format(self.model_name, repr(self.collection))
+        return f"WorkContext({self.model_name}, {repr(self.collection)})"
 
     __repr__ = __str__
 

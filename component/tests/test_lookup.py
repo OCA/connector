@@ -32,6 +32,7 @@ class TestLookup(TransactionComponentRegistryCase):
 
     def test_lookup_collection(self):
         """Lookup components of a collection"""
+
         # we register 2 components in foobar and one in other
         class Foo(Component):
             _name = "foo"

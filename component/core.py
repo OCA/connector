@@ -324,8 +324,9 @@ class WorkContext:
             and self.collection._name != component_class._collection
         ):
             raise NoComponentError(
-                "Component with name '%s' can't be used for collection '%s'."
-                % (name, self.collection._name)
+                "Component with name '{}' can't be used for collection '{}'.".format(
+                    name, self.collection._name
+                )
             )
 
         if (
@@ -337,10 +338,11 @@ class WorkContext:
             else:
                 hint_models = f"<one of {component_class.apply_on_models!r}>"
             raise NoComponentError(
-                "Component with name '%s' can't be used for model '%s'.\n"
+                "Component with name '{}' can't be used for model '{}'.\n"
                 "Hint: you might want to use: "
-                "component_by_name('%s', model_name=%s)"
-                % (name, work_model, name, hint_models)
+                "component_by_name('{}', model_name={})".format(
+                    name, work_model, name, hint_models
+                )
             )
 
         if work_model == self.model_name:
@@ -429,9 +431,8 @@ class WorkContext:
         )
         if not component_classes:
             raise NoComponentError(
-                "No component found for collection '%s', "
-                "usage '%s', model_name '%s'."
-                % (self.collection._name, usage, model_name)
+                f"No component found for collection '{self.collection._name}', "
+                f"usage '{usage}', model_name '{model_name}'."
             )
         elif len(component_classes) > 1:
             # If we have more than one component, try to find the one
@@ -444,9 +445,8 @@ class WorkContext:
             )
         if len(component_classes) != 1:
             raise SeveralComponentError(
-                "Several components found for collection '%s', "
-                "usage '%s', model_name '%s'. Found: %r"
-                % (
+                "Several components found for collection '{}', "
+                "usage '{}', model_name '{}'. Found: {}".format(
                     self.collection._name,
                     usage or "",
                     model_name or "",
@@ -831,9 +831,9 @@ class AbstractComponent(metaclass=MetaComponent):
 
         if cls._name in registry and not parents:
             raise TypeError(
-                "Component %r (in class %r) already exists. "
+                f"Component {cls._name} (in class {cls}) already exists. "
                 "Consider using _inherit instead of _name "
-                "or using a different _name." % (cls._name, cls)
+                "or using a different _name."
             )
 
         # determine the component's name
@@ -871,8 +871,7 @@ class AbstractComponent(metaclass=MetaComponent):
         for parent in parents:
             if parent not in registry:
                 raise TypeError(
-                    "Component %r inherits from non-existing component %r."
-                    % (name, parent)
+                    f"Component {name} inherits from non-existing component {parent}."
                 )
             parent_class = registry[parent]
             if parent == name:

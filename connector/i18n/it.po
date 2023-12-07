@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-23 06:52+0000\n"
-"PO-Revision-Date: 2023-10-09 09:14+0000\n"
+"PO-Revision-Date: 2023-12-07 18:34+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: Italian (http://www.transifex.com/oca/OCA-connector-9-0/"
 "language/it/)\n"
@@ -641,7 +641,7 @@ msgstr "Coda"
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job
 msgid "Queue Job"
-msgstr "Coda Job"
+msgstr "Lavoro in coda"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_record

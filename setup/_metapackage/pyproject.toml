@@ -1,0 +1,12 @@
+[project]
+name = "odoo-addons-oca-connector"
+version = "17.0.20231208.0"
+dependencies = [
+    "odoo-addon-component>=17.0dev,<17.1dev",
+    "odoo-addon-test_component>=17.0dev,<17.1dev",
+]
+classifiers=[
+    "Programming Language :: Python",
+    "Framework :: Odoo",
+    "Framework :: Odoo :: 17.0",
+]

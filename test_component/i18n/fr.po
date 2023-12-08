@@ -1,0 +1,68 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * test_component
+#
+# Translators:
+# OCA Transbot <transbot@odoo-community.org>, 2018
+# Nicolas JEUDY <njeudy@panda-chi.io>, 2018
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-01 01:48+0000\n"
+"PO-Revision-Date: 2018-02-01 01:48+0000\n"
+"Last-Translator: Nicolas JEUDY <njeudy@panda-chi.io>, 2018\n"
+"Language-Team: French (https://www.transifex.com/oca/teams/23907/fr/)\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: test_component
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: test_component
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: test_component
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: test_component
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__id
+msgid "ID"
+msgstr "ID"
+
+#. module: test_component
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection____last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: test_component
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: test_component
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: test_component
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__name
+msgid "Name"
+msgstr "Nom"
+
+#. module: test_component
+#: model:ir.model,name:test_component.model_test_component_collection
+msgid "Test Component Collection"
+msgstr ""
+
+#~ msgid "test.component.collection"
+#~ msgstr "test.component.collection"

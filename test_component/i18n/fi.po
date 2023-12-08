@@ -1,0 +1,64 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * test_component
+#
+# Translators:
+# OCA Transbot <transbot@odoo-community.org>, 2018
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-01-05 16:56+0000\n"
+"PO-Revision-Date: 2018-01-05 16:56+0000\n"
+"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2018\n"
+"Language-Team: Finnish (https://www.transifex.com/oca/teams/23907/fi/)\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: test_component
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__create_uid
+msgid "Created by"
+msgstr "Luonut"
+
+#. module: test_component
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__create_date
+msgid "Created on"
+msgstr "Luotu"
+
+#. module: test_component
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__display_name
+msgid "Display Name"
+msgstr "Nimi"
+
+#. module: test_component
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__id
+msgid "ID"
+msgstr "ID"
+
+#. module: test_component
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection____last_update
+msgid "Last Modified on"
+msgstr "Viimeksi muokattu"
+
+#. module: test_component
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__write_uid
+msgid "Last Updated by"
+msgstr "Viimeksi päivittänyt"
+
+#. module: test_component
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__write_date
+msgid "Last Updated on"
+msgstr "Viimeksi päivitetty"
+
+#. module: test_component
+#: model:ir.model.fields,field_description:test_component.field_test_component_collection__name
+msgid "Name"
+msgstr ""
+
+#. module: test_component
+#: model:ir.model,name:test_component.model_test_component_collection
+msgid "Test Component Collection"
+msgstr ""

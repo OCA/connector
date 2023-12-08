@@ -52,7 +52,7 @@ class EventWorkContext(WorkContext):
             raise ValueError("collection and env cannot both be provided")
 
         self.env = env
-        super(EventWorkContext, self).__init__(
+        super().__init__(
             model_name=model_name,
             collection=collection,
             components_registry=components_registry,
@@ -67,7 +67,7 @@ class EventWorkContext(WorkContext):
         """Return the current Odoo env"""
         if self._env:
             return self._env
-        return super(EventWorkContext, self).env
+        return super().env
 
     @env.setter
     def env(self, value):

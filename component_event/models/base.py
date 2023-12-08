@@ -99,14 +99,14 @@ class Base(models.AbstractModel):
 
     @api.model_create_multi
     def create(self, vals_list):
-        records = super(Base, self).create(vals_list)
+        records = super().create(vals_list)
         for idx, vals in enumerate(vals_list):
             fields = list(vals.keys())
             self._event("on_record_create").notify(records[idx], fields=fields)
         return records
 
     def write(self, vals):
-        result = super(Base, self).write(vals)
+        result = super().write(vals)
         fields = list(vals.keys())
         for record in self:
             self._event("on_record_write").notify(record, fields=fields)
@@ -115,5 +115,5 @@ class Base(models.AbstractModel):
     def unlink(self):
         for record in self:
             self._event("on_record_unlink").notify(record)
-        result = super(Base, self).unlink()
+        result = super().unlink()
         return result

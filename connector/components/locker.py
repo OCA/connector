@@ -63,8 +63,7 @@ class RecordLocker(Component):
             )
             raise RetryableJobError(
                 "A concurrent job is already working on the same record "
-                "(%s with one id in %s). The job will be retried later."
-                % (self.model._name, tuple(records.ids)),
+                f"({self.model._name} with one id in {tuple(records.ids)}). The job will be retried later.",
                 seconds=seconds,
                 ignore_retry=ignore_retry,
             ) from err

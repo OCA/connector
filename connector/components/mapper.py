@@ -199,8 +199,9 @@ def m2o_to_external(field, binding=None):
         if not value:
             raise MappingError(
                 "Can not find an external id for record "
-                "%s in model %s %s wrapping"
-                % (rel_id, binding_model, "with" if wrap else "without")
+                "{} in model {} {} wrapping".format(
+                    rel_id, binding_model, "with" if wrap else "without"
+                )
             )
         return value
 
@@ -247,9 +248,10 @@ def external_to_m2o(field, binding=None):
         record = binder.to_internal(rel_id, unwrap=unwrap)
         if not record:
             raise MappingError(
-                "Can not find an existing %s for external "
-                "record %s %s unwrapping"
-                % (binding_model, rel_id, "with" if unwrap else "without")
+                "Can not find an existing {} for external "
+                "record {} {} unwrapping".format(
+                    binding_model, rel_id, "with" if unwrap else "without"
+                )
             )
         if isinstance(record, models.BaseModel):
             return record.id
@@ -644,11 +646,11 @@ class Mapper(AbstractComponent):
     # pylint: disable=W8110
     @classmethod
     def _complete_component_build(cls):
-        super(Mapper, cls)._complete_component_build()
+        super()._complete_component_build()
         cls._build_mapper_component()
 
     def __init__(self, work):
-        super(Mapper, self).__init__(work)
+        super().__init__(work)
         self._options = None
 
     def _map_direct(self, record, from_attr, to_attr):
@@ -750,6 +752,7 @@ class Mapper(AbstractComponent):
                     zip(
                         direct_entry.__code__.co_freevars,
                         (c.cell_contents for c in direct_entry.__closure__),
+                        strict=True,
                     )
                 )
             )
@@ -824,8 +827,8 @@ class Mapper(AbstractComponent):
                     continue
                 if not isinstance(values, dict):
                     raise ValueError(
-                        "%s: invalid return value for the "
-                        "mapping method %s" % (values, meth)
+                        f"{values}: invalid return value for the "
+                        f"mapping method {meth}"
                     )
                 result.update(values)
 
@@ -1041,7 +1044,7 @@ class MapOptions(dict):
 
     def __getitem__(self, key):
         try:
-            return super(MapOptions, self).__getitem__(key)
+            return super().__getitem__(key)
         except KeyError:
             return None
 

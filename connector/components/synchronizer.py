@@ -43,7 +43,7 @@ class Synchronizer(AbstractComponent):
     _base_backend_adapter_usage = "backend.adapter"
 
     def __init__(self, work_context):
-        super(Synchronizer, self).__init__(work_context)
+        super().__init__(work_context)
         self._backend_adapter = None
         self._binder = None
         self._mapper = None
@@ -119,7 +119,7 @@ class GenericExporter(AbstractComponent):
     _default_binding_field = None
 
     def __init__(self, working_context):
-        super(GenericExporter, self).__init__(working_context)
+        super().__init__(working_context)
         self.binding = None
         self.external_id = None
 
@@ -230,8 +230,7 @@ class GenericExporter(AbstractComponent):
             )
             raise RetryableJobError(
                 "A concurrent job is already exporting the same record "
-                "(%s with id %s). The job will be retried later."
-                % (self.model._name, self.binding.id)
+                f"({self.model._name} with id {self.binding.id}). The job will be retried later."
             ) from err
 
     def _has_to_skip(self):

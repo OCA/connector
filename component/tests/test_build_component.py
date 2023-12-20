@@ -55,6 +55,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
         class Component1(Component):
             _name = "component1"
 
+        # pylint: disable=R7980
         class Component2(Component):
             _inherit = "component1"
 
@@ -177,7 +178,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
 
     def test_no_parent(self):
         """Ensure we can't _inherit a non-existent component"""
-
+        # pylint: disable=R7980
         class Component1(Component):
             _name = "component1"
             _inherit = "component1"

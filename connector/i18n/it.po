@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-23 06:52+0000\n"
-"PO-Revision-Date: 2023-12-07 18:34+0000\n"
+"PO-Revision-Date: 2023-12-24 19:34+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: Italian (http://www.transifex.com/oca/OCA-connector-9-0/"
 "language/it/)\n"
@@ -384,9 +384,9 @@ msgstr ""
 
 #. module: connector
 #: code:addons/connector/queue/model.py:266
-#, fuzzy, python-format
+#, python-format
 msgid "If both parameters are 0, ALL jobs will be requeued!"
-msgstr "I job selezionati verranno rischedulati."
+msgstr "I job selezionati verranno rischedulati!"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_unread

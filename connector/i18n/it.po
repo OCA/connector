@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-23 06:52+0000\n"
-"PO-Revision-Date: 2023-12-24 19:34+0000\n"
+"PO-Revision-Date: 2024-01-10 15:35+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: Italian (http://www.transifex.com/oca/OCA-connector-9-0/"
 "language/it/)\n"
@@ -82,7 +82,7 @@ msgstr ""
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_config_settings
 msgid "Backends"
-msgstr "Backends"
+msgstr "Backend"
 
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_connector_checkpoint_review

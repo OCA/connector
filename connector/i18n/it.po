@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: connector (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-12-22 14:19+0000\n"
-"PO-Revision-Date: 2024-01-10 15:36+0000\n"
+"PO-Revision-Date: 2024-01-17 10:36+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: Italian (http://www.transifex.com/oca/OCA-connector-8-0/"
 "language/it/)\n"
@@ -472,7 +472,7 @@ msgstr ""
 #. module: connector
 #: field:queue.job,max_retries:0
 msgid "Max. retries"
-msgstr "N. max tentativi"
+msgstr "Massimo tentativi"
 
 #. module: connector
 #: field:connector.checkpoint,message_ids:0 field:queue.job,message_ids:0
@@ -716,7 +716,7 @@ msgstr ""
 #. module: connector
 #: view:queue.requeue.job:connector.view_requeue_job
 msgid "The selected jobs will be requeued."
-msgstr "I job selezionati verranno rischedulati."
+msgstr "I lavori selezionati verranno riaccodati."
 
 #. module: connector
 #: help:connector.config.settings,module_google_calendar:0
@@ -758,7 +758,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model,name:connector.model_queue_requeue_job
 msgid "Wizard to requeue a selection of jobs"
-msgstr "Wizard per rischedulare una selezione di job"
+msgstr "Procedura guidata per riaccodare una selezione di lavori"
 
 #. module: connector
 #: help:connector.config.settings,module_multi_company:0

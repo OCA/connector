@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: connector (9.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-23 06:52+0000\n"
-"PO-Revision-Date: 2024-01-10 15:35+0000\n"
+"PO-Revision-Date: 2024-01-17 10:36+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: Italian (http://www.transifex.com/oca/OCA-connector-9-0/"
 "language/it/)\n"
@@ -386,7 +386,7 @@ msgstr ""
 #: code:addons/connector/queue/model.py:266
 #, python-format
 msgid "If both parameters are 0, ALL jobs will be requeued!"
-msgstr "I job selezionati verranno rischedulati!"
+msgstr "Se entrambi i parametri sono 0, tutti i lavori verranno riaccodati!"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_checkpoint_message_unread
@@ -527,7 +527,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_queue_job_max_retries
 msgid "Max. retries"
-msgstr "N. max tentativi"
+msgstr "Massimo tentativi"
 
 #. module: connector
 #: model:ir.model.fields,field_description:connector.field_connector_checkpoint_message
@@ -814,7 +814,7 @@ msgstr ""
 #. module: connector
 #: model:ir.ui.view,arch_db:connector.view_requeue_job
 msgid "The selected jobs will be requeued."
-msgstr "I job selezionati verranno rischedulati."
+msgstr "I lavori selezionati verranno riaccodati."
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_auth_signup_reset_password
@@ -883,7 +883,7 @@ msgstr ""
 #. module: connector
 #: model:ir.model,name:connector.model_queue_requeue_job
 msgid "Wizard to requeue a selection of jobs"
-msgstr "Wizard per rischedulare una selezione di job"
+msgstr "Procedura guidata per riaccodare una selezione di lavori"
 
 #. module: connector
 #: model:ir.model.fields,help:connector.field_connector_config_settings_group_light_multi_company

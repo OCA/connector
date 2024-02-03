@@ -86,14 +86,6 @@ msgid "ID on External"
 msgstr "外部ID"
 
 #. module: test_connector
-#: model:ir.model.fields,field_description:test_connector.field_connector_test_binding____last_update
-#: model:ir.model.fields,field_description:test_connector.field_connector_test_record____last_update
-#: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding____last_update
-#: model:ir.model.fields,field_description:test_connector.field_test_backend____last_update
-msgid "Last Modified on"
-msgstr "最后修改时间"
-
-#. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__write_uid
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_record__write_uid
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__write_uid
@@ -124,6 +116,9 @@ msgstr "测试连接器的记录"
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__odoo_id
 msgid "Test Record"
 msgstr "测试记录"
+
+#~ msgid "Last Modified on"
+#~ msgstr "最后修改时间"
 
 #~ msgid "Version"
 #~ msgstr "版本"

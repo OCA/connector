@@ -39,11 +39,6 @@ msgid "ID"
 msgstr "ID"
 
 #. module: test_component
-#: model:ir.model.fields,field_description:test_component.field_test_component_collection____last_update
-msgid "Last Modified on"
-msgstr "Zuletzt aktualisiert am"
-
-#. module: test_component
 #: model:ir.model.fields,field_description:test_component.field_test_component_collection__write_uid
 msgid "Last Updated by"
 msgstr "Zuletzt aktualisiert durch"
@@ -62,3 +57,6 @@ msgstr ""
 #: model:ir.model,name:test_component.model_test_component_collection
 msgid "Test Component Collection"
 msgstr ""
+
+#~ msgid "Last Modified on"
+#~ msgstr "Zuletzt aktualisiert am"

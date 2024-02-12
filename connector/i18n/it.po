@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-10 03:36+0000\n"
-"PO-Revision-Date: 2024-02-05 00:26+0000\n"
+"PO-Revision-Date: 2024-02-12 11:34+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
 "Language: it\n"
@@ -61,7 +61,7 @@ msgstr "Niente da esportare."
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job
 msgid "Queue Job"
-msgstr "Coda Job"
+msgstr "Lavoro in coda"
 
 #. module: connector
 #. odoo-python

@@ -230,7 +230,8 @@ class GenericExporter(AbstractComponent):
             )
             raise RetryableJobError(
                 "A concurrent job is already exporting the same record "
-                f"({self.model._name} with id {self.binding.id}). The job will be retried later."
+                f"({self.model._name} with id {self.binding.id}). The job will be "
+                f"retried later."
             ) from err
 
     def _has_to_skip(self):

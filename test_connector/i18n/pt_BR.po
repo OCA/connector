@@ -9,16 +9,17 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-05 16:56+0000\n"
-"PO-Revision-Date: 2019-09-03 03:24+0000\n"
-"Last-Translator: Rodrigo Macedo <rmsolucoeseminformatic4@gmail.com>\n"
-"Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/"
-"teams/23907/pt_BR/)\n"
+"PO-Revision-Date: 2024-05-21 01:00+0000\n"
+"Last-Translator: Rodrigo Macedo <sottomaiormacedotec@users.noreply."
+"translation.odoo-community.org>\n"
+"Language-Team: Portuguese (Brazil) (https://www.transifex.com/oca/teams/"
+"23907/pt_BR/)\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.8\n"
+"X-Generator: Weblate 4.17\n"
 
 #. module: test_connector
 #: model:ir.model.constraint,message:test_connector.constraint_connector_test_binding_test_binding_uniq
@@ -30,22 +31,22 @@ msgstr "Já existe uma ligação para este registro"
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__backend_id
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__backend_id
 msgid "Backend"
-msgstr ""
+msgstr "Servidor"
 
 #. module: test_connector
 #: model:ir.model,name:test_connector.model_test_backend
 msgid "Backends for testing Connector"
-msgstr ""
+msgstr "Servidor para testar o conector"
 
 #. module: test_connector
 #: model:ir.model,name:test_connector.model_connector_test_binding
 msgid "Bindings for testing Connector"
-msgstr ""
+msgstr "Vinculações para testar o conector"
 
 #. module: test_connector
 #: model:ir.model,name:test_connector.model_no_inherits_binding
 msgid "Bindings without inherit for testing Connector"
-msgstr ""
+msgstr "Vinculações sem herança para testar o conector"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__create_uid
@@ -61,7 +62,7 @@ msgstr "Criado por"
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__create_date
 #: model:ir.model.fields,field_description:test_connector.field_test_backend__create_date
 msgid "Created on"
-msgstr "Criado em "
+msgstr "Criado em"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__display_name
@@ -69,7 +70,7 @@ msgstr "Criado em "
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__display_name
 #: model:ir.model.fields,field_description:test_connector.field_test_backend__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Exibir Nome"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__id
@@ -83,7 +84,7 @@ msgstr "ID"
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__external_id
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__external_id
 msgid "ID on External"
-msgstr ""
+msgstr "Identificação Externa"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding____last_update
@@ -91,7 +92,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding____last_update
 #: model:ir.model.fields,field_description:test_connector.field_test_backend____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Última modificação no"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__write_uid
@@ -107,20 +108,20 @@ msgstr "Última atualização por"
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__write_date
 #: model:ir.model.fields,field_description:test_connector.field_test_backend__write_date
 msgid "Last Updated on"
-msgstr "Última atualização em "
+msgstr "Última atualização em"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__sync_date
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__sync_date
 msgid "Last synchronization date"
-msgstr ""
+msgstr "Data da última sincronização"
 
 #. module: test_connector
 #: model:ir.model,name:test_connector.model_connector_test_record
 msgid "Records for testing Connector"
-msgstr ""
+msgstr "Registros para testar o Conector"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__odoo_id
 msgid "Test Record"
-msgstr ""
+msgstr "Teste de Registro"

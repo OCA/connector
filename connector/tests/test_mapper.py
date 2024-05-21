@@ -144,6 +144,7 @@ class TestMapper(TransactionComponentRegistryCase):
             def name(self):
                 pass
 
+        # pylint: disable=R8180
         class FryMapperInherit(Component):
             _inherit = "fry.mapper"
             _apply_on = "res.users"

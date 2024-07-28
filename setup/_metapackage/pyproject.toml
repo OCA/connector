@@ -1,10 +1,11 @@
 [project]
 name = "odoo-addons-oca-connector"
-version = "17.0.20231211.0"
+version = "17.0.20240728.0"
 dependencies = [
     "odoo-addon-component>=17.0dev,<17.1dev",
     "odoo-addon-component_event>=17.0dev,<17.1dev",
     "odoo-addon-connector>=17.0dev,<17.1dev",
+    "odoo-addon-connector_base_product>=17.0dev,<17.1dev",
     "odoo-addon-test_component>=17.0dev,<17.1dev",
     "odoo-addon-test_connector>=17.0dev,<17.1dev",
 ]

@@ -6,7 +6,7 @@ import unittest
 
 import mock
 
-from odoo.tests.common import tagged
+from odoo.tests.common import MetaCase, tagged
 
 from odoo.addons.component.core import Component
 from odoo.addons.component.tests.common import (
@@ -18,7 +18,7 @@ from odoo.addons.component_event.core import EventWorkContext
 
 
 @tagged("standard", "at_install")
-class TestEventWorkContext(unittest.TestCase):
+class TestEventWorkContext(unittest.TestCase, MetaCase("DummyCase", (object,), {})):
     """Test Events Components"""
 
     if sys.version_info < (3, 8):

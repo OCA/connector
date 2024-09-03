@@ -12,8 +12,16 @@ exclude: |
   /static/(src/)?lib/|
   # Repos using Sphinx to generate docs don't need prettying
   ^docs/_templates/.*\.html$|
+  # Don't bother non-technical authors with formatting issues in docs
+  readme/.*\.(rst|md)$|
+  # Ignore build and dist directories in addons
+  /build/|/dist/|
+  # Ignore test files in addons
+  /tests/samples/.*|
   # You don't usually want a bot to modify your legal texts
-  (LICENSE.*|COPYING.*)
+  (LICENSE.*|COPYING.*)|
+  # Ignore manual docs
+  connector/doc/*
 default_language_version:
   python: python3
   node: "14.13.0"
@@ -33,12 +41,25 @@ repos:
         language: fail
         files: '[a-zA-Z0-9_]*/i18n/en\.po$'
   - repo: https://github.com/oca/maintainer-tools
-    rev: ab1d7f6
+    rev: d5fab7ee87fceee858a3d01048c78a548974d935
     hooks:
       # update the NOT INSTALLABLE ADDONS section above
       - id: oca-update-pre-commit-excluded-addons
       - id: oca-fix-manifest-website
         args: ["https://github.com/OCA/connector"]
+      - id: oca-gen-addon-readme
+        args:
+          - --addons-dir=.
+          - --branch=14.0
+          - --org-name=OCA
+          - --repo-name=connector
+          - --if-source-changed
+          - --keep-source-digest
+  - repo: https://github.com/OCA/odoo-pre-commit-hooks
+    rev: v0.0.25
+    hooks:
+      - id: oca-checks-odoo-module
+      - id: oca-checks-po
   - repo: https://github.com/myint/autoflake
     rev: v1.4
     hooks:

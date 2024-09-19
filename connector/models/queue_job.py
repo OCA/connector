@@ -18,7 +18,7 @@ class QueueJob(models.Model):
         """
         self.ensure_one()
         model_name = self.model_name
-        binding = self.env[model_name].browse(self.record_ids).exists()
+        binding = self.env[model_name].browse(self.records.ids).exists()
         if not binding:
             return None
         if len(binding) > 1:

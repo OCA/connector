@@ -11,7 +11,7 @@ create the binding between them.
 
 """
 
-from odoo import fields, models, tools
+from odoo import fields, models
 
 from odoo.addons.component.core import AbstractComponent
 
@@ -51,7 +51,7 @@ class Binder(AbstractComponent):
         context = self.env.context
         bindings = self.model.with_context(active_test=False).search(
             [
-                (self._external_field, "=", tools.ustr(external_id)),
+                (self._external_field, "=", external_id),
                 (self._backend_field, "=", self.backend_record.id),
             ]
         )
@@ -110,7 +110,7 @@ class Binder(AbstractComponent):
             binding = self.model.browse(binding)
         binding.with_context(connector_no_export=True).write(
             {
-                self._external_field: tools.ustr(external_id),
+                self._external_field: external_id,
                 self._sync_date_field: now_fmt,
             }
         )

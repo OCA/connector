@@ -13,7 +13,7 @@ from odoo.addons.component.core import ComponentRegistry, MetaComponent, _get_ad
 
 @contextmanager
 def new_rollbacked_env():
-    registry = odoo.registry(common.get_db_name())
+    registry = odoo.modules.registry.Registry(common.get_db_name())
     uid = odoo.SUPERUSER_ID
     cr = registry.cursor()
     try:

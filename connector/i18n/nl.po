@@ -53,7 +53,6 @@ msgstr "Laatste synchronisatie datum"
 #. module: connector
 #. odoo-python
 #: code:addons/connector/components/synchronizer.py:0
-#, python-format
 msgid "Nothing to export."
 msgstr ""
 
@@ -65,14 +64,12 @@ msgstr "Geplande taken"
 #. module: connector
 #. odoo-python
 #: code:addons/connector/components/synchronizer.py:0
-#, python-format
 msgid "Record exported with ID %s on Backend."
 msgstr ""
 
 #. module: connector
 #. odoo-python
 #: code:addons/connector/models/queue_job.py:0
-#, python-format
 msgid "Related Record"
 msgstr ""
 

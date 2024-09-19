@@ -54,7 +54,6 @@ msgstr "Data ultima sincronizzazione"
 #. module: connector
 #. odoo-python
 #: code:addons/connector/components/synchronizer.py:0
-#, python-format
 msgid "Nothing to export."
 msgstr "Niente da esportare."
 
@@ -66,14 +65,12 @@ msgstr "Lavoro in coda"
 #. module: connector
 #. odoo-python
 #: code:addons/connector/components/synchronizer.py:0
-#, python-format
 msgid "Record exported with ID %s on Backend."
 msgstr "Il record è stato esportato con ID %s su backend."
 
 #. module: connector
 #. odoo-python
 #: code:addons/connector/models/queue_job.py:0
-#, python-format
 msgid "Related Record"
 msgstr "Record collegato"
 

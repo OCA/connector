@@ -51,7 +51,7 @@ class RecordLocker(Component):
         :param ignore_retry: If True, the retry counter of the job will not be
                              increased.
         """
-        sql = "SELECT id FROM %s WHERE ID IN %%s FOR UPDATE NOWAIT" % self.model._table
+        sql = f"SELECT id FROM {self.model._table} WHERE ID IN %s FOR UPDATE NOWAIT"
         try:
             self.env.cr.execute(sql, (tuple(records.ids),), log_exceptions=False)
         except psycopg2.OperationalError as err:

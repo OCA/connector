@@ -15,6 +15,7 @@ systems, the backend adapters to read or write data on the backend and the
 binders to create the link between them.
 
 """
+
 import logging
 from contextlib import contextmanager
 
@@ -218,7 +219,7 @@ class GenericExporter(AbstractComponent):
         on the binding record it has to export.
 
         """
-        sql = "SELECT id FROM %s WHERE ID = %%s FOR UPDATE NOWAIT" % self.model._table
+        sql = f"SELECT id FROM {self.model._table} WHERE ID = %s FOR UPDATE NOWAIT"
         try:
             self.env.cr.execute(sql, (self.binding.id,), log_exceptions=False)
         except psycopg2.OperationalError as err:
@@ -264,9 +265,9 @@ class GenericExporter(AbstractComponent):
             if err.pgcode == psycopg2.errorcodes.UNIQUE_VIOLATION:
                 raise RetryableJobError(
                     "A database error caused the failure of the job:\n"
-                    "%s\n\n"
+                    f"{err}\n\n"
                     "Likely due to 2 concurrent jobs wanting to create "
-                    "the same record. The job will be retried later." % err
+                    "the same record. The job will be retried later."
                 ) from err
             else:
                 raise

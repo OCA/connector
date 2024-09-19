@@ -10,7 +10,6 @@ Core classes for the events system.
 
 """
 
-
 from odoo.addons.component.core import WorkContext
 
 
@@ -155,6 +154,5 @@ class EventWorkContext(WorkContext):
         return work.component(usage=usage, model_name=model_name)
 
     def __str__(self):
-        return "EventWorkContext({},{})".format(
-            repr(self._env or self._collection), self.model_name
-        )
+        return f"""EventWorkContext(
+                {repr(self._env or self._collection)},{self.model_name})"""

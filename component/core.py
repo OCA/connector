@@ -294,7 +294,7 @@ class WorkContext:
         components_registry = self.components_registry
         component_class = components_registry.get(name)
         if not component_class:
-            raise NoComponentError("No component with name '%s' found." % name)
+            raise NoComponentError(f"No component with name '{name}' found.")
         return component_class
 
     def component_by_name(self, name, model_name=None):
@@ -324,9 +324,8 @@ class WorkContext:
             and self.collection._name != component_class._collection
         ):
             raise NoComponentError(
-                "Component with name '{}' can't be used for collection '{}'.".format(
-                    name, self.collection._name
-                )
+                f"Component with name '{name}' can't be used for collection "
+                f"'{self.collection._name}'."
             )
 
         if (
@@ -338,11 +337,10 @@ class WorkContext:
             else:
                 hint_models = f"<one of {component_class.apply_on_models!r}>"
             raise NoComponentError(
-                "Component with name '{}' can't be used for model '{}'.\n"
+                f"Component with name '{name}' can't be used for model "
+                f"'{work_model}'.\n"
                 "Hint: you might want to use: "
-                "component_by_name('{}', model_name={})".format(
-                    name, work_model, name, hint_models
-                )
+                f"component_by_name('{name}', model_name={hint_models})"
             )
 
         if work_model == self.model_name:
@@ -756,7 +754,7 @@ class AbstractComponent(metaclass=MetaComponent):
         return self.work.many_components(usage=usage, model_name=model_name, **kw)
 
     def __str__(self):
-        return "Component(%s)" % self._name
+        return f"Component({self._name})"
 
     __repr__ = __str__
 
@@ -840,7 +838,7 @@ class AbstractComponent(metaclass=MetaComponent):
         name = cls._name or (len(parents) == 1 and parents[0])
 
         if not name:
-            raise TypeError("Component %r must have a _name" % cls)
+            raise TypeError(f"Component {cls} must have a _name")
 
         # all components except 'base' implicitly inherit from 'base'
         if name != "base":
@@ -849,7 +847,7 @@ class AbstractComponent(metaclass=MetaComponent):
         # create or retrieve the component's class
         if name in parents:
             if name not in registry:
-                raise TypeError("Component %r does not exist in registry." % name)
+                raise TypeError(f"Component {name} does not exist in registry.")
             ComponentClass = registry[name]
             ComponentClass._build_component_check_base(cls)
             check_parent = ComponentClass._build_component_check_parent

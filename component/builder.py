@@ -9,6 +9,7 @@ Components Builder
 Build the components at the build of a registry.
 
 """
+
 import odoo
 from odoo import models
 

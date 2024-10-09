@@ -1,8 +1,9 @@
 [project]
 name = "odoo-addons-oca-connector"
-version = "18.0.20241009.0"
+version = "18.0.20241009.1"
 dependencies = [
     "odoo-addon-component==18.0.*",
+    "odoo-addon-component_event==18.0.*",
     "odoo-addon-test_component==18.0.*",
 ]
 classifiers=[

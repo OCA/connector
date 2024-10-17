@@ -23,7 +23,9 @@ addon | version | maintainers | summary
 --- | --- | --- | ---
 [component](component/) | 18.0.1.0.0 | [![guewen](https://github.com/guewen.png?size=30px)](https://github.com/guewen) | Add capabilities to register and use decoupled components, as an alternative to model classes
 [component_event](component_event/) | 18.0.1.0.0 |  | Components Events
+[connector](connector/) | 18.0.1.0.0 |  | Connector
 [test_component](test_component/) | 18.0.1.0.0 | [![guewen](https://github.com/guewen.png?size=30px)](https://github.com/guewen) | Automated tests for Components, do not install.
+[test_connector](test_connector/) | 18.0.1.0.0 |  | Automated tests for Connector, do not install.
 
 [//]: # (end addons)
 

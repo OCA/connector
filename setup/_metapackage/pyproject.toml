@@ -1,10 +1,12 @@
 [project]
 name = "odoo-addons-oca-connector"
-version = "18.0.20241009.1"
+version = "18.0.20241017.0"
 dependencies = [
     "odoo-addon-component==18.0.*",
     "odoo-addon-component_event==18.0.*",
+    "odoo-addon-connector==18.0.*",
     "odoo-addon-test_component==18.0.*",
+    "odoo-addon-test_connector==18.0.*",
 ]
 classifiers=[
     "Programming Language :: Python",

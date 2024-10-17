@@ -55,7 +55,6 @@ msgstr "最后同步日期"
 #. module: connector
 #. odoo-python
 #: code:addons/connector/components/synchronizer.py:0
-#, python-format
 msgid "Nothing to export."
 msgstr "无需输出。"
 
@@ -67,14 +66,12 @@ msgstr "队列中作业"
 #. module: connector
 #. odoo-python
 #: code:addons/connector/components/synchronizer.py:0
-#, python-format
 msgid "Record exported with ID %s on Backend."
 msgstr "已在后端导出ID为%s的记录。"
 
 #. module: connector
 #. odoo-python
 #: code:addons/connector/models/queue_job.py:0
-#, python-format
 msgid "Related Record"
 msgstr "相关记录"
 

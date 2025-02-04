@@ -11,9 +11,7 @@
         <field name="inherit_id" ref="product.product_normal_form_view" />
         <field name="arch" type="xml">
             <xpath expr="/form/sheet/notebook" position="inside">
-                <!-- change the invisible attribute to 0 when used
-                     in submodules -->
-                <page string="Connectors" name="connector" invisible="True" />
+                <page string="Connectors" name="connector" />
             </xpath>
         </field>
     </record>
@@ -24,9 +22,7 @@
         <field name="inherit_id" ref="product.product_template_form_view" />
         <field name="arch" type="xml">
             <xpath expr="/form/sheet/notebook" position="inside">
-                <!-- change the invisible attribute to 0 when used
-                     in submodules -->
-                <page string="Connectors" name="connector" invisible="True" />
+                <page string="Connectors" name="connector" />
             </xpath>
         </field>
     </record>

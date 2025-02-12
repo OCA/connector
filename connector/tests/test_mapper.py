@@ -145,7 +145,9 @@ class TestMapper(TransactionComponentRegistryCase):
                 pass
 
         class FryMapperInherit(Component):
-            _inherit = "fry.mapper"
+            _inherit = (  # pylint: disable=consider-merging-classes-inherited
+                "fry.mapper"
+            )
             _apply_on = "res.users"
 
             @changed_by("email")

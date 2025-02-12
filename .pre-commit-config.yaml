@@ -19,7 +19,8 @@ exclude: |
   # Ignore test files in addons
   /tests/samples/.*|
   # You don't usually want a bot to modify your legal texts
-  (LICENSE.*|COPYING.*)
+  (LICENSE.*|COPYING.*)|
+  ^connector/doc/
 default_language_version:
   python: python3
   node: "14.18.0"

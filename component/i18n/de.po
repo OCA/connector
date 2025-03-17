@@ -9,24 +9,25 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-05 16:56+0000\n"
-"PO-Revision-Date: 2018-01-05 16:56+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2018\n"
+"PO-Revision-Date: 2025-03-17 14:06+0000\n"
+"Last-Translator: davidbeckercbl <becker@cbl-computer.de>\n"
 "Language-Team: German (https://www.transifex.com/oca/teams/23907/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 #. module: component
 #: model:ir.model,name:component.model_collection_base
 msgid "Base Abstract Collection"
-msgstr ""
+msgstr "Basis Abstrakte Sammlung"
 
 #. module: component
 #: model:ir.model,name:component.model_component_builder
 msgid "Component Builder"
-msgstr ""
+msgstr "Komponentenerzeuger"
 
 #~ msgid "Display Name"
 #~ msgstr "Anzeigebezeichnung"

@@ -9,14 +9,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-05 16:56+0000\n"
-"PO-Revision-Date: 2018-01-05 16:56+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2018\n"
+"PO-Revision-Date: 2025-03-17 14:06+0000\n"
+"Last-Translator: davidbeckercbl <becker@cbl-computer.de>\n"
 "Language-Team: German (https://www.transifex.com/oca/teams/23907/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 #. module: connector
 #: model:ir.module.category,name:connector.module_category_connector
@@ -55,7 +56,7 @@ msgstr "Letztes Synchronisationsdatum"
 #: code:addons/connector/components/synchronizer.py:0
 #, python-format
 msgid "Nothing to export."
-msgstr ""
+msgstr "Nichts zu exportieren."
 
 #. module: connector
 #: model:ir.model,name:connector.model_queue_job
@@ -67,7 +68,7 @@ msgstr "Aufgabe in Warteschlange einreihen"
 #: code:addons/connector/components/synchronizer.py:0
 #, python-format
 msgid "Record exported with ID %s on Backend."
-msgstr ""
+msgstr "Datensatz mit ID %s auf dem Backend exportiert."
 
 #. module: connector
 #. odoo-python

@@ -9,41 +9,42 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-05 16:56+0000\n"
-"PO-Revision-Date: 2018-01-05 16:56+0000\n"
-"Last-Translator: OCA Transbot <transbot@odoo-community.org>, 2018\n"
+"PO-Revision-Date: 2025-03-17 14:06+0000\n"
+"Last-Translator: davidbeckercbl <becker@cbl-computer.de>\n"
 "Language-Team: German (https://www.transifex.com/oca/teams/23907/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.10.2\n"
 
 #. module: test_connector
 #: model:ir.model.constraint,message:test_connector.constraint_connector_test_binding_test_binding_uniq
 #: model:ir.model.constraint,message:test_connector.constraint_no_inherits_binding_test_binding_uniq
 msgid "A binding already exists for this record"
-msgstr ""
+msgstr "Eine Bindung existiert bereits für diesen Datensatz"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__backend_id
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__backend_id
 msgid "Backend"
-msgstr ""
+msgstr "Backend"
 
 #. module: test_connector
 #: model:ir.model,name:test_connector.model_test_backend
 msgid "Backends for testing Connector"
-msgstr ""
+msgstr "Backends um den Konnektor zu testen"
 
 #. module: test_connector
 #: model:ir.model,name:test_connector.model_connector_test_binding
 msgid "Bindings for testing Connector"
-msgstr ""
+msgstr "Bindung, um den Konnektor zu testen"
 
 #. module: test_connector
 #: model:ir.model,name:test_connector.model_no_inherits_binding
 msgid "Bindings without inherit for testing Connector"
-msgstr ""
+msgstr "Bindungen ohne Vererbung zum Testen des Konnektors"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__create_uid
@@ -81,7 +82,7 @@ msgstr "ID"
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__external_id
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__external_id
 msgid "ID on External"
-msgstr ""
+msgstr "Externe ID"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding____last_update
@@ -111,14 +112,14 @@ msgstr "Zuletzt aktualisiert am"
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__sync_date
 #: model:ir.model.fields,field_description:test_connector.field_no_inherits_binding__sync_date
 msgid "Last synchronization date"
-msgstr ""
+msgstr "Letztes Synchronisationsdatum"
 
 #. module: test_connector
 #: model:ir.model,name:test_connector.model_connector_test_record
 msgid "Records for testing Connector"
-msgstr ""
+msgstr "Datensätze für den Konnektortest"
 
 #. module: test_connector
 #: model:ir.model.fields,field_description:test_connector.field_connector_test_binding__odoo_id
 msgid "Test Record"
-msgstr ""
+msgstr "Testdatensatz"

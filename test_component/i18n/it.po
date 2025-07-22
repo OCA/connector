@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-05 16:56+0000\n"
-"PO-Revision-Date: 2023-09-22 16:38+0000\n"
+"PO-Revision-Date: 2025-07-22 15:24+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: Italian (https://www.transifex.com/oca/teams/23907/it/)\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #. module: test_component
 #: model:ir.model.fields,field_description:test_component.field_test_component_collection__create_uid
@@ -57,7 +57,7 @@ msgstr "Nome"
 #. module: test_component
 #: model:ir.model,name:test_component.model_test_component_collection
 msgid "Test Component Collection"
-msgstr "Test collezone componente"
+msgstr "Test collezione componente"
 
 #~ msgid "Last Modified on"
 #~ msgstr "Ultima modifica il"

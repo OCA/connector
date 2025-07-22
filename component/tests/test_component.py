@@ -37,6 +37,10 @@ class TestComponent(TransactionComponentRegistryCase):
             _usage = "for.test"
             _apply_on = ["res.partner"]
 
+            def __init__(self, work_context):
+                super().__init__(work_context)
+                self.env = self.env(context=dict(self.env.context, foo="bar"))
+
         class Component2(Component):
             _name = "component2"
             _collection = "collection.base"
@@ -51,6 +55,10 @@ class TestComponent(TransactionComponentRegistryCase):
         # our collection, in a less abstract use case, it
         # could be a record of 'magento.backend' for instance
         self.collection_record = self.collection.new()
+        # add ctx key to ensure it's preserved later
+        self.collection_record = self.collection_record.with_context(
+            from_collection=True
+        )
 
         @contextmanager
         def get_base():
@@ -78,7 +86,8 @@ class TestComponent(TransactionComponentRegistryCase):
             # but this is not what we test here, we test the attributes:
             self.assertEqual(self.collection_record, comp.collection)
             self.assertEqual(base.work, comp.work)
-            self.assertEqual(self.env, comp.env)
+            self.assertEqual(comp.env.context["from_collection"], True)
+            self.assertEqual(comp.env.context["foo"], "bar")
             self.assertEqual(self.env["res.partner"], comp.model)
 
     def test_component_get_by_name_same_model(self):

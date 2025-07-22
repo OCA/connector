@@ -29,7 +29,7 @@ class TestComponent(TransactionComponentRegistryCase):
         self._teardown_registry(self)
         super().tearDown()
 
-    def _setUpComponents(self):
+    def _setUpComponents(self):  # pylint: disable=missing-return
         # create some Component to play with
         class Component1(Component):
             _name = "component1"

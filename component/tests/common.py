@@ -14,7 +14,7 @@ from odoo.addons.component.core import ComponentRegistry, MetaComponent, _get_ad
 @contextmanager
 def new_rollbacked_env():
     registry = odoo.modules.registry.Registry(common.get_db_name())
-    uid = odoo.SUPERUSER_ID
+    uid = api.SUPERUSER_ID
     cr = registry.cursor()
     try:
         yield api.Environment(cr, uid, {})
@@ -159,9 +159,11 @@ class ComponentRegistryCase:
         class_or_instance.comp_registry.ready = True
         if hasattr(class_or_instance, "env"):
             # let it propagate via ctx
-            class_or_instance.env.context = dict(
-                class_or_instance.env.context,
-                components_registry=class_or_instance.comp_registry,
+            class_or_instance.env = class_or_instance.env(
+                context=dict(
+                    class_or_instance.env.context,
+                    components_registry=class_or_instance.comp_registry,
+                )
             )
 
     @staticmethod

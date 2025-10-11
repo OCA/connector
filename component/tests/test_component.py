@@ -50,7 +50,7 @@ class TestComponent(TransactionComponentRegistryCase):
 
         # our collection, in a less abstract use case, it
         # could be a record of 'magento.backend' for instance
-        self.collection_record = self.collection.new()
+        self.collection_record = self.env[self.collection._name].new()
 
         @contextmanager
         def get_base():

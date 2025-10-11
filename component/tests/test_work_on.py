@@ -24,7 +24,7 @@ class TestWorkOn(TransactionComponentRegistryCase):
 
     def test_collection_work_on(self):
         """Create a new instance and test attributes access"""
-        collection_record = self.collection.new()
+        collection_record = self.env[self.collection._name].new()
         with collection_record.work_on("res.partner") as work:
             self.assertEqual(collection_record, work.collection)
             self.assertEqual("collection.base", work.collection._name)
@@ -51,7 +51,7 @@ class TestWorkOn(TransactionComponentRegistryCase):
         registry = ComponentRegistry()
         work = WorkContext(
             model_name="res.partner",
-            collection=self.collection,
+            collection=self.env[self.collection._name],
             # we can customize the lookup registry, but used mostly for tests
             components_registry=registry,
             # we can pass our own keyword args that will set as attributes

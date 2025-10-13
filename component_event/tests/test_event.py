@@ -14,7 +14,7 @@ from odoo.addons.component_event.components.event import skip_if
 from odoo.addons.component_event.core import EventWorkContext
 
 
-@tagged("standard", "at_install","op")
+@tagged("standard", "at_install")
 class TestEventWorkContext(BaseCase):
     """Test Events Components"""
 

@@ -257,8 +257,7 @@ def external_to_m2o(field, binding=None):
             return record.id
         else:
             _logger.debug(
-                "Binder for %s returned an id, "
-                "returning a record should be preferred.",
+                "Binder for %s returned an id, returning a record should be preferred.",
                 binding_model,
             )
             return record
@@ -795,9 +794,9 @@ class Mapper(AbstractComponent):
         :type map_record: :py:class:`MapRecord`
 
         """
-        assert (
-            self.options is not None
-        ), "options should be defined with '_mapping_options'"
+        assert self.options is not None, (
+            "options should be defined with '_mapping_options'"
+        )
         _logger.debug("converting record %s to model %s", map_record.source, self.model)
 
         fields = self.options.fields
@@ -827,8 +826,7 @@ class Mapper(AbstractComponent):
                     continue
                 if not isinstance(values, dict):
                     raise ValueError(
-                        f"{values}: invalid return value for the "
-                        f"mapping method {meth}"
+                        f"{values}: invalid return value for the mapping method {meth}"
                     )
                 result.update(values)
 

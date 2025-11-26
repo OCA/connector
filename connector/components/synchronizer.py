@@ -333,7 +333,7 @@ class GenericExporter(AbstractComponent):
             binding = self.env[binding_model].search(domain)
             if binding:
                 assert len(binding) == 1, (
-                    "only 1 binding for a backend is " "supported in _export_dependency"
+                    "only 1 binding for a backend is supported in _export_dependency"
                 )
             # we are working with a unwrapped record (e.g.
             # product.category) and the binding does not exist yet.

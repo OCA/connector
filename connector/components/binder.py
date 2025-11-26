@@ -100,7 +100,7 @@ class Binder(AbstractComponent):
         """
         # Prevent False, None, or "", but not 0
         assert (external_id or external_id == 0) and binding, (
-            "external_id or binding missing, " f"got: {external_id}, {binding}"
+            f"external_id or binding missing, got: {external_id}, {binding}"
         )
         # avoid to trigger the export when we modify the `external_id`
         now_fmt = fields.Datetime.now()

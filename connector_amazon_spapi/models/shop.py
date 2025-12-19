@@ -8,6 +8,7 @@ _logger = logging.getLogger(__name__)
 class AmazonShop(models.Model):
     _name = "amazon.shop"
     _description = "Amazon Shop"
+    _inherit = ["mail.thread", "mail.activity.mixin"]
 
     name = fields.Char(required=True)
     backend_id = fields.Many2one(

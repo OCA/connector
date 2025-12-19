@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_amazon_shop_tree" model="ir.ui.view">
+        <field name="name">amazon.shop.tree</field>
+        <field name="model">amazon.shop</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="backend_id" />
+                <field name="marketplace_id" />
+                <field name="company_id" />
+                <field name="warehouse_id" />
+                <field name="pricelist_id" />
+                <field name="import_orders" />
+                <field name="sync_stock" />
+                <field name="stock_sync_interval" />
+                <field name="order_sync_interval" />
+                <field name="sync_price" />
+                <field name="last_order_sync" />
+                <field name="last_stock_sync" />
+                <field name="active" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_amazon_shop_form" model="ir.ui.view">
+        <field name="name">amazon.shop.form</field>
+        <field name="model">amazon.shop</field>
+        <field name="arch" type="xml">
+            <form string="Amazon Shop">
+                <header>
+                    <button
+                        name="action_sync_catalog"
+                        string="Sync Catalog"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button
+                        name="action_sync_orders"
+                        string="Sync Orders"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button
+                        name="action_push_stock"
+                        string="Push Stock"
+                        type="object"
+                        class="btn-secondary"
+                    />                    <button
+                        name="action_sync_competitive_prices"
+                        string="Sync Competitive Pricing"
+                        type="object"
+                        class="btn-secondary"
+                        attrs="{'invisible': [('sync_price', '=', False)]}"
+                    />
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="backend_id" />
+                        <field name="marketplace_id" />
+                        <field name="company_id" />
+                        <field name="warehouse_id" />
+                        <field name="pricelist_id" />
+                        <field name="payment_journal_id" />
+                        <field name="default_salesperson_id" />
+                        <field name="default_sales_team_id" />
+                    </group>
+                    <group string="Sync">
+                        <field name="import_orders" />
+                        <field name="sync_stock" />
+                        <field
+                            name="stock_sync_interval"
+                            attrs="{'invisible': [('sync_stock', '=', False)]}"
+                        />
+                        <field
+                            name="order_sync_interval"
+                            attrs="{'invisible': [('import_orders', '=', False)]}"
+                        />
+                        <field name="sync_price" />
+                        <field name="include_afn" />
+                        <field name="stock_policy" />
+                        <field name="order_sync_lookback_days" />
+                        <field name="last_order_sync" readonly="1" />
+                        <field name="last_stock_sync" readonly="1" />
+                        <field name="last_price_sync" readonly="1" />
+                        <field name="active" />
+                    </group>
+                    <group string="Extra Routing Line">
+                        <field name="add_exp_line" />
+                        <field
+                            name="exp_line_product_id"
+                            attrs="{'invisible': [('add_exp_line', '=', False)]}"
+                        />
+                        <field
+                            name="exp_line_name"
+                            attrs="{'invisible': [('add_exp_line', '=', False)]}"
+                        />
+                        <field
+                            name="exp_line_qty"
+                            attrs="{'invisible': [('add_exp_line', '=', False)]}"
+                        />
+                        <field
+                            name="exp_line_price"
+                            attrs="{'invisible': [('add_exp_line', '=', False)]}"
+                        />
+                    </group>
+                    <group string="Notes" col="1">
+                        <field name="note" nolabel="1" />
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="message_ids" widget="mail_thread" />
+                    <field name="activity_ids" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_amazon_shop" model="ir.actions.act_window">
+        <field name="name">Amazon Shops</field>
+        <field name="res_model">amazon.shop</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

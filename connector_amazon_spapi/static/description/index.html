@@ -1,0 +1,869 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils: https://docutils.sourceforge.io/" />
+<title>Amazon SP-API Connector</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger (goodger@python.org)
+:Id: $Id: html4css1.css 9511 2024-01-13 09:50:07Z milde $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+Despite the name, some widely supported CSS2 features are used.
+
+See https://docutils.sourceforge.io/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+.subscript {
+  vertical-align: sub;
+  font-size: smaller }
+
+.superscript {
+  vertical-align: super;
+  font-size: smaller }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
+  overflow: hidden;
+}
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title, .code .error {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin: 0 0 0.5em 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left, .figure.align-left, object.align-left, table.align-left {
+  clear: left ;
+  float: left ;
+  margin-right: 1em }
+
+img.align-right, .figure.align-right, object.align-right, table.align-right {
+  clear: right ;
+  float: right ;
+  margin-left: 1em }
+
+img.align-center, .figure.align-center, object.align-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table.align-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.align-left {
+  text-align: left }
+
+.align-center {
+  clear: both ;
+  text-align: center }
+
+.align-right {
+  text-align: right }
+
+/* reset inner alignment in figures */
+div.align-right {
+  text-align: inherit }
+
+/* div.align-center * { */
+/*   text-align: left } */
+
+.align-top    {
+  vertical-align: top }
+
+.align-middle {
+  vertical-align: middle }
+
+.align-bottom {
+  vertical-align: bottom }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font: inherit }
+
+pre.literal-block, pre.doctest-block, pre.math, pre.code {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+pre.code .ln { color: gray; } /* line numbers */
+pre.code, code { background-color: #eeeeee }
+pre.code .comment, code .comment { color: #5C6576 }
+pre.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
+pre.code .literal.string, code .literal.string { color: #0C5404 }
+pre.code .name.builtin, code .name.builtin { color: #352B84 }
+pre.code .deleted, code .deleted { background-color: #DEB0A1}
+pre.code .inserted, code .inserted { background-color: #A3D289}
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic, pre.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+/* "booktabs" style (no vertical lines) */
+table.docutils.booktabs {
+  border: 0px;
+  border-top: 2px solid;
+  border-bottom: 2px solid;
+  border-collapse: collapse;
+}
+table.docutils.booktabs * {
+  border: 0px;
+}
+table.docutils.booktabs th {
+  border-bottom: thin solid;
+  text-align: left;
+}
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="amazon-sp-api-connector">
+<h1 class="title">Amazon SP-API Connector</h1>
+
+<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! This file is generated by oca-gen-addon-readme !!
+!! changes will be overwritten.                   !!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! source digest: sha256:9646eb7c22e5e534d987bea536ff7f000dc931d36d4ef74d0d69ab77880c6b53
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/lgpl-3.0-standalone.html"><img alt="License: LGPL-3" src="https://img.shields.io/badge/licence-LGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/OCA/connector/tree/16.0/foo"><img alt="OCA/connector" src="https://img.shields.io/badge/github-OCA%2Fconnector-lightgray.png?logo=github" /></a> <a class="reference external image-reference" href="https://translation.odoo-community.org/projects/connector-16-0/connector-16-0-foo"><img alt="Translate me on Weblate" src="https://img.shields.io/badge/weblate-Translate%20me-F47D42.png" /></a> <a class="reference external image-reference" href="https://runboat.odoo-community.org/builds?repo=OCA/connector&amp;target_branch=16.0"><img alt="Try me on Runboat" src="https://img.shields.io/badge/runboat-Try%20me-875A7B.png" /></a></p>
+<div class="section" id="order-management">
+<h1>Order Management</h1>
+<ul class="simple">
+<li>Fetches orders from Amazon SP-API with configurable lookback period (default: 30 days)</li>
+<li>Handles pagination with NextToken for large order volumes</li>
+<li>Creates/updates Odoo sale orders with full Amazon order data</li>
+<li>Maps Amazon order items to Odoo sale order lines</li>
+<li>Automatic product matching by SKU (SellerSKU)</li>
+<li>Graceful handling of missing products and unmapped items</li>
+<li>Supports multiple shops per backend for diverse Amazon seller accounts</li>
+</ul>
+</div>
+<div class="section" id="authentication-api-integration">
+<h1>Authentication &amp; API Integration</h1>
+<ul class="simple">
+<li>Secure LWA token refresh with automatic expiry management</li>
+<li>Token caching with TTL to minimize API calls</li>
+<li>Support for multiple Amazon regions (North America, Europe, Far East)</li>
+<li>Custom endpoint support for testing and alternative regions</li>
+<li>Comprehensive error handling with user-friendly error messages</li>
+<li>Connection testing via marketplace metadata API verification</li>
+</ul>
+<div class="section" id="test-suite-overview">
+<h2>Test Suite Overview</h2>
+<p>The module includes a comprehensive test suite with <strong>47+ test methods</strong> covering all critical functionality.</p>
+</div>
+</div>
+<div class="section" id="test-coverage-summary">
+<h1>Test Coverage Summary</h1>
+<table border="1" class="docutils">
+<colgroup>
+<col width="40%" />
+<col width="15%" />
+<col width="45%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Component</th>
+<th class="head">Tests</th>
+<th class="head">Coverage Area</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Backend Authentication</td>
+<td>17</td>
+<td>Auth, tokens, API calls</td>
+</tr>
+<tr><td>Shop Synchronization</td>
+<td>14</td>
+<td>Order sync, pagination</td>
+</tr>
+<tr><td>Order Import &amp; Line Items</td>
+<td>16</td>
+<td>Import, products, fields</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="test-implementation-highlights">
+<h1>Test Implementation Highlights</h1>
+<p>✅ <strong>Backend Tests (17 tests)</strong> - <tt class="docutils literal">tests/test_backend.py</tt></p>
+<ul class="simple">
+<li>Endpoint resolution for NA/EU/FE regions + custom endpoints</li>
+<li>LWA token refresh with mock requests.post</li>
+<li>Access token caching with TTL validation</li>
+<li>Automatic token refresh on expiry</li>
+<li>SP-API calls with Authorization headers</li>
+<li>HTTP error handling (401, 403, 500)</li>
+<li>Connection testing with marketplace verification</li>
+<li>Multi-shop and warehouse configuration</li>
+</ul>
+<p>✅ <strong>Shop Synchronization Tests (14 tests)</strong> - <tt class="docutils literal">tests/test_shop.py</tt></p>
+<ul class="simple">
+<li>Shop creation and default values</li>
+<li>Async job queueing via queue_job integration</li>
+<li>Order fetching from SP-API with date range filtering</li>
+<li>Pagination handling with NextToken parameter</li>
+<li>Last sync timestamp updates</li>
+<li>Existing order status updates</li>
+<li>Stock push feature validation</li>
+<li>Multi-shop and warehouse support</li>
+</ul>
+<p>✅ <strong>Order Import Tests (16 tests)</strong> - <tt class="docutils literal">tests/test_order.py</tt></p>
+<ul class="simple">
+<li>Order creation from Amazon API data</li>
+<li>Order line item synchronization</li>
+<li>Pagination for order items endpoint</li>
+<li>Product matching by SKU (SellerSKU)</li>
+<li>Graceful handling of missing products</li>
+<li>Quantity and pricing accuracy</li>
+<li>Complete Amazon field mapping</li>
+<li>Empty response and edge case handling</li>
+</ul>
+</div>
+<div class="section" id="oca-best-practices-applied">
+<h1>OCA Best Practices Applied</h1>
+<dl class="docutils">
+<dt>✅ <strong>Test Organization</strong></dt>
+<dd><ul class="first last simple">
+<li>Base class (CommonConnectorAmazonSpapi) with shared fixtures</li>
+<li>Separate test files by model (backend, shop, order)</li>
+<li>Clear naming convention: test_feature_scenario</li>
+</ul>
+</dd>
+<dt>✅ <strong>Test Isolation</strong></dt>
+<dd><ul class="first last simple">
+<li>Each test uses Odoo TransactionCase for database isolation</li>
+<li>No test interdependencies</li>
+<li>Auto-rollback after each test</li>
+<li>Fresh database state guaranteed</li>
+</ul>
+</dd>
+<dt>✅ <strong>Mock External Dependencies</strong></dt>
+<dd><ul class="first last simple">
+<li>All requests to Amazon SP-API mocked (zero external calls)</li>
+<li>Realistic mock responses matching Amazon API structure</li>
+<li>Deterministic test execution</li>
+<li>Fast test suite: ~5-10 seconds for full suite</li>
+</ul>
+</dd>
+<dt>✅ <strong>Realistic Test Data</strong></dt>
+<dd><ul class="first last simple">
+<li>Amazon Order structure (22+ fields)</li>
+<li>Amazon Order Item structure (20+ fields)</li>
+<li>Marketplace and backend configurations</li>
+<li>Authentic pricing, quantities, and timestamps</li>
+</ul>
+</dd>
+<dt>✅ <strong>Comprehensive Documentation</strong></dt>
+<dd><ul class="first last simple">
+<li>Clear docstrings for each test method</li>
+<li>README with running instructions</li>
+<li>Sample data documentation</li>
+<li>Troubleshooting guide and common issues</li>
+<li>Extension guidelines for adding tests</li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="running-tests">
+<h2>Running Tests</h2>
+</div>
+</div>
+<div class="section" id="via-pytest-development">
+<h1>Via Pytest (Development)</h1>
+<pre class="literal-block">
+# All tests
+pytest tests/ -v
+
+# Specific file
+pytest tests/test_backend.py -v
+
+# Specific test method
+pytest tests/test_backend.py::TestAmazonBackend::test_backend_creation -v
+
+# With coverage report
+pytest tests/ --cov=. --cov-report=html
+</pre>
+</div>
+<div class="section" id="via-odoo-test-suite">
+<h1>Via Odoo Test Suite</h1>
+<pre class="literal-block">
+# From module directory
+odoo --test-enable -d test_db -i connector_amazon_spapi
+
+# Via invoke (Doodba)
+invoke test --cur-file __init__.py
+</pre>
+</div>
+<div class="section" id="test-configuration">
+<h1>Test Configuration</h1>
+<ul class="simple">
+<li><strong>Framework</strong>: Odoo TransactionCase (isolated database per test)</li>
+<li><strong>Mocking</strong>: unittest.mock with &#64;mock.patch</li>
+<li><strong>Mock Targets</strong>: requests.post, requests.request, backend._call_sp_api</li>
+<li><strong>Execution Time</strong>: ~5-10 seconds for full suite</li>
+<li><strong>External Dependencies</strong>: None (100% mocked)</li>
+</ul>
+<div class="section" id="models-fields">
+<h2>Models &amp; Fields</h2>
+</div>
+</div>
+<div class="section" id="amazon-backend">
+<h1>amazon.backend</h1>
+<p>Main configuration for Amazon seller account integration.</p>
+<ul class="simple">
+<li><strong>name</strong>: Backend display name</li>
+<li><strong>seller_id</strong>: Amazon Seller ID</li>
+<li><strong>region</strong>: Amazon region (NA/EU/FE)</li>
+<li><strong>client_id</strong>: LWA client ID (from App Console)</li>
+<li><strong>client_secret</strong>: LWA client secret</li>
+<li><strong>refresh_token</strong>: LWA refresh token</li>
+<li><strong>access_token</strong>: Current access token (managed automatically)</li>
+<li><strong>token_expires_at</strong>: Token expiry datetime</li>
+<li><strong>warehouse_id</strong>: Default warehouse for orders (optional)</li>
+</ul>
+</div>
+<div class="section" id="amazon-marketplace">
+<h1>amazon.marketplace</h1>
+<p>Represents an Amazon marketplace (e.g., amazon.com, amazon.de).</p>
+<ul class="simple">
+<li><strong>name</strong>: Marketplace name</li>
+<li><strong>marketplace_id</strong>: Amazon marketplace ID (e.g., ATVPDKIKX0DER)</li>
+<li><strong>region_id</strong>: Associated region</li>
+<li><strong>country_code</strong>: Country code</li>
+</ul>
+</div>
+<div class="section" id="amazon-shop">
+<h1>amazon.shop</h1>
+<p>Shop-level configuration for order synchronization.</p>
+<ul class="simple">
+<li><strong>backend_id</strong>: Parent backend</li>
+<li><strong>marketplace_id</strong>: Target marketplace</li>
+<li><strong>name</strong>: Shop name</li>
+<li><strong>import_orders</strong>: Enable order import</li>
+<li><strong>push_stock</strong>: Enable stock push (future)</li>
+<li><strong>lookback_days</strong>: Days to fetch orders (default: 30)</li>
+<li><strong>last_sync_at</strong>: Last successful sync timestamp</li>
+<li><strong>warehouse_id</strong>: Override warehouse for this shop</li>
+</ul>
+</div>
+<div class="section" id="amazon-sale-order">
+<h1>amazon.sale.order</h1>
+<p>Order binding for Amazon orders in Odoo.</p>
+<ul class="simple">
+<li><strong>backend_id</strong>: Source backend</li>
+<li><strong>external_id</strong>: Amazon OrderId</li>
+<li><strong>odoo_id</strong>: Related sale.order record</li>
+<li><strong>status</strong>: Amazon order status</li>
+<li><strong>buyer_email</strong>: Buyer email address</li>
+<li><strong>last_update_date</strong>: Last update from Amazon</li>
+</ul>
+</div>
+<div class="section" id="amazon-sale-order-line">
+<h1>amazon.sale.order.line</h1>
+<p>Order line item binding.</p>
+<ul class="simple">
+<li><strong>order_id</strong>: Parent order binding</li>
+<li><strong>product_id</strong>: Linked Odoo product (if matched)</li>
+<li><strong>external_id</strong>: Amazon OrderItemId</li>
+<li><strong>asin</strong>: Amazon ASIN</li>
+<li><strong>seller_sku</strong>: SKU used in listing</li>
+<li><strong>quantity</strong>: Quantity ordered</li>
+<li><strong>price_unit</strong>: Unit price</li>
+</ul>
+<div class="section" id="configuration">
+<h2>Configuration</h2>
+</div>
+</div>
+<div class="section" id="initial-setup">
+<h1>Initial Setup</h1>
+<ol class="arabic simple">
+<li><strong>Create Backend</strong>
+- Go to Amazon → Backends
+- Fill in seller ID, region, and LWA credentials
+- Test connection to verify credentials</li>
+<li><strong>Configure Marketplaces</strong>
+- Go to Amazon → Marketplaces
+- Verify marketplace IDs and regions
+- Link to backend</li>
+<li><strong>Create Shop(s)</strong>
+- Go to Amazon → Shops
+- Select backend and marketplace
+- Set import_orders, lookback_days, warehouse
+- Test synchronization</li>
+<li><strong>First Order Import</strong>
+- Click “Sync Orders” on shop record
+- Watch queue_job for progress
+- Verify orders created in sale.order</li>
+</ol>
+</div>
+<div class="section" id="marketplace-region-mapping">
+<h1>Marketplace Region Mapping</h1>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="50%" />
+<col width="20%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Region</th>
+<th class="head">Endpoint</th>
+<th class="head">Codes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>North America (NA)</td>
+<td>sellingpartnerapi-na.amazon.com</td>
+<td>US, MX</td>
+</tr>
+<tr><td>Europe (EU)</td>
+<td>sellingpartnerapi-eu.amazon.com</td>
+<td>DE, FR</td>
+</tr>
+<tr><td>Far East (FE)</td>
+<td>sellingpartnerapi-fe.amazon.com</td>
+<td>JP, AU</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="configuration-file-location">
+<h1>Configuration File Location</h1>
+<p>See <tt class="docutils literal">tests/README.md</tt> for comprehensive test documentation with:</p>
+<ul class="simple">
+<li>Detailed test descriptions and purposes</li>
+<li>Running instructions for different scenarios</li>
+<li>Sample data structures and fixtures</li>
+<li>OCA best practices validation</li>
+<li>CI/CD integration guidance</li>
+<li>Troubleshooting common issues</li>
+</ul>
+<div class="section" id="implementation-status">
+<h2>Implementation Status</h2>
+</div>
+</div>
+<div class="section" id="completed">
+<h1>✅ Completed</h1>
+<ul class="simple">
+<li>Data models (backend, marketplace, shop, bindings)</li>
+<li>Backend authentication (LWA token management)</li>
+<li>Order synchronization with pagination</li>
+<li>Order line import with SKU-based product matching</li>
+<li>Queue job integration for async processing</li>
+<li>Multi-marketplace support</li>
+<li>Full test suite (47+ tests)</li>
+<li>OCA-compliant structure and documentation</li>
+</ul>
+</div>
+<div class="section" id="in-progress">
+<h1>🚧 In Progress</h1>
+<ul class="simple">
+<li>Component implementations (binder, adapters, mappers)</li>
+<li>Stock push to Amazon (Feeds v2/Listings)</li>
+<li>Price synchronization and pricelist management</li>
+</ul>
+</div>
+<div class="section" id="future-enhancements">
+<h1>📋 Future Enhancements</h1>
+<ul class="simple">
+<li>Notifications API for near-real-time order updates</li>
+<li>FBA inventory synchronization</li>
+<li>Returns and refunds ingestion</li>
+<li>Settlement and fee reporting</li>
+<li>Repricing rules and guardrails</li>
+<li>Promotion management</li>
+</ul>
+<div class="section" id="dependencies">
+<h2>Dependencies</h2>
+</div>
+</div>
+<div class="section" id="core-dependencies">
+<h1>Core Dependencies</h1>
+<ul class="simple">
+<li><tt class="docutils literal">connector</tt>: OCA Connector framework</li>
+<li><tt class="docutils literal">sale_management</tt>: Odoo sales module</li>
+<li><tt class="docutils literal">stock</tt>: Odoo inventory module</li>
+<li><tt class="docutils literal">product</tt>: Odoo product master</li>
+<li><tt class="docutils literal">queue_job</tt>: Job queueing for async operations</li>
+<li><tt class="docutils literal">mail</tt>: Notification support</li>
+</ul>
+</div>
+<div class="section" id="python-dependencies">
+<h1>Python Dependencies</h1>
+<ul class="simple">
+<li><tt class="docutils literal">requests</tt>: HTTP library for SP-API calls</li>
+</ul>
+<div class="section" id="known-limitations">
+<h2>Known Limitations</h2>
+<ul class="simple">
+<li><strong>Order Fetch Limit</strong>: Current pagination limited by Amazon (100 orders per call)</li>
+<li><strong>Sync Timing</strong>: Manual or queue job based; does not use Notifications API for real-time</li>
+<li><strong>Stock Push</strong>: Not yet implemented (scaffolding only)</li>
+<li><strong>Price Sync</strong>: Not yet implemented (scaffolding only)</li>
+<li><strong>Rate Limiting</strong>: Basic backoff; does not implement RDT (Restricted Data Token) for sensitive fields</li>
+</ul>
+</div>
+<div class="section" id="troubleshooting">
+<h2>Troubleshooting</h2>
+</div>
+</div>
+<div class="section" id="common-issues">
+<h1>Common Issues</h1>
+<dl class="docutils">
+<dt><strong>Tests not discovered</strong></dt>
+<dd><ul class="first last simple">
+<li>Ensure pytest/odoo can find tests/ directory</li>
+<li>Check __init__.py imports in tests/</li>
+<li>Run with explicit path: <tt class="docutils literal">pytest tests/test_backend.py</tt></li>
+</ul>
+</dd>
+<dt><strong>Mock path errors</strong></dt>
+<dd><ul class="first last simple">
+<li>Verify &#64;mock.patch paths match actual imports</li>
+<li>Use <tt class="docutils literal">mock.patch.object()</tt> for instance methods</li>
+<li>Check mock target in error message</li>
+</ul>
+</dd>
+<dt><strong>Token expiry during testing</strong></dt>
+<dd><ul class="first last simple">
+<li>All token tests use mock; no actual expiry occurs</li>
+<li>If needed, adjust token_expires_at in fixture</li>
+</ul>
+</dd>
+<dt><strong>Database state issues</strong></dt>
+<dd><ul class="first last simple">
+<li>Use TransactionCase to auto-rollback per test</li>
+<li>Don’t share objects between tests</li>
+<li>Use setUp() to create fresh fixtures</li>
+</ul>
+</dd>
+<dt><strong>Slow test execution</strong></dt>
+<dd><ul class="first last simple">
+<li>Check for missing mocks (actual API calls)</li>
+<li>Profile with pytest –durations=10</li>
+<li>Run subset of tests for faster feedback</li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="support-contact">
+<h2>Support &amp; Contact</h2>
+<ul class="simple">
+<li><strong>Module Author</strong>: Kencove</li>
+<li><strong>Website</strong>: <a class="reference external" href="https://www.kencove.com">https://www.kencove.com</a></li>
+<li><strong>Odoo Version</strong>: 16.0</li>
+<li><strong>License</strong>: LGPL-3</li>
+<li><strong>OCA Compliance</strong>: Yes</li>
+</ul>
+<p>For issues or enhancements, see <tt class="docutils literal">tests/README.md</tt> for comprehensive testing documentation
+and <tt class="docutils literal">TEST_IMPLEMENTATION_SUMMARY.md</tt> for detailed test implementation details.</p>
+<p><strong>Table of contents</strong></p>
+</div>
+<div class="section" id="usage">
+<h2>Usage</h2>
+<p>This module does nothing on its own.  It is a ground for developing
+advanced connector modules. For further information, please go on:
+<a class="reference external" href="http://odoo-connector.com">http://odoo-connector.com</a></p>
+</div>
+<div class="section" id="changelog">
+<h2>Changelog</h2>
+<!-- [ The change log. The goal of this file is to help readers
+understand changes between version. The primary audience is
+end users and integrators. Purely technical changes such as
+code refactoring must not be mentioned here.
+
+This file may contain ONE level of section titles, underlined
+with the ~ (tilde) character. Other section markers are
+forbidden and will likely break the structure of the README.rst
+or other documents where this fragment is included. ] -->
+<div class="section" id="next">
+<h3>Next</h3>
+</div>
+<div class="section" id="section-1">
+<h3>12.0.1.0.0 (2018-11-26)</h3>
+<ul class="simple">
+<li>[MIGRATION] from 12.0 branched at rev. 324e006</li>
+</ul>
+</div>
+</div>
+<div class="section" id="bug-tracker">
+<h2>Bug Tracker</h2>
+<p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/connector/issues">GitHub Issues</a>.
+In case of trouble, please check there if your issue has already been reported.
+If you spotted it first, help us to smash it by providing a detailed and welcomed
+<a class="reference external" href="https://github.com/OCA/connector/issues/new?body=module:%20foo%0Aversion:%2016.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**">feedback</a>.</p>
+<p>Do not contact contributors directly about support or help with technical issues.</p>
+</div>
+<div class="section" id="credits">
+<h2>Credits</h2>
+<div class="section" id="authors">
+<h3>Authors</h3>
+<ul class="simple">
+<li>Kencove</li>
+</ul>
+</div>
+<div class="section" id="contributors">
+<h3>Contributors</h3>
+<ul class="simple">
+<li>Don Kendall &lt;<a class="reference external" href="mailto:kendall&#64;donkendall.com">kendall&#64;donkendall.com</a>&gt;</li>
+<li>Mohamed Alkobrosly &lt;<a class="reference external" href="mailto:malkobrosly&#64;donkendall.com">malkobrosly&#64;donkendall.com</a>&gt;</li>
+</ul>
+</div>
+<div class="section" id="maintainers">
+<h3>Maintainers</h3>
+<p>This module is maintained by the OCA.</p>
+<a class="reference external image-reference" href="https://odoo-community.org">
+<img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" />
+</a>
+<p>OCA, or the Odoo Community Association, is a nonprofit organization whose
+mission is to support the collaborative development of Odoo features and
+promote its widespread use.</p>
+<p>This module is part of the <a class="reference external" href="https://github.com/OCA/connector/tree/16.0/foo">OCA/connector</a> project on GitHub.</p>
+<p>You are welcome to contribute. To learn how please visit <a class="reference external" href="https://odoo-community.org/page/Contribute">https://odoo-community.org/page/Contribute</a>.</p>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

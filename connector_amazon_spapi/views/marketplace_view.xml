@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_amazon_marketplace_tree" model="ir.ui.view">
+        <field name="name">amazon.marketplace.tree</field>
+        <field name="model">amazon.marketplace</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="code" />
+                <field name="marketplace_id" />
+                <field name="backend_id" />
+                <field name="currency_id" />
+                <field name="country_code" />
+                <field name="active" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_amazon_marketplace_form" model="ir.ui.view">
+        <field name="name">amazon.marketplace.form</field>
+        <field name="model">amazon.marketplace</field>
+        <field name="arch" type="xml">
+            <form string="Amazon Marketplace">
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="code" />
+                        <field name="marketplace_id" />
+                        <field name="backend_id" />
+                        <field name="currency_id" />
+                        <field name="timezone" />
+                        <field name="country_code" />
+                        <field name="active" />
+                    </group>
+                    <group string="Filters">
+                        <field name="order_status_filter" />
+                        <field name="fulfillment_channel_filter" />
+                    </group>
+                    <group string="Delivery Method Mapping">
+                        <field name="delivery_standard_id" />
+                        <field name="delivery_expedited_id" />
+                        <field name="delivery_priority_id" />
+                        <field name="delivery_scheduled_id" />
+                        <field name="delivery_default_id" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_amazon_marketplace" model="ir.actions.act_window">
+        <field name="name">Amazon Marketplaces</field>
+        <field name="res_model">amazon.marketplace</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_amazon_order_tree" model="ir.ui.view">
+        <field name="name">amazon.sale.order.tree</field>
+        <field name="model">amazon.sale.order</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="external_id" />
+                <field name="backend_id" />
+                <field name="shop_id" />
+                <field name="marketplace_id" />
+                <field name="odoo_id" />
+                <field name="status" />
+                <field name="fulfillment_channel" />
+                <field name="purchase_date" />
+                <field name="last_sync" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_amazon_order_form" model="ir.ui.view">
+        <field name="name">amazon.sale.order.form</field>
+        <field name="model">amazon.sale.order</field>
+        <field name="arch" type="xml">
+            <form string="Amazon Order">
+                <sheet>
+                    <group>
+                        <field name="external_id" />
+                        <field name="backend_id" />
+                        <field name="shop_id" />
+                        <field name="marketplace_id" />
+                        <field name="odoo_id" />
+                        <field name="status" />
+                        <field name="fulfillment_channel" />
+                        <field name="purchase_date" />
+                        <field name="last_update_date" />
+                        <field name="last_sync" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_amazon_order" model="ir.actions.act_window">
+        <field name="name">Amazon Orders</field>
+        <field name="res_model">amazon.sale.order</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

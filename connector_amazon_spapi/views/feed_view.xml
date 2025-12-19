@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_amazon_feed_tree" model="ir.ui.view">
+        <field name="name">amazon.feed.tree</field>
+        <field name="model">amazon.feed</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="feed_type" />
+                <field name="backend_id" />
+                <field name="marketplace_id" />
+                <field name="external_feed_id" />
+                <field name="state" />
+                <field name="retry_count" />
+                <field name="last_status_update" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_amazon_feed_form" model="ir.ui.view">
+        <field name="name">amazon.feed.form</field>
+        <field name="model">amazon.feed</field>
+        <field name="arch" type="xml">
+            <form string="Amazon Feed">
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="feed_type" />
+                        <field name="backend_id" />
+                        <field name="marketplace_id" />
+                        <field name="external_feed_id" />
+                        <field name="state" />
+                        <field name="retry_count" />
+                        <field name="last_status_update" />
+                    </group>
+                    <group string="Payload">
+                        <field name="payload_json" nolabel="1" widget="text" />
+                        <field name="last_state_message" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_amazon_feed" model="ir.actions.act_window">
+        <field name="name">Amazon Feeds</field>
+        <field name="res_model">amazon.feed</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

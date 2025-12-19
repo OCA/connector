@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_amazon_product_binding_tree" model="ir.ui.view">
+        <field name="name">amazon.product.binding.tree</field>
+        <field name="model">amazon.product.binding</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="seller_sku" />
+                <field name="asin" />
+                <field name="backend_id" />
+                <field name="marketplace_id" />
+                <field name="odoo_id" />
+                <field name="fulfillment_channel" />
+                <field name="sync_price" />
+                <field name="sync_stock" />
+                <field name="last_price_sync" />
+                <field name="last_stock_sync" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_amazon_product_binding_form" model="ir.ui.view">
+        <field name="name">amazon.product.binding.form</field>
+        <field name="model">amazon.product.binding</field>
+        <field name="arch" type="xml">
+            <form string="Amazon Product Binding">
+                <header>
+                    <button
+                        name="action_fetch_competitive_prices"
+                        string="Fetch Competitive Prices"
+                        type="object"
+                        class="oe_highlight"
+                        attrs="{'invisible': ['|', ('asin', '=', False), ('marketplace_id', '=', False)]}"
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_view_competitive_prices"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-line-chart"
+                            attrs="{'invisible': [('competitive_price_count', '=', 0)]}"
+                        >
+                            <field
+                                name="competitive_price_count"
+                                widget="statinfo"
+                                string="Competitive Prices"
+                            />
+                        </button>
+                    </div>
+                    <group>
+                        <field name="seller_sku" />
+                        <field name="asin" />
+                        <field name="external_id" />
+                        <field name="backend_id" />
+                        <field name="marketplace_id" />
+                        <field name="odoo_id" />
+                        <field name="fulfillment_channel" />
+                    </group>
+                    <group string="Stock">
+                        <field name="stock_buffer" />
+                        <field name="lead_time_days" />
+                        <field name="handling_time_days" />
+                        <field name="sync_stock" />
+                        <field name="last_stock_sync" readonly="1" />
+                    </group>
+                    <group string="Price">
+                        <field name="sync_price" />
+                        <field name="last_price_sync" readonly="1" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_amazon_product_binding" model="ir.actions.act_window">
+        <field name="name">Amazon Product Bindings</field>
+        <field name="res_model">amazon.product.binding</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

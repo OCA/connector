@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_amazon_backend,access_amazon_backend,model_amazon_backend,base.group_system,1,1,1,1
+access_amazon_marketplace,access_amazon_marketplace,model_amazon_marketplace,base.group_system,1,1,1,1
+access_amazon_shop,access_amazon_shop,model_amazon_shop,base.group_system,1,1,1,1
+access_amazon_product_binding,access_amazon_product_binding,model_amazon_product_binding,base.group_system,1,1,1,1
+access_amazon_competitive_price,access_amazon_competitive_price,model_amazon_competitive_price,base.group_system,1,1,1,1
+access_amazon_sale_order,access_amazon_sale_order,model_amazon_sale_order,base.group_system,1,1,1,1
+access_amazon_sale_order_line,access_amazon_sale_order_line,model_amazon_sale_order_line,base.group_system,1,1,1,1
+access_amazon_feed,access_amazon_feed,model_amazon_feed,base.group_system,1,1,1,1

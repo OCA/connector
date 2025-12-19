@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_amazon_backend_tree" model="ir.ui.view">
+        <field name="name">amazon.backend.tree</field>
+        <field name="model">amazon.backend</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="code" />
+                <field name="version" />
+                <field name="seller_id" />
+                <field name="region" />
+                <field name="company_id" />
+                <field name="test_mode" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_amazon_backend_form" model="ir.ui.view">
+        <field name="name">amazon.backend.form</field>
+        <field name="model">amazon.backend</field>
+        <field name="arch" type="xml">
+            <form string="Amazon Backend">
+                <header>
+                    <button
+                        name="action_test_connection"
+                        string="Test Connection"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button
+                        name="action_fetch_marketplaces"
+                        type="object"
+                        string="Fetch Marketplaces"
+                    />
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="code" />
+                        <field name="version" readonly="1" />
+                        <field name="region" />
+                        <field name="company_id" />
+                        <field name="warehouse_id" />
+                        <field name="test_mode" />
+                        <field
+                            name="read_only_mode"
+                            widget="boolean_toggle"
+                            attrs="{'invisible': [('test_mode', '=', False)]}"
+                        />
+                    </group>
+                    <group string="Credentials">
+                        <field name="seller_id" />
+                        <field name="lwa_client_id" password="True" />
+                        <field name="lwa_client_secret" password="True" />
+                        <field name="lwa_refresh_token" password="True" />
+                        <field name="aws_role_arn" />
+                        <field name="aws_external_id" />
+                        <field name="endpoint" />
+                    </group>
+                    <group string="Flags">
+                        <field name="enable_price_sync" />
+                        <field name="enable_stock_sync" />
+                    </group>
+                    <notebook>
+                        <page string="Marketplaces">
+                            <field name="marketplace_ids">
+                                <tree editable="bottom">
+                                    <field name="name" />
+                                    <field name="code" />
+                                    <field name="marketplace_id" />
+                                    <field name="currency_id" />
+                                    <field name="country_code" />
+                                    <field name="order_status_filter" />
+                                    <field name="fulfillment_channel_filter" />
+                                    <field name="active" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Shops">
+                            <field name="shop_ids">
+                                <tree editable="bottom">
+                                    <field name="name" />
+                                    <field name="marketplace_id" />
+                                    <field name="company_id" />
+                                    <field name="warehouse_id" />
+                                    <field name="pricelist_id" />
+                                    <field name="import_orders" />
+                                    <field name="sync_stock" />
+                                    <field name="sync_price" />
+                                    <field name="include_afn" />
+                                    <field name="stock_policy" />
+                                    <field name="last_order_sync" />
+                                    <field name="order_sync_lookback_days" />
+                                    <field name="active" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="note" nolabel="1" />
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_amazon_backend" model="ir.actions.act_window">
+        <field name="name">Amazon Backends</field>
+        <field name="res_model">amazon.backend</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

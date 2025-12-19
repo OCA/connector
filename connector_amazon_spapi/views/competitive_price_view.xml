@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_amazon_competitive_price_tree" model="ir.ui.view">
+        <field name="name">amazon.competitive.price.tree</field>
+        <field name="model">amazon.competitive.price</field>
+        <field name="arch" type="xml">
+            <tree
+                decoration-danger="price_difference &lt; -5"
+                decoration-success="price_difference &gt; 5"
+            >
+                <field name="fetch_date" />
+                <field name="product_id" />
+                <field name="asin" />
+                <field name="seller_sku" />
+                <field name="marketplace_id" />
+                <field name="listing_price" widget="monetary" />
+                <field name="shipping_price" widget="monetary" />
+                <field name="landed_price" widget="monetary" />
+                <field name="our_current_price" widget="monetary" />
+                <field name="price_difference" widget="monetary" />
+                <field name="condition" />
+                <field name="offer_type" />
+                <field name="is_buy_box_winner" />
+                <field name="number_of_offers_new" />
+                <field name="currency_id" invisible="1" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_amazon_competitive_price_form" model="ir.ui.view">
+        <field name="name">amazon.competitive.price.form</field>
+        <field name="model">amazon.competitive.price</field>
+        <field name="arch" type="xml">
+            <form string="Amazon Competitive Price">
+                <header>
+                    <button
+                        name="action_apply_to_pricelist"
+                        string="Apply to Pricelist"
+                        type="object"
+                        class="oe_highlight"
+                    />
+                    <button
+                        name="action_view_product"
+                        string="View Product"
+                        type="object"
+                    />
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Product Information">
+                            <field name="product_binding_id" />
+                            <field name="product_id" />
+                            <field name="asin" />
+                            <field name="seller_sku" />
+                            <field name="marketplace_id" />
+                            <field name="backend_id" />
+                        </group>
+                        <group string="Pricing">
+                            <field name="listing_price" widget="monetary" />
+                            <field name="shipping_price" widget="monetary" />
+                            <field name="landed_price" widget="monetary" />
+                            <field name="currency_id" />
+                            <field name="our_current_price" widget="monetary" />
+                            <field name="price_difference" widget="monetary" />
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Offer Details">
+                            <field name="condition" />
+                            <field name="subcondition" />
+                            <field name="offer_type" />
+                            <field name="competitive_price_id" />
+                        </group>
+                        <group string="Competitive Landscape">
+                            <field name="is_buy_box_winner" />
+                            <field name="is_featured_merchant" />
+                            <field name="number_of_offers_new" />
+                            <field name="number_of_offers_used" />
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Metadata">
+                            <field name="fetch_date" />
+                            <field name="active" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_amazon_competitive_price_search" model="ir.ui.view">
+        <field name="name">amazon.competitive.price.search</field>
+        <field name="model">amazon.competitive.price</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_id" />
+                <field name="asin" />
+                <field name="seller_sku" />
+                <field name="marketplace_id" />
+                <field name="backend_id" />
+                <separator />
+                <filter
+                    string="Buy Box Winner"
+                    name="buy_box_winner"
+                    domain="[('is_buy_box_winner', '=', True)]"
+                />
+                <filter
+                    string="Featured Merchant"
+                    name="featured_merchant"
+                    domain="[('is_featured_merchant', '=', True)]"
+                />
+                <filter
+                    string="Lower Than Our Price"
+                    name="lower_price"
+                    domain="[('price_difference', '&lt;', 0)]"
+                />
+                <filter
+                    string="Higher Than Our Price"
+                    name="higher_price"
+                    domain="[('price_difference', '&gt;', 0)]"
+                />
+                <separator />
+                <filter
+                    string="New Condition"
+                    name="condition_new"
+                    domain="[('condition', '=', 'New')]"
+                />
+                <filter
+                    string="Used Condition"
+                    name="condition_used"
+                    domain="[('condition', '=', 'Used')]"
+                />
+                <separator />
+                <filter
+                    string="Active"
+                    name="active"
+                    domain="[('active', '=', True)]"
+                />
+                <filter
+                    string="Archived"
+                    name="archived"
+                    domain="[('active', '=', False)]"
+                />
+                <separator />
+                <filter
+                    string="Last 7 Days"
+                    name="last_7_days"
+                    domain="[('fetch_date', '&gt;=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"
+                />
+                <filter
+                    string="Last 30 Days"
+                    name="last_30_days"
+                    domain="[('fetch_date', '&gt;=', (context_today() - datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]"
+                />
+                <group expand="0" string="Group By">
+                    <filter
+                        name="group_product"
+                        string="Product"
+                        context="{'group_by': 'product_id'}"
+                    />
+                    <filter
+                        name="group_marketplace"
+                        string="Marketplace"
+                        context="{'group_by': 'marketplace_id'}"
+                    />
+                    <filter
+                        name="group_condition"
+                        string="Condition"
+                        context="{'group_by': 'condition'}"
+                    />
+                    <filter
+                        name="group_fetch_date"
+                        string="Fetch Date"
+                        context="{'group_by': 'fetch_date:day'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_amazon_competitive_price" model="ir.actions.act_window">
+        <field name="name">Competitive Prices</field>
+        <field name="res_model">amazon.competitive.price</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No competitive pricing data yet
+            </p>
+            <p>
+                Competitive prices show how your Amazon listings compare to other sellers.
+                Use the "Fetch Competitive Prices" button on product bindings to retrieve
+                current market pricing.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem
+        id="menu_amazon_competitive_price"
+        name="Competitive Prices"
+        parent="connector.menu_connector_root"
+        action="action_amazon_competitive_price"
+        sequence="50"
+    />
+</odoo>

@@ -10,7 +10,7 @@
                 <field name="backend_id" />
                 <field name="marketplace_id" />
                 <field name="external_feed_id" />
-                <field name="status" />
+                <field name="state" />
                 <field name="retry_count" />
                 <field name="last_status_update" />
             </tree>
@@ -29,7 +29,7 @@
                         <field name="backend_id" />
                         <field name="marketplace_id" />
                         <field name="external_feed_id" />
-                        <field name="status" />
+                        <field name="state" />
                         <field name="retry_count" />
                         <field name="last_status_update" />
                     </group>

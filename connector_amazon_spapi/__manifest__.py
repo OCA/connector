@@ -1,4 +1,4 @@
-{
+{  # noqa: B018
     "name": "Amazon SP-API Connector",
     "version": "16.0.1.0.0",
     "category": "Connector",

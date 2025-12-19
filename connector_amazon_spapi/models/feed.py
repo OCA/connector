@@ -134,6 +134,7 @@ class AmazonFeed(models.Model):
             upload_url,
             data=self.payload_json.encode("utf-8"),
             headers=headers,
+            timeout=60,
         )
         response.raise_for_status()
 

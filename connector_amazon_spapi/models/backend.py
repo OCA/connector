@@ -100,7 +100,7 @@ class AmazonBackend(models.Model):
 
             return data["access_token"]
         except Exception as e:
-            raise UserError(f"Failed to refresh LWA access token: {str(e)}")
+            raise UserError(f"Failed to refresh LWA access token: {str(e)}") from e
 
     def _get_access_token(self):
         """Get valid access token, refreshing if necessary"""
@@ -145,9 +145,9 @@ class AmazonBackend(models.Model):
         except requests.exceptions.HTTPError as e:
             raise UserError(
                 f"SP-API HTTP Error: {e.response.status_code} - {e.response.text}"
-            )
+            ) from e
         except Exception as e:
-            raise UserError(f"SP-API Call Failed: {str(e)}")
+            raise UserError(f"SP-API Call Failed: {str(e)}") from e
 
     def action_test_connection(self):
         """Test SP-API connection by fetching marketplace participations"""
@@ -165,7 +165,10 @@ class AmazonBackend(models.Model):
                     "tag": "display_notification",
                     "params": {
                         "title": "Connection Successful",
-                        "message": f"Connected to Amazon SP-API. Found {len(result['payload'])} marketplace(s).",
+                        "message": (
+                            f"Connected to Amazon SP-API. "
+                            f"Found {len(result['payload'])} marketplace(s)."
+                        ),
                         "type": "success",
                         "sticky": False,
                     },

@@ -77,12 +77,12 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * Odoo Community Association (OCA)
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
 This module is maintained by the OCA.
 

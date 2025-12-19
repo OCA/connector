@@ -43,7 +43,7 @@ class AmazonShop(models.Model):
         comodel_name="crm.team",
         help="Sales team to assign on imported orders.",
     )
-    import_orders = fields.Boolean(string="Import Orders", default=True)
+    import_orders = fields.Boolean(default=True)
     sync_stock = fields.Boolean(string="Push Stock", default=True)
     sync_price = fields.Boolean(string="Push Prices", default=True)
     stock_sync_interval = fields.Selection(
@@ -167,7 +167,7 @@ class AmazonShop(models.Model):
 
             return len(orders)
         except Exception as e:
-            raise UserError(f"Failed to sync orders for {self.name}: {str(e)}")
+            raise UserError(f"Failed to sync orders for {self.name}: {str(e)}") from e
 
     def action_sync_catalog(self):
         """Fetch Amazon listings and create/update product bindings"""
@@ -179,7 +179,10 @@ class AmazonShop(models.Model):
             "tag": "display_notification",
             "params": {
                 "title": "Catalog Sync Queued",
-                "message": f"Catalog synchronization job(s) queued for {len(self)} shop(s).",
+                "message": (
+                    f"Catalog synchronization job(s) queued "
+                    f"for {len(self)} shop(s)."
+                ),
                 "type": "success",
                 "sticky": False,
             },
@@ -191,7 +194,8 @@ class AmazonShop(models.Model):
         Fetches active listings and creates amazon.product.binding records
         for products that exist on Amazon Seller Central.
 
-        Ref: https://developer-docs.amazon.com/sp-api/docs/catalog-items-api-v2020-12-01-reference
+        Ref: https://developer-docs.amazon.com/sp-api/docs/
+        catalog-items-api-v2020-12-01-reference
         """
         self.ensure_one()
         from odoo.exceptions import UserError
@@ -279,7 +283,7 @@ class AmazonShop(models.Model):
             return {"created": created_count, "updated": updated_count}
 
         except Exception as e:
-            raise UserError(f"Failed to sync catalog for {self.name}: {str(e)}")
+            raise UserError(f"Failed to sync catalog for {self.name}: {str(e)}") from e
 
     def action_push_stock(self):
         """Push inventory levels to Amazon"""
@@ -434,7 +438,7 @@ class AmazonShop(models.Model):
 
             xml_lines.extend(
                 [
-                    f"  <Message>",
+                    "  <Message>",
                     f"    <MessageID>{idx}</MessageID>",
                     "    <Inventory>",
                     f"      <SKU>{binding.seller_sku}</SKU>",

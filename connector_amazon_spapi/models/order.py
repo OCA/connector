@@ -174,7 +174,13 @@ class AmazonSaleOrder(models.Model):
             "    <MessageID>1</MessageID>",
             "    <OrderFulfillment>",
             f"      <AmazonOrderID>{self.external_id}</AmazonOrderID>",
-            f"      <FulfillmentDate>{fields.Datetime.to_string(picking.date_done) if picking.date_done else fields.Datetime.now()}</FulfillmentDate>",
+            "      <FulfillmentDate>"
+            + (
+                fields.Datetime.to_string(picking.date_done)
+                if picking.date_done
+                else fields.Datetime.now()
+            )
+            + "</FulfillmentDate>",
             "      <FulfillmentData>",
             f"        <CarrierName>{carrier_name}</CarrierName>",
             f"        <ShippingMethod>{ship_method}</ShippingMethod>",

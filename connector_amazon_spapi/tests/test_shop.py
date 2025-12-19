@@ -27,7 +27,7 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
     @mock.patch("odoo.addons.queue_job.models.queue_job.Queue.enqueue")
     def test_action_sync_orders_queues_job(self, mock_enqueue):
         """Test that action_sync_orders queues a job"""
-        with mock.patch.object(self.shop, "_scheduler_sync_orders") as mock_sync:
+        with mock.patch.object(self.shop, "_scheduler_sync_orders"):
             self.shop.with_delay()._scheduler_sync_orders()
             # The with_delay() would queue the job in real scenario
 

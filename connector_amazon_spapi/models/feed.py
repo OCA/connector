@@ -4,8 +4,6 @@ from datetime import datetime
 from odoo import _, fields, models
 from odoo.exceptions import UserError
 
-from odoo.addons.queue_job.job import job
-
 _logger = logging.getLogger(__name__)
 
 
@@ -51,7 +49,6 @@ class AmazonFeed(models.Model):
     retry_count = fields.Integer(default=0)
     last_status_update = fields.Datetime()
 
-    @job
     def submit_feed(self):
         """Submit feed to Amazon SP-API via Feeds API.
 
@@ -160,7 +157,6 @@ class AmazonFeed(models.Model):
             payload=payload,
         )
 
-    @job
     def check_feed_status(self):
         """Check feed processing status and update state.
 

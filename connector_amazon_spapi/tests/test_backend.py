@@ -63,7 +63,7 @@ class TestAmazonBackend(common.CommonConnectorAmazonSpapi):
         token = self.backend._refresh_access_token()
 
         self.assertEqual(token, "Amzn1.obtainTokenResponse")
-        self.backend.invalidate_cache()
+        self.backend.invalidate_recordset()
         self.assertEqual(self.backend.access_token, "Amzn1.obtainTokenResponse")
         self.assertIsNotNone(self.backend.token_expires_at)
 

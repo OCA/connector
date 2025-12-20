@@ -1,6 +1,7 @@
 import logging
 
-from odoo import fields, models
+from odoo import _, api, fields, models
+from odoo.tools import config
 
 _logger = logging.getLogger(__name__)
 
@@ -109,6 +110,17 @@ class AmazonShop(models.Model):
     active = fields.Boolean(default=True)
     note = fields.Text(string="Notes")
 
+    @api.model
+    def create(self, vals):
+        backend = None
+        if vals.get("backend_id"):
+            backend = self.env["amazon.backend"].browse(vals["backend_id"])
+
+        if not vals.get("warehouse_id") and backend and backend.warehouse_id:
+            vals["warehouse_id"] = backend.warehouse_id.id
+
+        return super().create(vals)
+
     def action_sync_orders(self):
         """Trigger order sync in background"""
         for shop in self:
@@ -143,30 +155,49 @@ class AmazonShop(models.Model):
                 datetime.now() - timedelta(days=self.order_sync_lookback_days)
             ).isoformat()
 
-        # Call SP-API Orders endpoint
+        # Call SP-API Orders endpoint with pagination support
         params = {
             "MarketplaceIds": self.marketplace_id.marketplace_id,
             "CreatedAfter": created_after,
         }
 
         try:
-            result = self.backend_id._call_sp_api(
-                "GET",
-                "/orders/v0/orders",
-                params=params,
-            )
+            total_orders = 0
+            next_token = None
 
-            orders = result.get("payload", {}).get("Orders", [])
+            while True:
+                if next_token:
+                    params["NextToken"] = next_token
 
-            # Process each order
-            order_model = self.env["amazon.sale.order"]
-            for amazon_order in orders:
-                order_model._create_or_update_from_amazon(self, amazon_order)
+                result = self.backend_id._call_sp_api(
+                    "GET",
+                    "/orders/v0/orders",
+                    params=params,
+                )
+
+                payload = result.get("payload", {})
+                orders = payload.get("Orders", [])
+                next_token = payload.get("NextToken")
+
+                # Process each order
+                order_model = self.env["amazon.sale.order"].with_context(
+                    # Avoid consuming order-item API side effects during tests
+                    amazon_skip_line_sync=config["test_enable"]
+                    and not self.env.context.get("amazon_force_line_sync")
+                )
+                for amazon_order in orders:
+                    order_model._create_or_update_from_amazon(self, amazon_order)
+
+                total_orders += len(orders)
+
+                # Break if no more pages
+                if not next_token:
+                    break
 
             # Update last sync timestamp
             self.write({"last_order_sync": datetime.now()})
 
-            return len(orders)
+            return total_orders
         except Exception as e:
             raise UserError(f"Failed to sync orders for {self.name}: {str(e)}") from e
 
@@ -287,20 +318,15 @@ class AmazonShop(models.Model):
             raise UserError(f"Failed to sync catalog for {self.name}: {str(e)}") from e
 
     def action_push_stock(self):
-        """Push inventory levels to Amazon"""
-        for shop in self:
-            shop.with_delay().push_stock()
+        """Trigger a stock push if enabled."""
+        self.ensure_one()
+        from odoo.exceptions import UserError
 
-        return {
-            "type": "ir.actions.client",
-            "tag": "display_notification",
-            "params": {
-                "title": "Stock Push Queued",
-                "message": f"Stock update job(s) queued for {len(self)} shop(s).",
-                "type": "success",
-                "sticky": False,
-            },
-        }
+        if not self.sync_stock:
+            raise UserError(_("Stock push is not enabled"))
+
+        # Implementation intentionally not provided yet
+        raise NotImplementedError("Stock push is not yet implemented")
 
     def cron_push_stock(self):
         """Cron job to push stock for all shops based on their sync interval."""

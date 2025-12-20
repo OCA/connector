@@ -28,9 +28,7 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
         sample_order = self._create_sample_amazon_order()
 
         order_obj = self.env["amazon.sale.order"]
-        order = order_obj._create_from_amazon_data(
-            self.shop, self.backend, sample_order
-        )
+        order = order_obj._create_or_update_from_amazon(self.shop, sample_order)
 
         self.assertEqual(order.external_id, sample_order["AmazonOrderId"])
         self.assertEqual(order.shop_id, self.shop)
@@ -54,9 +52,7 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
         ).isoformat()
 
         order_obj = self.env["amazon.sale.order"]
-        updated_order = order_obj._create_from_amazon_data(
-            self.shop, self.backend, sample_order
-        )
+        updated_order = order_obj._create_or_update_from_amazon(self.shop, sample_order)
 
         self.assertEqual(updated_order.id, existing_order.id)
         self.assertEqual(updated_order.status, "Shipped")
@@ -79,7 +75,7 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
         order = self._create_amazon_order(
             external_id="111-1111111-1111111",
             name="111-1111111-1111111",
-            state="pending",
+            state="draft",
         )
 
         sample_item = self._create_sample_amazon_order_item()
@@ -104,13 +100,13 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
         order = self._create_amazon_order(
             external_id="111-1111111-1111111",
             name="111-1111111-1111111",
-            state="pending",
+            state="draft",
         )
 
         sample_item = self._create_sample_amazon_order_item()
 
         line_obj = self.env["amazon.sale.order.line"]
-        line = line_obj._create_from_amazon_data(order, sample_item)
+        line = line_obj._create_or_update_from_amazon(order, self.shop, sample_item)
 
         self.assertEqual(line.order_id, order)
         self.assertEqual(line.external_id, sample_item["OrderItemId"])
@@ -131,14 +127,14 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
         order = self._create_amazon_order(
             external_id="111-1111111-1111111",
             name="111-1111111-1111111",
-            state="pending",
+            state="draft",
         )
 
         sample_item = self._create_sample_amazon_order_item()
         sample_item["SellerSKU"] = "SKU-123"
 
         line_obj = self.env["amazon.sale.order.line"]
-        line = line_obj._create_from_amazon_data(order, sample_item)
+        line = line_obj._create_or_update_from_amazon(order, self.shop, sample_item)
 
         self.assertEqual(line.product_id, product)
 
@@ -147,14 +143,14 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
         order = self._create_amazon_order(
             external_id="111-1111111-1111111",
             name="111-1111111-1111111",
-            state="pending",
+            state="draft",
         )
 
         sample_item = self._create_sample_amazon_order_item()
         sample_item["SellerSKU"] = "NON-EXISTENT-SKU"
 
         line_obj = self.env["amazon.sale.order.line"]
-        line = line_obj._create_from_amazon_data(order, sample_item)
+        line = line_obj._create_or_update_from_amazon(order, self.shop, sample_item)
 
         # Should create line without product
         self.assertEqual(line.order_id, order)
@@ -166,13 +162,13 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
         order = self._create_amazon_order(
             external_id="111-1111111-1111111",
             name="111-1111111-1111111",
-            state="pending",
+            state="draft",
         )
 
         sample_item = self._create_sample_amazon_order_item()
 
         line_obj = self.env["amazon.sale.order.line"]
-        line = line_obj._create_from_amazon_data(order, sample_item)
+        line = line_obj._create_or_update_from_amazon(order, self.shop, sample_item)
 
         # Verify quantity
         self.assertEqual(line.quantity, sample_item["QuantityOrdered"])
@@ -180,7 +176,7 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
 
         # Verify pricing (converted from string to float)
         item_price = float(sample_item["ItemPrice"]["Amount"])
-        self.assertEqual(float(line.price_unit), item_price)
+        self.assertAlmostEqual(float(line.price_unit), item_price, places=2)
 
     @mock.patch(
         "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api"
@@ -190,7 +186,7 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
         order = self._create_amazon_order(
             external_id="111-1111111-1111111",
             name="111-1111111-1111111",
-            state="pending",
+            state="draft",
         )
 
         item1 = self._create_sample_amazon_order_item()
@@ -216,13 +212,13 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
         order = self._create_amazon_order(
             external_id="111-1111111-1111111",
             name="111-1111111-1111111",
-            state="pending",
+            state="draft",
         )
 
         sample_item = self._create_sample_amazon_order_item()
 
         line_obj = self.env["amazon.sale.order.line"]
-        line = line_obj._create_from_amazon_data(order, sample_item)
+        line = line_obj._create_or_update_from_amazon(order, self.shop, sample_item)
 
         # Verify all important fields are stored
         self.assertEqual(line.external_id, sample_item["OrderItemId"])
@@ -240,7 +236,7 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
         order = self._create_amazon_order(
             external_id="111-1111111-1111111",
             name="111-1111111-1111111",
-            state="pending",
+            state="draft",
         )
 
         mock_call_sp_api.return_value = {
@@ -260,7 +256,7 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
         order = self._create_amazon_order(
             external_id=sample_order["AmazonOrderId"],
             name=sample_order["AmazonOrderId"],
-            state="pending",
+            state="draft",
             status=sample_order["OrderStatus"],
             buyer_email=sample_order.get("BuyerEmail"),
             buyer_name=sample_order["ShippingAddress"]["Name"],

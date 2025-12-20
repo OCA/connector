@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class AmazonMarketplace(models.Model):
@@ -11,6 +11,9 @@ class AmazonMarketplace(models.Model):
         required=True,
         string="Marketplace ID",
         help="Identifier used by the SP-API for this marketplace.",
+    )
+    region = fields.Char(
+        help="Optional Amazon region identifier (e.g., EU, US, FarEast)",
     )
     backend_id = fields.Many2one(
         comodel_name="amazon.backend",
@@ -63,6 +66,84 @@ class AmazonMarketplace(models.Model):
     )
 
     active = fields.Boolean(default=True)
+
+    @api.model
+    def create(self, vals):
+        """Ensure a non-null currency_id on creation.
+
+        Fallback order:
+        - Backend company currency
+        - Heuristic by marketplace code/name/region (GBP for UK, EUR for EU, USD for NA, JPY for JP)
+        - Current company currency
+        - Any available currency
+        """
+        # Ensure code is provided for the not-null constraint
+        if not vals.get("code"):
+            # Prefer explicit country_code
+            country_code = (vals.get("country_code") or "").upper()
+            if country_code:
+                vals["code"] = country_code
+            else:
+                name_hint = vals.get("name") or ""
+                vals["code"] = (
+                    name_hint[:2].upper() or (vals.get("marketplace_id") or "MK")[:2]
+                )
+
+        if not vals.get("currency_id"):
+            Currency = self.env["res.currency"]
+            currency = False
+
+            backend_id = vals.get("backend_id")
+            backend = None
+            if backend_id:
+                backend = self.env["amazon.backend"].browse(backend_id)
+                if backend and backend.company_id and backend.company_id.currency_id:
+                    currency = backend.company_id.currency_id
+
+            # Heuristic mapping if still empty
+            if not currency:
+                code = (vals.get("code") or "").upper()
+                name = (vals.get("name") or "").lower()
+                region = (
+                    vals.get("region") or (backend and backend.region) or ""
+                ).lower()
+
+                def _by_code(code_name):
+                    return Currency.search([("name", "=", code_name)], limit=1)
+
+                # UK / GB → GBP
+                if "uk" in code or ".co.uk" in name or code == "GB":
+                    currency = _by_code("GBP")
+                # JP → JPY
+                elif code == "JP" or "japan" in name:
+                    currency = _by_code("JPY")
+                # CA → CAD
+                elif code == "CA" or "canada" in name:
+                    currency = _by_code("CAD")
+                # AU → AUD
+                elif code == "AU" or "australia" in name:
+                    currency = _by_code("AUD")
+                # EU region → EUR (covers most EU marketplaces)
+                elif region == "eu" or "europe" in region:
+                    currency = _by_code("EUR")
+                # NA region → USD
+                elif (
+                    region == "na" or "north america" in region or code in ("US", "MX")
+                ):
+                    currency = _by_code("USD")
+
+            # Company currency fallback
+            if not currency and self.env.company.currency_id:
+                currency = self.env.company.currency_id
+
+            # Last resort: any currency
+            if not currency:
+                currency = Currency.search([], limit=1)
+
+            if currency:
+                vals["currency_id"] = currency.id
+
+        return super().create(vals)
 
     def get_delivery_carrier_for_amazon_shipping(self, ship_service_level):
         """Map Amazon shipping level to Odoo delivery carrier

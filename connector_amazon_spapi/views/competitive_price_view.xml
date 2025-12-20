@@ -23,7 +23,7 @@
                 <field name="offer_type" />
                 <field name="is_buy_box_winner" />
                 <field name="number_of_offers_new" />
-                <field name="currency_id" column_invisible="1" />
+                <field name="currency_id" invisible="1" />
             </tree>
         </field>
     </record>

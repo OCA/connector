@@ -87,13 +87,19 @@ class AmazonShop(models.Model):
     )
     add_exp_line = fields.Boolean(
         string="Add Extra Routing Line",
-        help="If enabled, add a configurable extra line to imported orders (e.g., /EXP-AMZ).",
+        help=(
+            "If enabled, add a configurable extra line to imported orders "
+            "(e.g., /EXP-AMZ)."
+        ),
         default=False,
     )
     exp_line_product_id = fields.Many2one(
         comodel_name="product.product",
         string="Extra Line Product",
-        help="Product to use for the extra line. If not set, the extra line will be skipped.",
+        help=(
+            "Product to use for the extra line. "
+            "If not set, the extra line will be skipped."
+        ),
     )
     exp_line_name = fields.Char(
         string="Extra Line Description",
@@ -112,6 +118,16 @@ class AmazonShop(models.Model):
 
     @api.model
     def create(self, vals):
+        # Handle batch creation (vals is a list of dicts)
+        if isinstance(vals, list):
+            for val in vals:
+                backend = None
+                if val.get("backend_id"):
+                    backend = self.env["amazon.backend"].browse(val["backend_id"])
+                if not val.get("warehouse_id") and backend and backend.warehouse_id:
+                    val["warehouse_id"] = backend.warehouse_id.id
+            return super().create(vals)
+
         backend = None
         if vals.get("backend_id"):
             backend = self.env["amazon.backend"].browse(vals["backend_id"])
@@ -131,7 +147,7 @@ class AmazonShop(models.Model):
             "tag": "display_notification",
             "params": {
                 "title": "Order Sync Queued",
-                "message": f"Order synchronization job(s) queued for {len(self)} shop(s).",
+                "message": (f"Order sync queued for {len(self)} shop(s)."),
                 "type": "success",
                 "sticky": False,
             },
@@ -169,13 +185,14 @@ class AmazonShop(models.Model):
                 if next_token:
                     params["NextToken"] = next_token
 
-                # Use adapter for API calls
-                adapter = self.backend_id.component(usage="orders.adapter")
-                result = adapter.list_orders(
-                    marketplace_id=self.marketplace_id.marketplace_id,
-                    created_after=created_after if not next_token else None,
-                    next_token=next_token,
-                )
+                # Use adapter for API calls via work_on context
+                with self.backend_id.work_on("amazon.sale.order") as work:
+                    adapter = work.component(usage="orders.adapter")
+                    result = adapter.list_orders(
+                        marketplace_id=self.marketplace_id.marketplace_id,
+                        created_after=created_after if not next_token else None,
+                        next_token=next_token,
+                    )
 
                 payload = result.get("payload", {})
                 orders = payload.get("Orders", [])
@@ -237,19 +254,16 @@ class AmazonShop(models.Model):
         try:
             # Call Catalog Items API to get active listings
             # Note: This uses the ListingsItems endpoint for seller's active inventory
-            params = {
-                "MarketplaceIds": self.marketplace_id.marketplace_id,
-                "IncludedData": "summaries",
-            }
 
-            # Use adapter for API calls
-            adapter = self.backend_id.component(usage="listings.adapter")
-            result = adapter.get_listings_item(
-                seller_sku="*",  # This endpoint needs refinement for listing all
-                marketplace_ids=[self.marketplace_id.marketplace_id],
-            )
-            # Note: Amazon Listings API doesn't have a "list all" endpoint
-            # You need to iterate through known SKUs. Consider using catalog adapter instead.
+            # Use adapter for API calls via work_on context
+            with self.backend_id.work_on("amazon.product.binding") as work:
+                adapter = work.component(usage="listings.adapter")
+                result = adapter.get_listings_item(
+                    seller_sku="*",  # This endpoint needs refinement for listing all
+                    marketplace_ids=[self.marketplace_id.marketplace_id],
+                )
+            # Note: Amazon Listings API doesn't have a "list all" endpoint.
+            # Iterate through known SKUs or use the catalog adapter instead.
 
             listings = result.get("listings", [])
             binding_model = self.env["amazon.product.binding"]
@@ -290,8 +304,10 @@ class AmazonShop(models.Model):
                     if not product:
                         # Log unmapped product - manual intervention needed
                         _logger.warning(
-                            "Amazon listing found with SKU %s but no matching Odoo product. "
-                            "Create product with default_code=%s or manually create binding.",
+                            (
+                                "Amazon listing SKU %s missing in Odoo. "
+                                "Create product (default_code=%s) or create binding."
+                            ),
                             sku,
                             sku,
                         )
@@ -451,13 +467,14 @@ class AmazonShop(models.Model):
         Returns XML string following Amazon's Inventory Feed schema.
         Ref: https://sellercentral.amazon.com/gp/help/200386250
         """
+        merchant_id = self.backend_id.lwa_client_id
         xml_lines = [
             '<?xml version="1.0" encoding="UTF-8"?>',
             '<AmazonEnvelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"',
             '    xsi:noNamespaceSchemaLocation="amzn-envelope.xsd">',
             "  <Header>",
             "    <DocumentVersion>1.01</DocumentVersion>",
-            f"    <MerchantIdentifier>{self.backend_id.lwa_client_id}</MerchantIdentifier>",
+            "    <MerchantIdentifier>" + merchant_id + "</MerchantIdentifier>",
             "  </Header>",
             "  <MessageType>Inventory</MessageType>",
         ]

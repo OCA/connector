@@ -1,6 +1,8 @@
 # Copyright 2025 Kencove
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
+from datetime import timedelta
+
 from odoo import api, fields, models
 
 
@@ -215,7 +217,10 @@ class AmazonCompetitivePrice(models.Model):
             "tag": "display_notification",
             "params": {
                 "title": "Price Updated",
-                "message": f"Pricelist updated to {self.listing_price} {self.currency_id.name}",
+                "message": (
+                    f"Pricelist updated to {self.listing_price:.2f} "
+                    f"{self.currency_id.name}"
+                ),
                 "type": "success",
             },
         }
@@ -241,9 +246,7 @@ class AmazonCompetitivePrice(models.Model):
         Returns:
             int: Number of records archived
         """
-        cutoff_date = fields.Datetime.now() - fields.Datetime.to_datetime(
-            f"{days} days ago"
-        )
+        cutoff_date = fields.Datetime.now() - timedelta(days=days)
         old_prices = self.search(
             [("fetch_date", "<", cutoff_date), ("active", "=", True)]
         )

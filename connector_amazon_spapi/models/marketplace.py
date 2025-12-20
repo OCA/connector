@@ -73,10 +73,14 @@ class AmazonMarketplace(models.Model):
 
         Fallback order:
         - Backend company currency
-        - Heuristic by marketplace code/name/region (GBP for UK, EUR for EU, USD for NA, JPY for JP)
+        - Heuristic by code/name/region (GBP/EUR/USD/JPY)
         - Current company currency
         - Any available currency
         """
+        # Handle batch creation (vals is a list of dicts)
+        if isinstance(vals, list):
+            return super().create(vals)
+
         # Ensure code is provided for the not-null constraint
         if not vals.get("code"):
             # Prefer explicit country_code
@@ -91,55 +95,12 @@ class AmazonMarketplace(models.Model):
 
         if not vals.get("currency_id"):
             Currency = self.env["res.currency"]
-            currency = False
-
-            backend_id = vals.get("backend_id")
             backend = None
+            backend_id = vals.get("backend_id")
             if backend_id:
                 backend = self.env["amazon.backend"].browse(backend_id)
-                if backend and backend.company_id and backend.company_id.currency_id:
-                    currency = backend.company_id.currency_id
 
-            # Heuristic mapping if still empty
-            if not currency:
-                code = (vals.get("code") or "").upper()
-                name = (vals.get("name") or "").lower()
-                region = (
-                    vals.get("region") or (backend and backend.region) or ""
-                ).lower()
-
-                def _by_code(code_name):
-                    return Currency.search([("name", "=", code_name)], limit=1)
-
-                # UK / GB → GBP
-                if "uk" in code or ".co.uk" in name or code == "GB":
-                    currency = _by_code("GBP")
-                # JP → JPY
-                elif code == "JP" or "japan" in name:
-                    currency = _by_code("JPY")
-                # CA → CAD
-                elif code == "CA" or "canada" in name:
-                    currency = _by_code("CAD")
-                # AU → AUD
-                elif code == "AU" or "australia" in name:
-                    currency = _by_code("AUD")
-                # EU region → EUR (covers most EU marketplaces)
-                elif region == "eu" or "europe" in region:
-                    currency = _by_code("EUR")
-                # NA region → USD
-                elif (
-                    region == "na" or "north america" in region or code in ("US", "MX")
-                ):
-                    currency = _by_code("USD")
-
-            # Company currency fallback
-            if not currency and self.env.company.currency_id:
-                currency = self.env.company.currency_id
-
-            # Last resort: any currency
-            if not currency:
-                currency = Currency.search([], limit=1)
-
+            currency = self._resolve_currency(vals, Currency, backend)
             if currency:
                 vals["currency_id"] = currency.id
 
@@ -174,3 +135,38 @@ class AmazonMarketplace(models.Model):
             carrier = self.delivery_default_id
 
         return carrier
+
+    @api.model
+    def _resolve_currency(self, vals, Currency, backend):
+        """Compute currency from vals, backend, and heuristics."""
+        # Backend company currency
+        if backend and backend.company_id and backend.company_id.currency_id:
+            return backend.company_id.currency_id
+
+        code = (vals.get("code") or "").upper()
+        name = (vals.get("name") or "").lower()
+        region = (vals.get("region") or (backend and backend.region) or "").lower()
+
+        def _by_code(code_name):
+            return Currency.search([("name", "=", code_name)], limit=1)
+
+        # Heuristics by marketplace
+        if "uk" in code or ".co.uk" in name or code == "GB":
+            return _by_code("GBP")
+        if code == "JP" or "japan" in name:
+            return _by_code("JPY")
+        if code == "CA" or "canada" in name:
+            return _by_code("CAD")
+        if code == "AU" or "australia" in name:
+            return _by_code("AUD")
+        if region == "eu" or "europe" in region:
+            return _by_code("EUR")
+        if region == "na" or "north america" in region or code in ("US", "MX"):
+            return _by_code("USD")
+
+        # Company currency fallback
+        if self.env.company.currency_id:
+            return self.env.company.currency_id
+
+        # Last resort: any currency
+        return Currency.search([], limit=1)

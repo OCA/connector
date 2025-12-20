@@ -3,10 +3,10 @@
 
 from datetime import datetime, timedelta
 
-from odoo.tests.common import TransactionCase
+from odoo.addons.component.tests.common import TransactionComponentCase
 
 
-class CommonConnectorAmazonSpapi(TransactionCase):
+class CommonConnectorAmazonSpapi(TransactionComponentCase):
     """Base class for Amazon SP-API connector tests"""
 
     @classmethod

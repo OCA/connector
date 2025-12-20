@@ -48,7 +48,7 @@ class AmazonSaleOrder(models.Model):
     ]
 
     @api.model
-    def _create_or_update_from_amazon(self, shop, amazon_order):
+    def _create_or_update_from_amazon(self, shop, amazon_order):  # noqa: C901
         """Create or update Odoo order from Amazon order data"""
         amazon_order_id = amazon_order.get("AmazonOrderId")
 
@@ -74,7 +74,8 @@ class AmazonSaleOrder(models.Model):
             """Return an Odoo-compatible datetime string from various inputs.
 
             Accepts ISO 8601 strings (with 'T', fractional seconds, or 'Z'),
-            Python datetime objects, or falsy. Returns False if no value.
+            Python datetime objects, or falsy.
+            Returns False if no value.
             """
             if not value:
                 return False
@@ -87,7 +88,8 @@ class AmazonSaleOrder(models.Model):
                     dt = datetime.fromisoformat(s.replace("Z", "+00:00"))
                     return fields.Datetime.to_string(dt)
                 except Exception:
-                    # Fallback: replace 'T' by space, strip fractional seconds and timezone
+                    # Fallback: replace 'T' by space, strip fractional seconds
+                    # and any timezone information
                     s2 = s.replace("T", " ")
                     # remove fractional seconds
                     if "." in s2:
@@ -270,19 +272,24 @@ class AmazonSaleOrder(models.Model):
             lines_xml.extend(
                 [
                     "      <Item>",
-                    f"        <AmazonOrderItemCode>{amazon_item_code}</AmazonOrderItemCode>",
+                    (
+                        "        <AmazonOrderItemCode>"
+                        + amazon_item_code
+                        + "</AmazonOrderItemCode>"
+                    ),
                     f"        <Quantity>{qty}</Quantity>",
                     "      </Item>",
                 ]
             )
 
+        merchant_id = self.backend_id.lwa_client_id
         xml_lines = [
             '<?xml version="1.0" encoding="UTF-8"?>',
             '<AmazonEnvelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"',
             '    xsi:noNamespaceSchemaLocation="amzn-envelope.xsd">',
             "  <Header>",
             "    <DocumentVersion>1.01</DocumentVersion>",
-            f"    <MerchantIdentifier>{self.backend_id.lwa_client_id}</MerchantIdentifier>",
+            "    <MerchantIdentifier>" + merchant_id + "</MerchantIdentifier>",
             "  </Header>",
             "  <MessageType>OrderFulfillment</MessageType>",
             "  <Message>",
@@ -446,10 +453,10 @@ class AmazonSaleOrder(models.Model):
 
         next_token = None
         while True:
-            params = {"NextToken": next_token} if next_token else None
-            # Use adapter for API calls
-            adapter = shop.backend_id.component(usage="orders.adapter")
-            result = adapter.get_order_items(amazon_order_id)
+            # Use adapter for API calls via work_on context
+            with shop.backend_id.work_on("amazon.sale.order.line") as work:
+                adapter = work.component(usage="orders.adapter")
+                result = adapter.get_order_items(amazon_order_id)
 
             if not isinstance(result, dict):
                 break
@@ -497,7 +504,7 @@ class AmazonSaleOrderLine(models.Model):
     )
     order_id = fields.Many2one(
         comodel_name="amazon.sale.order",
-        string="Amazon Order",
+        string="Order",
         compute="_compute_order_id",
         store=True,
         readonly=True,

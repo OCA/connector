@@ -2,8 +2,10 @@
     "name": "Amazon SP-API Connector",
     "version": "16.0.1.0.0",
     "category": "Connector",
-    "summary": "Amazon Seller Central (SP-API) integration for orders, stock, and prices",
-    "author": "Odoo Community Association (OCA)",
+    "summary": (
+        "Amazon Seller Central (SP-API) integration for orders, " "stock, and prices"
+    ),
+    "author": "Kencove, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/connector",
     "license": "LGPL-3",
     "depends": [

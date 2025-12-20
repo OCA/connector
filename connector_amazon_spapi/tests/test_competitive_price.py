@@ -221,7 +221,9 @@ class TestAmazonCompetitivePrice(common.CommonConnectorAmazonSpapi):
         )
 
         # Try to create duplicate
-        with self.assertRaises(Exception):
+        from psycopg2 import IntegrityError
+
+        with self.assertRaises(IntegrityError):
             self._create_competitive_price(
                 competitive_price_id="test-id", fetch_date="2025-12-19 10:00:00"
             )
@@ -324,7 +326,8 @@ class TestAmazonProductBindingCompetitivePricing(common.CommonConnectorAmazonSpa
         self.assertIn("No marketplace", str(context.exception))
 
     @mock.patch(
-        "odoo.addons.connector_amazon_spapi.components.backend_adapter.AmazonPricingAdapter.get_competitive_pricing"
+        "odoo.addons.connector_amazon_spapi.components.backend_adapter."
+        "AmazonPricingAdapter.get_competitive_pricing"
     )
     def test_action_fetch_competitive_prices_success(
         self, mock_get_competitive_pricing
@@ -354,7 +357,8 @@ class TestAmazonProductBindingCompetitivePricing(common.CommonConnectorAmazonSpa
         self.assertEqual(result["params"]["type"], "success")
 
     @mock.patch(
-        "odoo.addons.connector_amazon_spapi.components.backend_adapter.AmazonPricingAdapter.get_competitive_pricing"
+        "odoo.addons.connector_amazon_spapi.components.backend_adapter."
+        "AmazonPricingAdapter.get_competitive_pricing"
     )
     def test_action_fetch_competitive_prices_empty_response(
         self, mock_get_competitive_pricing

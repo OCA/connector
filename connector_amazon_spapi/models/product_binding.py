@@ -77,20 +77,22 @@ class AmazonProductBinding(models.Model):
         if not self.marketplace_id:
             raise UserError(_("No marketplace assigned to this product."))
 
-        # Use pricing adapter to fetch competitive prices
-        adapter = self.backend_id.component(usage="pricing.adapter")
-        result = adapter.get_competitive_pricing(
-            marketplace_id=self.marketplace_id.marketplace_id,
-            asins=[self.asin],
-        )
+        # Use pricing adapter to fetch competitive prices via work_on context
+        with self.backend_id.work_on("amazon.product.binding") as work:
+            adapter = work.component(usage="pricing.adapter")
+            result = adapter.get_competitive_pricing(
+                marketplace_id=self.marketplace_id.marketplace_id,
+                asins=[self.asin],
+            )
 
         if not result or not isinstance(result, list):
             raise UserError(_("No competitive pricing data returned from Amazon API."))
 
-        # Use mapper to transform API response
-        mapper = self.backend_id.component(
-            usage="import.mapper", model_name="amazon.product.binding"
-        )
+        # Use mapper to transform API response via work_on context
+        with self.backend_id.work_on("amazon.product.binding") as work:
+            mapper = work.component(
+                usage="import.mapper", model_name="amazon.product.binding"
+            )
 
         competitive_price_vals_list = []
         for pricing_data in result:
@@ -101,9 +103,13 @@ class AmazonProductBinding(models.Model):
         if not competitive_price_vals_list:
             raise UserError(
                 _(
-                    "No competitive pricing data found for ASIN %(asin)s in marketplace %(marketplace)s"
+                    "No competitive pricing data found for ASIN %(asin)s "
+                    "in marketplace %(marketplace)s"
                 )
-                % {"asin": self.asin, "marketplace": self.marketplace_id.name}
+                % {
+                    "asin": self.asin,
+                    "marketplace": self.marketplace_id.name,
+                }
             )
 
         # Create competitive price records

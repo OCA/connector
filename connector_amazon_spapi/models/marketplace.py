@@ -30,31 +30,36 @@ class AmazonMarketplace(models.Model):
         help="Comma-separated channels (AFN/AFS/DEFAULT/MFN).",
     )
 
-    # Delivery method mappings
+    # Delivery method mappings (optional - delivery module not required)
     delivery_standard_id = fields.Many2one(
         comodel_name="delivery.carrier",
         string="Standard Shipping",
         help="Odoo delivery method for Amazon Standard shipping.",
+        ondelete="set null",
     )
     delivery_expedited_id = fields.Many2one(
         comodel_name="delivery.carrier",
         string="Expedited Shipping",
         help="Odoo delivery method for Amazon Expedited shipping.",
+        ondelete="set null",
     )
     delivery_priority_id = fields.Many2one(
         comodel_name="delivery.carrier",
         string="Priority Shipping",
         help="Odoo delivery method for Amazon Priority/NextDay shipping.",
+        ondelete="set null",
     )
     delivery_scheduled_id = fields.Many2one(
         comodel_name="delivery.carrier",
         string="Scheduled Delivery",
         help="Odoo delivery method for Amazon Scheduled delivery.",
+        ondelete="set null",
     )
     delivery_default_id = fields.Many2one(
         comodel_name="delivery.carrier",
         string="Default Carrier",
         help="Fallback delivery method when Amazon shipping level is unknown.",
+        ondelete="set null",
     )
 
     active = fields.Boolean(default=True)

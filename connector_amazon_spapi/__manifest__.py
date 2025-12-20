@@ -13,7 +13,6 @@
         "product",
         "queue_job",
         "mail",
-        "delivery",
     ],
     "data": [
         "security/ir.model.access.csv",

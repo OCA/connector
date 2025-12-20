@@ -38,11 +38,17 @@ class CommonConnectorAmazonSpapi(TransactionCase):
 
     def _create_marketplace(self, **kwargs):
         """Create a test marketplace record"""
+        # Get the default currency
+        default_currency = self.env.company.currency_id
+
         values = {
             "name": "Amazon.com",
+            "code": "US",
             "marketplace_id": "ATVPDKIKX0DER",
-            "region": "NA",
             "backend_id": self.backend.id,
+            "currency_id": default_currency.id,
+            "timezone": "America/New_York",
+            "country_code": "US",
         }
         values.update(kwargs)
         return self.env["amazon.marketplace"].create(values)
@@ -118,3 +124,35 @@ class CommonConnectorAmazonSpapi(TransactionCase):
             "DeemedReservePrice": {"Amount": "0.00", "CurrencyCode": "USD"},
             "IsFulfillable": True,
         }
+
+    def _create_amazon_order(self, **kwargs):
+        """Create an amazon.sale.order with required partner and sale.order"""
+        # Create partner if not provided
+        if "partner_id" not in kwargs:
+            partner = self.env["res.partner"].create({
+                "name": "Test Buyer",
+                "email": "test@example.com"
+            })
+        else:
+            partner = self.env["res.partner"].browse(kwargs.pop("partner_id"))
+
+        # Create sale.order if odoo_id not provided
+        if "odoo_id" not in kwargs:
+            order_name = kwargs.get("name", "TEST-SALE-ORDER")
+            sale_order = self.env["sale.order"].create({
+                "partner_id": partner.id,
+                "name": order_name,
+            })
+            kwargs["odoo_id"] = sale_order.id
+
+        # Set default values if not provided
+        defaults = {
+            "shop_id": self.shop.id,
+            "backend_id": self.backend.id,
+            "external_id": "TEST-AMAZON-ORDER-001",
+            "purchase_date": datetime.now(),
+            "status": "Pending",
+        }
+        defaults.update(kwargs)
+
+        return self.env["amazon.sale.order"].create(defaults)

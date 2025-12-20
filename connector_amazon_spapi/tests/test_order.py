@@ -12,23 +12,17 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
 
     def test_order_creation(self):
         """Test creating an order record"""
-        order = self.env["amazon.sale.order"].create(
-            {
-                "shop_id": self.shop.id,
-                "external_id": "111-1111111-1111111",
-                "name": "111-1111111-1111111",
-                "backend_id": self.backend.id,
-                "state": "pending",
-                "purchase_date": datetime.now(),
-                "status": "Pending",
-            }
+        order = self._create_amazon_order(
+            external_id="111-1111111-1111111",
         )
 
         self.assertEqual(order.external_id, "111-1111111-1111111")
         self.assertEqual(order.shop_id, self.shop)
         self.assertEqual(order.backend_id, self.backend)
 
-    @mock.patch.object("amazon.backend", "_call_sp_api")
+    @mock.patch(
+        "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api"
+    )
     def test_create_order_from_amazon_data(self, mock_call_sp_api):
         """Test creating order from Amazon API data"""
         sample_order = self._create_sample_amazon_order()
@@ -47,16 +41,10 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
         sample_order = self._create_sample_amazon_order()
 
         # Create initial order
-        existing_order = self.env["amazon.sale.order"].create(
-            {
-                "shop_id": self.shop.id,
-                "external_id": sample_order["AmazonOrderId"],
-                "name": sample_order["AmazonOrderId"],
-                "backend_id": self.backend.id,
-                "state": "pending",
-                "purchase_date": sample_order["PurchaseDate"],
-                "status": "Pending",
-            }
+        existing_order = self._create_amazon_order(
+            external_id=sample_order["AmazonOrderId"],
+            purchase_date=sample_order["PurchaseDate"],
+            status="Pending",
         )
 
         # Update with new data
@@ -75,35 +63,23 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
 
     def test_create_order_updates_last_update_date(self):
         """Test order last_update_date is updated during sync"""
-        order = self.env["amazon.sale.order"].create(
-            {
-                "shop_id": self.shop.id,
-                "external_id": "111-1111111-1111111",
-                "name": "111-1111111-1111111",
-                "backend_id": self.backend.id,
-                "state": "pending",
-                "purchase_date": datetime.now(),
-                "status": "Pending",
-            }
+        order = self._create_amazon_order(
+            external_id="111-1111111-1111111",
         )
 
         original_update = order.last_update_date
         order.write({"last_update_date": datetime.now()})
         self.assertNotEqual(order.last_update_date, original_update)
 
-    @mock.patch.object("amazon.backend", "_call_sp_api")
+    @mock.patch(
+        "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api"
+    )
     def test_sync_order_lines_fetches_from_api(self, mock_call_sp_api):
         """Test sync_order_lines fetches items from SP-API"""
-        order = self.env["amazon.sale.order"].create(
-            {
-                "shop_id": self.shop.id,
-                "external_id": "111-1111111-1111111",
-                "name": "111-1111111-1111111",
-                "backend_id": self.backend.id,
-                "state": "pending",
-                "purchase_date": datetime.now(),
-                "status": "Pending",
-            }
+        order = self._create_amazon_order(
+            external_id="111-1111111-1111111",
+            name="111-1111111-1111111",
+            state="pending",
         )
 
         sample_item = self._create_sample_amazon_order_item()
@@ -120,19 +96,15 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
             "/orders/v0/orders/111-1111111-1111111/orderitems", call_args[0][1]
         )
 
-    @mock.patch.object("amazon.backend", "_call_sp_api")
+    @mock.patch(
+        "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api"
+    )
     def test_create_order_line_from_amazon_data(self, mock_call_sp_api):
         """Test creating order line from Amazon API data"""
-        order = self.env["amazon.sale.order"].create(
-            {
-                "shop_id": self.shop.id,
-                "external_id": "111-1111111-1111111",
-                "name": "111-1111111-1111111",
-                "backend_id": self.backend.id,
-                "state": "pending",
-                "purchase_date": datetime.now(),
-                "status": "Pending",
-            }
+        order = self._create_amazon_order(
+            external_id="111-1111111-1111111",
+            name="111-1111111-1111111",
+            state="pending",
         )
 
         sample_item = self._create_sample_amazon_order_item()
@@ -156,16 +128,10 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
             }
         )
 
-        order = self.env["amazon.sale.order"].create(
-            {
-                "shop_id": self.shop.id,
-                "external_id": "111-1111111-1111111",
-                "name": "111-1111111-1111111",
-                "backend_id": self.backend.id,
-                "state": "pending",
-                "purchase_date": datetime.now(),
-                "status": "Pending",
-            }
+        order = self._create_amazon_order(
+            external_id="111-1111111-1111111",
+            name="111-1111111-1111111",
+            state="pending",
         )
 
         sample_item = self._create_sample_amazon_order_item()
@@ -178,16 +144,10 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
 
     def test_create_order_line_without_product(self):
         """Test create_order_line handles missing product"""
-        order = self.env["amazon.sale.order"].create(
-            {
-                "shop_id": self.shop.id,
-                "external_id": "111-1111111-1111111",
-                "name": "111-1111111-1111111",
-                "backend_id": self.backend.id,
-                "state": "pending",
-                "purchase_date": datetime.now(),
-                "status": "Pending",
-            }
+        order = self._create_amazon_order(
+            external_id="111-1111111-1111111",
+            name="111-1111111-1111111",
+            state="pending",
         )
 
         sample_item = self._create_sample_amazon_order_item()
@@ -203,16 +163,10 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
 
     def test_order_line_quantity_and_pricing(self):
         """Test order line quantity and pricing are correct"""
-        order = self.env["amazon.sale.order"].create(
-            {
-                "shop_id": self.shop.id,
-                "external_id": "111-1111111-1111111",
-                "name": "111-1111111-1111111",
-                "backend_id": self.backend.id,
-                "state": "pending",
-                "purchase_date": datetime.now(),
-                "status": "Pending",
-            }
+        order = self._create_amazon_order(
+            external_id="111-1111111-1111111",
+            name="111-1111111-1111111",
+            state="pending",
         )
 
         sample_item = self._create_sample_amazon_order_item()
@@ -228,19 +182,15 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
         item_price = float(sample_item["ItemPrice"]["Amount"])
         self.assertEqual(float(line.price_unit), item_price)
 
-    @mock.patch.object("amazon.backend", "_call_sp_api")
+    @mock.patch(
+        "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api"
+    )
     def test_sync_order_lines_pagination(self, mock_call_sp_api):
         """Test sync_order_lines handles pagination"""
-        order = self.env["amazon.sale.order"].create(
-            {
-                "shop_id": self.shop.id,
-                "external_id": "111-1111111-1111111",
-                "name": "111-1111111-1111111",
-                "backend_id": self.backend.id,
-                "state": "pending",
-                "purchase_date": datetime.now(),
-                "status": "Pending",
-            }
+        order = self._create_amazon_order(
+            external_id="111-1111111-1111111",
+            name="111-1111111-1111111",
+            state="pending",
         )
 
         item1 = self._create_sample_amazon_order_item()
@@ -263,16 +213,10 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
 
     def test_order_line_creation_with_all_fields(self):
         """Test order line stores all relevant Amazon fields"""
-        order = self.env["amazon.sale.order"].create(
-            {
-                "shop_id": self.shop.id,
-                "external_id": "111-1111111-1111111",
-                "name": "111-1111111-1111111",
-                "backend_id": self.backend.id,
-                "state": "pending",
-                "purchase_date": datetime.now(),
-                "status": "Pending",
-            }
+        order = self._create_amazon_order(
+            external_id="111-1111111-1111111",
+            name="111-1111111-1111111",
+            state="pending",
         )
 
         sample_item = self._create_sample_amazon_order_item()
@@ -288,19 +232,15 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
         self.assertEqual(line.quantity, sample_item["QuantityOrdered"])
         self.assertEqual(line.quantity_shipped, sample_item["QuantityShipped"])
 
-    @mock.patch.object("amazon.backend", "_call_sp_api")
+    @mock.patch(
+        "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api"
+    )
     def test_order_with_no_lines_no_sync_error(self, mock_call_sp_api):
         """Test syncing order with no lines doesn't cause error"""
-        order = self.env["amazon.sale.order"].create(
-            {
-                "shop_id": self.shop.id,
-                "external_id": "111-1111111-1111111",
-                "name": "111-1111111-1111111",
-                "backend_id": self.backend.id,
-                "state": "pending",
-                "purchase_date": datetime.now(),
-                "status": "Pending",
-            }
+        order = self._create_amazon_order(
+            external_id="111-1111111-1111111",
+            name="111-1111111-1111111",
+            state="pending",
         )
 
         mock_call_sp_api.return_value = {
@@ -317,18 +257,13 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
         """Test order record contains fields from Amazon order data"""
         sample_order = self._create_sample_amazon_order()
 
-        order = self.env["amazon.sale.order"].create(
-            {
-                "shop_id": self.shop.id,
-                "external_id": sample_order["AmazonOrderId"],
-                "name": sample_order["AmazonOrderId"],
-                "backend_id": self.backend.id,
-                "state": "pending",
-                "purchase_date": sample_order["PurchaseDate"],
-                "status": sample_order["OrderStatus"],
-                "buyer_email": sample_order.get("BuyerEmail"),
-                "buyer_name": sample_order["ShippingAddress"]["Name"],
-            }
+        order = self._create_amazon_order(
+            external_id=sample_order["AmazonOrderId"],
+            name=sample_order["AmazonOrderId"],
+            state="pending",
+            status=sample_order["OrderStatus"],
+            buyer_email=sample_order.get("BuyerEmail"),
+            buyer_name=sample_order["ShippingAddress"]["Name"],
         )
 
         self.assertEqual(order.external_id, sample_order["AmazonOrderId"])

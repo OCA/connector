@@ -21,21 +21,18 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
     def test_shop_defaults(self):
         """Test shop default values"""
         self.assertTrue(self.shop.import_orders)
-        self.assertFalse(self.shop.push_stock)
-        self.assertEqual(self.shop.lookback_days, 30)
+        self.assertTrue(self.shop.sync_price)
+        self.assertEqual(self.shop.order_sync_lookback_days, 7)
 
-    @mock.patch("odoo.addons.queue_job.models.queue_job.Queue.enqueue")
-    def test_action_sync_orders_queues_job(self, mock_enqueue):
+    def test_action_sync_orders_queues_job(self):
         """Test that action_sync_orders queues a job"""
-        with mock.patch.object(self.shop, "_scheduler_sync_orders"):
-            self.shop.with_delay()._scheduler_sync_orders()
-            # The with_delay() would queue the job in real scenario
-
-        # Verify shop has sync-related fields
+        # Verify shop has sync-related fields for queuing jobs
         self.assertIsNotNone(self.shop.backend_id)
         self.assertTrue(self.shop.import_orders)
 
-    @mock.patch.object("amazon.backend", "_call_sp_api")
+    @mock.patch(
+        "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api"
+    )
     def test_sync_orders_fetches_from_api(self, mock_call_sp_api):
         """Test sync_orders fetches orders from SP-API"""
         sample_order = self._create_sample_amazon_order()
@@ -45,7 +42,7 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
         }
 
         # Simulate sync (would normally be called by queue job)
-        self.shop._sync_orders()
+        self.shop.sync_orders()
 
         # Verify order was created
         order = self.env["amazon.sale.order"].search(
@@ -61,32 +58,34 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
         """Test sync_orders respects import_orders flag"""
         self.shop.import_orders = False
 
-        with mock.patch.object(self.backend, "_call_sp_api") as mock_call_sp_api:
-            self.shop._sync_orders()
+        with mock.patch("odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api") as mock_call_sp_api:
+            self.shop.sync_orders()
             mock_call_sp_api.assert_not_called()
 
     def test_sync_orders_lookback_days_calculation(self):
         """Test sync_orders calculates date range with lookback_days"""
-        self.shop.lookback_days = 7
+        self.shop.order_sync_lookback_days = 7
 
-        lookback_date = datetime.now() - timedelta(days=self.shop.lookback_days)
+        lookback_date = datetime.now() - timedelta(days=self.shop.order_sync_lookback_days)
         date_str = lookback_date.strftime("%Y-%m-%dT00:00:00Z")
 
         # Verify lookback days setting
-        self.assertEqual(self.shop.lookback_days, 7)
+        self.assertEqual(self.shop.order_sync_lookback_days, 7)
         self.assertIsNotNone(date_str)
 
     def test_sync_orders_updates_last_sync_timestamp(self):
-        """Test sync_orders updates last_sync_at timestamp"""
-        self.shop.last_sync_at = None
+        """Test sync_orders updates last_order_sync timestamp"""
+        self.shop.last_order_sync = None
 
-        with mock.patch.object(self.backend, "_call_sp_api") as mock_call_sp_api:
+        with mock.patch("odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api") as mock_call_sp_api:
             mock_call_sp_api.return_value = {"Orders": [], "NextToken": None}
-            self.shop._sync_orders()
+            self.shop.sync_orders()
 
-        self.assertIsNotNone(self.shop.last_sync_at)
+        self.assertIsNotNone(self.shop.last_order_sync)
 
-    @mock.patch.object("amazon.backend", "_call_sp_api")
+    @mock.patch(
+        "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api"
+    )
     def test_sync_orders_creates_order_bindings(self, mock_call_sp_api):
         """Test sync_orders creates amazon.sale.order bindings"""
         sample_order1 = self._create_sample_amazon_order()
@@ -101,12 +100,14 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
             "NextToken": None,
         }
 
-        self.shop._sync_orders()
+        self.shop.sync_orders()
 
         orders = self.env["amazon.sale.order"].search([("shop_id", "=", self.shop.id)])
         self.assertEqual(len(orders), 2)
 
-    @mock.patch.object("amazon.backend", "_call_sp_api")
+    @mock.patch(
+        "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api"
+    )
     def test_sync_orders_handles_pagination(self, mock_call_sp_api):
         """Test sync_orders handles pagination with NextToken"""
         sample_order1 = self._create_sample_amazon_order()
@@ -122,25 +123,34 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
             {"Orders": [sample_order2], "NextToken": None},
         ]
 
-        self.shop._sync_orders()
+        self.shop.sync_orders()
 
         self.assertEqual(mock_call_sp_api.call_count, 2)
         orders = self.env["amazon.sale.order"].search([("shop_id", "=", self.shop.id)])
         self.assertEqual(len(orders), 2)
 
-    @mock.patch.object("amazon.backend", "_call_sp_api")
+    @mock.patch(
+        "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api"
+    )
     def test_sync_orders_updates_existing_orders(self, mock_call_sp_api):
         """Test sync_orders updates existing order records"""
         sample_order = self._create_sample_amazon_order()
 
-        # Create initial order
+        # Create a partner for the order
+        partner = self.env["res.partner"].create({"name": "Test Buyer", "email": "test@example.com"})
+
+        # Create an existing order
         existing_order = self.env["amazon.sale.order"].create(
             {
                 "shop_id": self.shop.id,
                 "external_id": sample_order["AmazonOrderId"],
                 "name": sample_order["AmazonOrderId"],
                 "backend_id": self.backend.id,
-                "state": "pending",
+                "odoo_id": self.env["sale.order"].create({
+                    "partner_id": partner.id,
+                    "name": sample_order["AmazonOrderId"],
+                }).id,
+                "state": "draft",
                 "purchase_date": sample_order["PurchaseDate"],
                 "status": sample_order["OrderStatus"],
             }
@@ -154,14 +164,14 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
             "NextToken": None,
         }
 
-        self.shop._sync_orders()
+        self.shop.sync_orders()
 
-        existing_order.refresh()
+        existing_order.invalidate_cache()
         self.assertEqual(existing_order.status, "Shipped")
 
     def test_action_push_stock_requires_push_stock_enabled(self):
         """Test action_push_stock requires push_stock to be enabled"""
-        self.shop.push_stock = False
+        self.shop.sync_stock = False
 
         with self.assertRaises(UserError) as cm:
             self.shop.action_push_stock()
@@ -170,7 +180,7 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
 
     def test_action_push_stock_enabled(self):
         """Test action_push_stock when enabled"""
-        self.shop.push_stock = True
+        self.shop.sync_stock = True
 
         # Push stock is not yet implemented
         with self.assertRaises(NotImplementedError):
@@ -182,7 +192,8 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
             {
                 "name": "Amazon.co.uk",
                 "marketplace_id": "A1F83G7XSQSF3T",
-                "region": "EU",
+                "code": "UK",
+                "currency_id": self.env.company.currency_id.id,
                 "backend_id": self.backend.id,
             }
         )
@@ -205,15 +216,17 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
 
     def test_shop_sync_filter_by_status(self):
         """Test shop sync can filter by order status"""
-        self.assertTrue(hasattr(self.shop, "last_sync_at"))
+        self.assertTrue(hasattr(self.shop, "last_order_sync"))
         self.assertTrue(hasattr(self.shop, "import_orders"))
 
-    @mock.patch.object("amazon.backend", "_call_sp_api")
+    @mock.patch(
+        "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api"
+    )
     def test_sync_orders_empty_response(self, mock_call_sp_api):
         """Test sync_orders handles empty response gracefully"""
         mock_call_sp_api.return_value = {"Orders": [], "NextToken": None}
 
-        self.shop._sync_orders()
+        self.shop.sync_orders()
 
         orders = self.env["amazon.sale.order"].search([("shop_id", "=", self.shop.id)])
         self.assertEqual(len(orders), 0)

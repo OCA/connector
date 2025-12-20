@@ -9,6 +9,7 @@ class AmazonSaleOrder(models.Model):
 
     odoo_id = fields.Many2one(
         comodel_name="sale.order",
+        string="Odoo Sale Order",
         required=True,
         ondelete="cascade",
     )
@@ -27,7 +28,7 @@ class AmazonSaleOrder(models.Model):
     fulfillment_channel = fields.Selection(
         selection=[("AFN", "Fulfilled by Amazon"), ("MFN", "Fulfilled by Merchant")]
     )
-    status = fields.Char()
+    status = fields.Char(string="Amazon Order Status")
     last_sync = fields.Datetime()
     shipment_confirmed = fields.Boolean(default=False)
     last_shipment_push = fields.Datetime()

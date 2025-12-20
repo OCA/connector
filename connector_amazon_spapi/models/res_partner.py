@@ -19,7 +19,7 @@ class ResPartner(models.Model):
                 compute="_compute_supplier_invoice_count_fallback",
             )
             self._add_field("supplier_invoice_count", field)
-            field.setup_full(self)
+            field.setup(self)
         return res
 
     def _compute_supplier_invoice_count_fallback(self):

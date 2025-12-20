@@ -7,9 +7,12 @@ class AmazonBaseAdapter(Component):
     _usage = "backend.adapter"
     _backend_model_name = "amazon.backend"
 
-    def _auth(self):
-        # TODO: inject SP-API client with LWA + STS + throttling
-        raise NotImplementedError
+    def _call_api(self, method, endpoint, params=None, json_data=None):
+        """Call SP-API through the backend with authentication"""
+        backend = self.backend_record
+        return backend._call_sp_api(
+            method, endpoint, params=params, json_data=json_data
+        )
 
 
 class AmazonOrdersAdapter(AmazonBaseAdapter):
@@ -17,29 +20,356 @@ class AmazonOrdersAdapter(AmazonBaseAdapter):
     _usage = "orders.adapter"
 
     def list_orders(
-        self, backend_record, marketplace, updated_after=None, created_after=None
+        self,
+        marketplace_id,
+        created_after=None,
+        updated_after=None,
+        order_statuses=None,
+        next_token=None,
     ):
-        # TODO: implement getOrders/getOrderItems with cursors
-        raise NotImplementedError
+        """Fetch orders from Amazon Orders API with pagination support
+
+        Args:
+            marketplace_id: Amazon marketplace ID
+            created_after: ISO 8601 datetime for CreatedAfter filter
+            updated_after: ISO 8601 datetime for LastUpdatedAfter filter
+            order_statuses: List of order statuses to filter
+            next_token: Pagination token for subsequent requests
+
+        Returns:
+            dict: API response with Orders list and NextToken
+        """
+        params = {"MarketplaceIds": marketplace_id}
+
+        if next_token:
+            params["NextToken"] = next_token
+        else:
+            if created_after:
+                params["CreatedAfter"] = created_after
+            if updated_after:
+                params["LastUpdatedAfter"] = updated_after
+            if order_statuses:
+                params["OrderStatuses"] = ",".join(order_statuses)
+
+        return self._call_api("GET", "/orders/v0/orders", params=params)
+
+    def get_order_items(self, amazon_order_id, next_token=None):
+        """Fetch order items for a specific order with pagination
+
+        Args:
+            amazon_order_id: Amazon order ID
+            next_token: Pagination token for subsequent requests
+
+        Returns:
+            dict: API response with OrderItems list and NextToken
+        """
+        params = {"NextToken": next_token} if next_token else None
+        endpoint = f"/orders/v0/orders/{amazon_order_id}/orderitems"
+        return self._call_api("GET", endpoint, params=params)
+
+    def get_order(self, amazon_order_id):
+        """Fetch single order details
+
+        Args:
+            amazon_order_id: Amazon order ID
+
+        Returns:
+            dict: Order details
+        """
+        endpoint = f"/orders/v0/orders/{amazon_order_id}"
+        return self._call_api("GET", endpoint)
 
 
 class AmazonPricingAdapter(AmazonBaseAdapter):
     _name = "amazon.pricing.adapter"
     _usage = "pricing.adapter"
 
-    def get_prices(self, backend_record, marketplace, skus):
-        # TODO: call Pricing API, return pricing payloads
-        raise NotImplementedError
+    def get_competitive_pricing(self, marketplace_id, asins=None, skus=None):
+        """Get competitive pricing for products
 
-    def push_prices(self, backend_record, marketplace, payload):
-        # TODO: send price feed
-        raise NotImplementedError
+        Args:
+            marketplace_id: Amazon marketplace ID
+            asins: List of ASINs (max 20)
+            skus: List of SKUs (max 20)
+
+        Returns:
+            dict: Pricing information
+        """
+        params = {"MarketplaceId": marketplace_id}
+
+        if asins:
+            params["Asins"] = ",".join(asins[:20])
+        elif skus:
+            params["Skus"] = ",".join(skus[:20])
+
+        return self._call_api(
+            "GET", "/products/pricing/v0/competitivePrice", params=params
+        )
+
+    def get_pricing(self, marketplace_id, item_type, asins=None, skus=None):
+        """Get pricing information for products
+
+        Args:
+            marketplace_id: Amazon marketplace ID
+            item_type: 'Asin' or 'Sku'
+            asins: List of ASINs (max 20)
+            skus: List of SKUs (max 20)
+
+        Returns:
+            dict: Pricing information
+        """
+        params = {"MarketplaceId": marketplace_id, "ItemType": item_type}
+
+        if asins:
+            params["Asins"] = ",".join(asins[:20])
+        if skus:
+            params["Skus"] = ",".join(skus[:20])
+
+        return self._call_api("GET", "/products/pricing/v0/price", params=params)
+
+    def create_price_feed(self, feed_content):
+        """Submit price feed through Feeds API
+
+        Args:
+            feed_content: XML feed content as string
+
+        Returns:
+            dict: Feed creation response with feedId
+        """
+        # Price feeds are submitted through the generic feed adapter
+        # This is a wrapper for consistency
+        feed_adapter = self.component(usage="feed.adapter")
+        return feed_adapter.create_feed("POST_PRODUCT_PRICING_DATA", feed_content)
 
 
 class AmazonInventoryAdapter(AmazonBaseAdapter):
     _name = "amazon.inventory.adapter"
     _usage = "inventory.adapter"
 
-    def push_inventory(self, backend_record, marketplace, payload):
-        # TODO: send stock feed
-        raise NotImplementedError
+    def create_inventory_feed(self, feed_content):
+        """Submit inventory/stock feed through Feeds API
+
+        Args:
+            feed_content: XML feed content as string
+
+        Returns:
+            dict: Feed creation response with feedId
+        """
+        feed_adapter = self.component(usage="feed.adapter")
+        return feed_adapter.create_feed(
+            "POST_INVENTORY_AVAILABILITY_DATA", feed_content
+        )
+
+
+class AmazonFeedAdapter(AmazonBaseAdapter):
+    _name = "amazon.feed.adapter"
+    _usage = "feed.adapter"
+
+    def create_feed_document(self, content_type="text/xml; charset=UTF-8"):
+        """Create feed document and get upload URL
+
+        Args:
+            content_type: Content type for the feed
+
+        Returns:
+            dict: Response with feedDocumentId and uploadUrl
+        """
+        payload = {"contentType": content_type}
+        return self._call_api("POST", "/feeds/2021-06-30/documents", json_data=payload)
+
+    def create_feed(
+        self, feed_type, feed_document_id, marketplace_ids, feed_options=None
+    ):
+        """Create feed submission
+
+        Args:
+            feed_type: Amazon feed type (e.g., 'POST_PRODUCT_DATA')
+            feed_document_id: Document ID from create_feed_document
+            marketplace_ids: List of marketplace IDs
+            feed_options: Optional dict of feed-specific options
+
+        Returns:
+            dict: Response with feedId
+        """
+        payload = {
+            "feedType": feed_type,
+            "marketplaceIds": marketplace_ids,
+            "inputFeedDocumentId": feed_document_id,
+        }
+
+        if feed_options:
+            payload["feedOptions"] = feed_options
+
+        return self._call_api("POST", "/feeds/2021-06-30/feeds", json_data=payload)
+
+    def get_feed(self, feed_id):
+        """Get feed processing status
+
+        Args:
+            feed_id: Amazon feed ID
+
+        Returns:
+            dict: Feed status and details
+        """
+        endpoint = f"/feeds/2021-06-30/feeds/{feed_id}"
+        return self._call_api("GET", endpoint)
+
+    def get_feed_document(self, feed_document_id):
+        """Get feed processing result document
+
+        Args:
+            feed_document_id: Result document ID from feed status
+
+        Returns:
+            dict: Response with downloadUrl for results
+        """
+        endpoint = f"/feeds/2021-06-30/documents/{feed_document_id}"
+        return self._call_api("GET", endpoint)
+
+    def cancel_feed(self, feed_id):
+        """Cancel a feed submission
+
+        Args:
+            feed_id: Amazon feed ID
+
+        Returns:
+            dict: Cancellation response
+        """
+        endpoint = f"/feeds/2021-06-30/feeds/{feed_id}"
+        return self._call_api("DELETE", endpoint)
+
+
+class AmazonCatalogAdapter(AmazonBaseAdapter):
+    _name = "amazon.catalog.adapter"
+    _usage = "catalog.adapter"
+
+    def search_catalog_items(
+        self, marketplace_ids, keywords=None, identifiers=None, identifier_type=None
+    ):
+        """Search catalog items
+
+        Args:
+            marketplace_ids: List of marketplace IDs
+            keywords: Search keywords
+            identifiers: List of product identifiers (ASIN, UPC, etc.)
+            identifier_type: Type of identifier ('ASIN', 'UPC', 'EAN', etc.)
+
+        Returns:
+            dict: Catalog items matching search
+        """
+        params = {"marketplaceIds": ",".join(marketplace_ids)}
+
+        if keywords:
+            params["keywords"] = keywords
+        if identifiers:
+            params["identifiers"] = ",".join(identifiers)
+        if identifier_type:
+            params["identifiersType"] = identifier_type
+
+        return self._call_api("GET", "/catalog/2022-04-01/items", params=params)
+
+    def get_catalog_item(self, asin, marketplace_ids, included_data=None):
+        """Get detailed catalog item information
+
+        Args:
+            asin: Product ASIN
+            marketplace_ids: List of marketplace IDs
+            included_data: List of data types to include
+                ('attributes', 'identifiers', 'images', 'productTypes', etc.)
+
+        Returns:
+            dict: Detailed catalog item data
+        """
+        params = {"marketplaceIds": ",".join(marketplace_ids)}
+
+        if included_data:
+            params["includedData"] = ",".join(included_data)
+
+        endpoint = f"/catalog/2022-04-01/items/{asin}"
+        return self._call_api("GET", endpoint, params=params)
+
+
+class AmazonListingsAdapter(AmazonBaseAdapter):
+    _name = "amazon.listings.adapter"
+    _usage = "listings.adapter"
+
+    def get_listings_item(self, seller_sku, marketplace_ids, included_data=None):
+        """Get seller's listing for a SKU
+
+        Args:
+            seller_sku: Seller SKU
+            marketplace_ids: List of marketplace IDs
+            included_data: List of data sections ('summaries', 'attributes', etc.)
+
+        Returns:
+            dict: Listing details
+        """
+        params = {"marketplaceIds": ",".join(marketplace_ids)}
+
+        if included_data:
+            params["includedData"] = ",".join(included_data)
+
+        endpoint = (
+            f"/listings/2021-08-01/items/{self.backend_record.seller_id}/{seller_sku}"
+        )
+        return self._call_api("GET", endpoint, params=params)
+
+    def put_listings_item(self, seller_sku, marketplace_ids, product_type, attributes):
+        """Create or fully update a listing
+
+        Args:
+            seller_sku: Seller SKU
+            marketplace_ids: List of marketplace IDs
+            product_type: Amazon product type
+            attributes: Dict of listing attributes
+
+        Returns:
+            dict: Update response with status
+        """
+        endpoint = (
+            f"/listings/2021-08-01/items/{self.backend_record.seller_id}/{seller_sku}"
+        )
+        payload = {
+            "productType": product_type,
+            "requirements": "LISTING",
+            "attributes": attributes,
+        }
+        params = {"marketplaceIds": ",".join(marketplace_ids)}
+
+        return self._call_api("PUT", endpoint, params=params, json_data=payload)
+
+    def patch_listings_item(self, seller_sku, marketplace_ids, patches):
+        """Partially update a listing
+
+        Args:
+            seller_sku: Seller SKU
+            marketplace_ids: List of marketplace IDs
+            patches: List of JSON Patch operations
+
+        Returns:
+            dict: Update response with status
+        """
+        endpoint = (
+            f"/listings/2021-08-01/items/{self.backend_record.seller_id}/{seller_sku}"
+        )
+        payload = {"productType": "PRODUCT", "patches": patches}
+        params = {"marketplaceIds": ",".join(marketplace_ids)}
+
+        return self._call_api("PATCH", endpoint, params=params, json_data=payload)
+
+    def delete_listings_item(self, seller_sku, marketplace_ids):
+        """Delete a listing
+
+        Args:
+            seller_sku: Seller SKU
+            marketplace_ids: List of marketplace IDs
+
+        Returns:
+            dict: Deletion response
+        """
+        endpoint = (
+            f"/listings/2021-08-01/items/{self.backend_record.seller_id}/{seller_sku}"
+        )
+        params = {"marketplaceIds": ",".join(marketplace_ids)}
+
+        return self._call_api("DELETE", endpoint, params=params)

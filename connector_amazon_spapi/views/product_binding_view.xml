@@ -24,7 +24,31 @@
         <field name="model">amazon.product.binding</field>
         <field name="arch" type="xml">
             <form string="Amazon Product Binding">
+                <header>
+                    <button
+                        name="action_fetch_competitive_prices"
+                        string="Fetch Competitive Prices"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="not asin or not marketplace_id"
+                    />
+                </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_view_competitive_prices"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-line-chart"
+                            invisible="competitive_price_count == 0"
+                        >
+                            <field
+                                name="competitive_price_count"
+                                widget="statinfo"
+                                string="Competitive Prices"
+                            />
+                        </button>
+                    </div>
                     <group>
                         <field name="seller_sku" />
                         <field name="asin" />

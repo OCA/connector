@@ -21,6 +21,7 @@
         "views/marketplace_view.xml",
         "views/shop_view.xml",
         "views/product_binding_view.xml",
+        "views/competitive_price_view.xml",
         "views/order_view.xml",
         "views/feed_view.xml",
         "views/amazon_menu.xml",

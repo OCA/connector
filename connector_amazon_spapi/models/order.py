@@ -447,11 +447,9 @@ class AmazonSaleOrder(models.Model):
         next_token = None
         while True:
             params = {"NextToken": next_token} if next_token else None
-            result = shop.backend_id._call_sp_api(
-                "GET",
-                f"/orders/v0/orders/{amazon_order_id}/orderitems",
-                params=params,
-            )
+            # Use adapter for API calls
+            adapter = shop.backend_id.component(usage="orders.adapter")
+            result = adapter.get_order_items(amazon_order_id)
 
             if not isinstance(result, dict):
                 break

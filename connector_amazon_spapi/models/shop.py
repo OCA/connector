@@ -80,6 +80,11 @@ class AmazonShop(models.Model):
     )
     last_order_sync = fields.Datetime()
     last_stock_sync = fields.Datetime()
+    last_price_sync = fields.Datetime(
+        string="Last Competitive Pricing Sync",
+        readonly=True,
+        help="Timestamp of last competitive pricing fetch.",
+    )
     order_sync_lookback_days = fields.Integer(
         string="Order Lookback (days)",
         default=7,
@@ -339,6 +344,24 @@ class AmazonShop(models.Model):
         # Implementation intentionally not provided yet
         raise NotImplementedError("Stock push is not yet implemented")
 
+    def action_sync_competitive_prices(self):
+        """Trigger competitive pricing sync in background"""
+        for shop in self:
+            shop.with_delay().sync_competitive_prices(
+                updated_since=shop.last_price_sync
+            )
+
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": "Competitive Pricing Sync Queued",
+                "message": (f"Pricing sync queued for {len(self)} shop(s)."),
+                "type": "success",
+                "sticky": False,
+            },
+        }
+
     def cron_push_stock(self):
         """Cron job to push stock for all shops based on their sync interval."""
         # Hourly shops
@@ -413,6 +436,24 @@ class AmazonShop(models.Model):
                 binding.with_delay().push_shipment()
             except Exception:
                 # let the job record the error; continue others
+                continue
+
+    @api.model
+    def cron_sync_competitive_prices(self):
+        """Cron job to sync competitive pricing for active shops with price sync enabled."""
+        shops = self.search(
+            [
+                ("active", "=", True),
+                ("sync_price", "=", True),
+            ]
+        )
+        for shop in shops:
+            try:
+                shop.with_delay().sync_competitive_prices(
+                    updated_since=shop.last_price_sync
+                )
+            except Exception:
+                # Let job queue record errors; continue to next shop
                 continue
 
     def push_stock(self):
@@ -491,3 +532,95 @@ class AmazonShop(models.Model):
 
         xml_lines.append("</AmazonEnvelope>")
         return "\n".join(xml_lines)
+
+    def sync_competitive_prices(self, updated_since=None, chunk_size=None):
+        """Fetch competitive pricing for all price-synced bindings in this shop.
+
+        If ``updated_since`` is provided, only bindings whose latest
+        local competitive price ``fetch_date`` is older than that
+        timestamp (or missing) will be refreshed. Otherwise, all
+        eligible bindings are fetched.
+
+        Results are fetched in chunks using the pricing adapter's bulk
+        helper to respect API per-request limits.
+
+        Args:
+            updated_since (datetime|str): Optional threshold to limit refresh.
+            chunk_size (int): Optional chunk size cap per request (<=20).
+
+        Returns:
+            int: Number of competitive price records created.
+        """
+        self.ensure_one()
+
+        # Collect eligible product bindings (must have ASIN and price sync enabled)
+        binding_domain = [
+            ("backend_id", "=", self.backend_id.id),
+            ("marketplace_id", "=", self.marketplace_id.id),
+            ("sync_price", "=", True),
+            ("asin", "!=", False),
+        ]
+        bindings = self.env["amazon.product.binding"].search(binding_domain)
+        if not bindings:
+            return 0
+
+        # If incremental, determine which bindings are stale relative to updated_since
+        if updated_since:
+            groups = (
+                self.env["amazon.competitive.price"].read_group(
+                    domain=[("product_binding_id", "in", bindings.ids)],
+                    fields=["product_binding_id", "fetch_date:max"],
+                    groupby=["product_binding_id"],
+                )
+                or []
+            )
+            latest_map = {
+                g["product_binding_id"][0]: g.get("fetch_date_max") for g in groups
+            }
+
+            def is_stale(b):
+                last = latest_map.get(b.id)
+                return (not last) or (last < updated_since)
+
+            bindings = bindings.filtered(is_stale)
+
+        if not bindings:
+            return 0
+
+        # Map ASIN -> binding for fast lookup when mapping results
+        asin_to_binding = {b.asin: b for b in bindings}
+        asins = list(asin_to_binding.keys())
+
+        created_vals = []
+
+        # Use adapter and mapper via work_on context
+        with self.backend_id.work_on("amazon.product.binding") as work:
+            adapter = work.component(usage="pricing.adapter")
+            mapper = work.component(
+                usage="import.mapper", model_name="amazon.product.binding"
+            )
+
+            results = adapter.get_competitive_pricing_bulk(
+                marketplace_id=self.marketplace_id.marketplace_id,
+                asins=asins,
+                chunk_size=chunk_size or 20,
+            )
+
+            for pricing_data in results:
+                asin = pricing_data.get("ASIN")
+                binding = asin_to_binding.get(asin)
+                if not binding:
+                    continue
+                vals = mapper.map_competitive_price(pricing_data, binding)
+                if vals:
+                    created_vals.append(vals)
+
+        if not created_vals:
+            return 0
+
+        self.env["amazon.competitive.price"].create(created_vals)
+
+        # Update last sync timestamp
+        self.write({"last_price_sync": fields.Datetime.now()})
+
+        return len(created_vals)

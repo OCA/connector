@@ -57,6 +57,7 @@
                         <field name="order_sync_lookback_days" />
                         <field name="last_order_sync" readonly="1" />
                         <field name="last_stock_sync" readonly="1" />
+                        <field name="last_price_sync" readonly="1" />
                         <field name="active" />
                     </group>
                     <group string="Extra Routing Line">
@@ -104,8 +105,13 @@
                         string="Push Stock"
                         type="object"
                         class="btn-secondary"
-                    />
-                </footer>
+                    />                    <button
+                        name="action_sync_competitive_prices"
+                        string="Sync Competitive Pricing"
+                        type="object"
+                        class="btn-secondary"
+                        attrs="{'invisible': [('sync_price', '=', False)]}"
+                    />                </footer>
             </form>
         </field>
     </record>

@@ -1,7 +1,7 @@
 # Copyright 2025 Kencove
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from unittest import mock
 
 from odoo.exceptions import UserError
@@ -36,9 +36,12 @@ class TestAmazonCompetitivePrice(common.CommonConnectorAmazonSpapi):
     def _create_competitive_price(self, **kwargs):
         """Create a test competitive price record"""
         # Generate unique values to avoid constraint violations
-        # Use a counter-based approach to ensure different fetch_dates/IDs per call
-        call_index = getattr(self, "_competitive_price_call_index", 0)
-        self._competitive_price_call_index = call_index + 1
+        # Use timestamp-based approach for better uniqueness across test runs
+        import uuid
+        from time import time
+
+        timestamp = int(time() * 1000000)  # microsecond precision
+        unique_suffix = uuid.uuid4().hex[:8]
 
         values = {
             "product_binding_id": self.product_binding.id,
@@ -53,9 +56,8 @@ class TestAmazonCompetitivePrice(common.CommonConnectorAmazonSpapi):
             "is_buy_box_winner": True,
             "number_of_offers_new": 5,
             "number_of_offers_used": 2,
-            "competitive_price_id": f"test-id-{call_index}",
-            "fetch_date": datetime(2025, 12, 19, 10, 0, 0)
-            + timedelta(seconds=call_index),
+            "competitive_price_id": f"test-{timestamp}-{unique_suffix}",
+            "fetch_date": datetime.now(),
         }
         values.update(kwargs)
         return self.env["amazon.competitive.price"].create(values)
@@ -226,19 +228,27 @@ class TestAmazonCompetitivePrice(common.CommonConnectorAmazonSpapi):
 
     def test_unique_constraint(self):
         """Test unique constraint on competitive price"""
+        import time
+
         from psycopg2 import IntegrityError
 
-        # Create first record with specific values
-        test_fetch_date = datetime(2025, 12, 19, 10, 0, 0)
-        self._create_competitive_price(
-            competitive_price_id="test-id", fetch_date=test_fetch_date
+        # Create first record - capture its fetch_date for duplicate test
+        first_record = self._create_competitive_price(
+            competitive_price_id="test-id-unique-constraint-1"
         )
+        test_fetch_date = first_record.fetch_date
+        test_competitive_price_id = first_record.competitive_price_id
 
         # Try to create duplicate with exact same values - should raise IntegrityError
+        # Ensure microsecond difference to avoid accidental duplicate
+        # from datetime.now() between the two calls
+        time.sleep(0.001)  # 1ms delay to ensure different timestamp in helper
         with self.assertRaises(IntegrityError):
-            self._create_competitive_price(
-                competitive_price_id="test-id", fetch_date=test_fetch_date
-            )
+            with self.env.cr.savepoint():
+                self._create_competitive_price(
+                    competitive_price_id=test_competitive_price_id,
+                    fetch_date=test_fetch_date,
+                )
 
 
 @tagged("post_install", "-at_install")

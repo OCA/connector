@@ -110,6 +110,60 @@ class AmazonPricingAdapter(AmazonBaseAdapter):
             "GET", "/products/pricing/v0/competitivePrice", params=params
         )
 
+    def get_competitive_pricing_bulk(
+        self,
+        marketplace_id,
+        asins=None,
+        skus=None,
+        chunk_size=20,
+    ):
+        """Fetch competitive pricing in chunks and merge results.
+
+        Amazon enforces a maximum number of identifiers per request
+        (commonly 20). This helper partitions the input list into
+        chunks of up to ``chunk_size`` and aggregates all responses
+        into a single list.
+
+        Args:
+            marketplace_id: Amazon marketplace ID
+            asins: List of ASINs to query
+            skus: List of SKUs to query
+            chunk_size: Max IDs per request (defaults to 20)
+
+        Returns:
+            list: Aggregated competitive pricing payload across chunks
+        """
+        ids = list(asins or skus or [])
+        if not ids:
+            return []
+
+        # Respect API hard limit of 20 when chunking
+        chunk_size = min(int(chunk_size or 20), 20)
+
+        aggregated = []
+        for i in range(0, len(ids), chunk_size):
+            chunk = ids[i : i + chunk_size]
+            # Call underlying single-request method
+            if asins is not None:
+                resp = self.get_competitive_pricing(
+                    marketplace_id=marketplace_id, asins=chunk
+                )
+            else:
+                resp = self.get_competitive_pricing(
+                    marketplace_id=marketplace_id, skus=chunk
+                )
+
+            # Adapter returns a list of pricing entries when successful
+            if isinstance(resp, list):
+                aggregated.extend(resp)
+            elif isinstance(resp, dict):
+                # Some backends may encapsulate results in a payload
+                payload = resp.get("payload") or resp.get("results")
+                if isinstance(payload, list):
+                    aggregated.extend(payload)
+
+        return aggregated
+
     def get_pricing(self, marketplace_id, item_type, asins=None, skus=None):
         """Get pricing information for products
 
@@ -150,18 +204,30 @@ class AmazonInventoryAdapter(AmazonBaseAdapter):
     _name = "amazon.inventory.adapter"
     _usage = "inventory.adapter"
 
-    def create_inventory_feed(self, feed_content):
+    def create_inventory_feed(self, feed_content, marketplace_ids=None):
         """Submit inventory/stock feed through Feeds API
 
         Args:
             feed_content: XML feed content as string
+            marketplace_ids: List of marketplace IDs (uses backend's primary if not provided)
 
         Returns:
             dict: Feed creation response with feedId
         """
+        if not marketplace_ids:
+            # Use backend's primary marketplace
+            marketplace_ids = [self.backend_record.marketplace_id.code]
+
         feed_adapter = self.component(usage="feed.adapter")
+
+        # Create and submit feed document
+        # The feed adapter handles: create_feed_document -> upload -> create_feed
+        doc_response = feed_adapter.create_feed_document()
+        feed_document_id = doc_response.get("feedDocumentId")
+
+        # Create feed submission with the document
         return feed_adapter.create_feed(
-            "POST_INVENTORY_AVAILABILITY_DATA", feed_content
+            "POST_INVENTORY_AVAILABILITY_DATA", feed_document_id, marketplace_ids
         )
 
 

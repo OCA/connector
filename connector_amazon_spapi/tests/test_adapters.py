@@ -124,20 +124,21 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
         with self.backend.work_on("amazon.product.binding") as work:
             adapter = work.component(usage="inventory.adapter")
 
-            inventory_data = [
-                {"sku": "TEST-SKU-001", "quantity": 10, "fulfillment_latency": 2}
-            ]
+            feed_content = """<?xml version="1.0" encoding="UTF-8"?>
+                <AmazonEnvelope><MessageType>Inventory</MessageType></AmazonEnvelope>"""
 
             with mock.patch(
                 "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api",
-                return_value={"feedId": "123"},
+                side_effect=[
+                    {"feedDocumentId": "doc-123"},  # create_feed_document response
+                    {"feedId": "123"},  # create_feed response
+                ],
             ) as mock_call:
-                adapter.create_inventory_feed(
-                    marketplace_id="ATVPDKIKX0DER", inventory_data=inventory_data
-                )
+                result = adapter.create_inventory_feed(feed_content=feed_content)
 
-                mock_call.assert_called()
-                # Should call feed document creation first, then feed submission
+                # Should call _call_sp_api twice (create_feed_document, then create_feed)
+                self.assertEqual(mock_call.call_count, 2)
+                self.assertEqual(result.get("feedId"), "123")
 
     def test_feed_adapter_create_feed_document(self):
         """Test FeedAdapter.create_feed_document calls backend correctly"""
@@ -231,8 +232,6 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
         with self.backend.work_on("amazon.product.binding") as work:
             adapter = work.component(usage="listings.adapter")
 
-            listings_data = {"productType": "PRODUCT", "attributes": {}}
-
             with mock.patch(
                 "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api",
                 return_value={"status": "ACCEPTED"},
@@ -240,7 +239,8 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
                 adapter.put_listings_item(
                     seller_sku="TEST-SKU-001",
                     marketplace_ids=["ATVPDKIKX0DER"],
-                    listings_data=listings_data,
+                    product_type="PRODUCT",
+                    attributes={},
                 )
 
                 mock_call.assert_called_once()

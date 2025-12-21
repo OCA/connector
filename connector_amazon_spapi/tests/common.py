@@ -169,3 +169,47 @@ class CommonConnectorAmazonSpapi(TransactionComponentCase):
         defaults.update(kwargs)
 
         return self.env["amazon.sale.order"].create(defaults)
+
+    def _create_product_binding(self, **kwargs):
+        """Create an amazon.product.binding"""
+        defaults = {
+            "backend_id": self.backend.id,
+            "marketplace_id": self.marketplace.id,
+            "odoo_id": self.product.id,
+            "seller_sku": "TEST-SKU-001",
+            "asin": "B08TEST123",
+            "sync_stock": False,
+            "sync_price": False,
+        }
+        defaults.update(kwargs)
+        return self.env["amazon.product.binding"].create(defaults)
+
+    def _create_sample_pricing_data(self, asin=None):
+        """Create sample competitive pricing data from Amazon API"""
+        return {
+            "ASIN": asin or "B08TEST123",
+            "status": "Success",
+            "Product": {
+                "CompetitivePricing": {
+                    "CompetitivePrices": [
+                        {
+                            "CompetitivePriceId": "1",
+                            "Price": {
+                                "LandedPrice": {"CurrencyCode": "USD", "Amount": 99.99},
+                                "ListingPrice": {
+                                    "CurrencyCode": "USD",
+                                    "Amount": 89.99,
+                                },
+                                "Shipping": {"CurrencyCode": "USD", "Amount": 10.00},
+                            },
+                            "condition": "New",
+                            "subcondition": "New",
+                            "belongsToRequester": True,
+                        }
+                    ],
+                    "NumberOfOfferListings": [
+                        {"condition": "New", "Count": 5},
+                    ],
+                },
+            },
+        }

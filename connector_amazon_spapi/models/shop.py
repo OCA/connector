@@ -1,6 +1,6 @@
 import logging
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.tools import config
 
 _logger = logging.getLogger(__name__)
@@ -334,15 +334,20 @@ class AmazonShop(models.Model):
             raise UserError(f"Failed to sync catalog for {self.name}: {str(e)}") from e
 
     def action_push_stock(self):
-        """Trigger a stock push if enabled."""
-        self.ensure_one()
-        from odoo.exceptions import UserError
+        """Trigger stock push in background"""
+        for shop in self:
+            shop.with_delay().push_stock()
 
-        if not self.sync_stock:
-            raise UserError(_("Stock push is not enabled"))
-
-        # Implementation intentionally not provided yet
-        raise NotImplementedError("Stock push is not yet implemented")
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": "Stock Push Queued",
+                "message": (f"Stock push queued for {len(self)} shop(s)."),
+                "type": "success",
+                "sticky": False,
+            },
+        }
 
     def action_sync_competitive_prices(self):
         """Trigger competitive pricing sync in background"""

@@ -17,8 +17,9 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
         with self.backend.work_on("amazon.sale.order") as work:
             adapter = work.component(usage="orders.adapter")
 
-            with mock.patch.object(
-                self.backend, "_call_sp_api", return_value={"Orders": []}
+            with mock.patch(
+                "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api",
+                return_value={"Orders": []},
             ) as mock_call:
                 adapter.list_orders(
                     marketplace_id="ATVPDKIKX0DER", created_after="2025-12-01T00:00:00Z"
@@ -35,8 +36,9 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
         with self.backend.work_on("amazon.sale.order") as work:
             adapter = work.component(usage="orders.adapter")
 
-            with mock.patch.object(
-                self.backend, "_call_sp_api", return_value={}
+            with mock.patch(
+                "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api",
+                return_value={"Order": {}},
             ) as mock_call:
                 adapter.get_order("111-1111111-1111111")
 
@@ -50,8 +52,9 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
         with self.backend.work_on("amazon.sale.order") as work:
             adapter = work.component(usage="orders.adapter")
 
-            with mock.patch.object(
-                self.backend, "_call_sp_api", return_value={"OrderItems": []}
+            with mock.patch(
+                "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api",
+                return_value={"OrderItems": []},
             ) as mock_call:
                 adapter.get_order_items("111-1111111-1111111")
 
@@ -66,8 +69,9 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
         with self.backend.work_on("amazon.product.binding") as work:
             adapter = work.component(usage="pricing.adapter")
 
-            with mock.patch.object(
-                self.backend, "_call_sp_api", return_value=[]
+            with mock.patch(
+                "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api",
+                return_value={"Items": []},
             ) as mock_call:
                 adapter.get_competitive_pricing(
                     marketplace_id="ATVPDKIKX0DER", asins=["B01ABCDEFG", "B02XYZABC"]
@@ -84,8 +88,9 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
         with self.backend.work_on("amazon.product.binding") as work:
             adapter = work.component(usage="pricing.adapter")
 
-            with mock.patch.object(
-                self.backend, "_call_sp_api", return_value=[]
+            with mock.patch(
+                "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api",
+                return_value={"Items": []},
             ) as mock_call:
                 adapter.get_competitive_pricing(
                     marketplace_id="ATVPDKIKX0DER", skus=["TEST-SKU-001"]
@@ -185,7 +190,9 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
             with mock.patch.object(
                 self.backend, "_call_sp_api", return_value={"asin": "B01ABCDEFG"}
             ) as mock_call:
-                adapter.get_catalog_item(asin="B01ABCDEFG", marketplace_id="ATVPDKIKX0DER")
+                adapter.get_catalog_item(
+                    asin="B01ABCDEFG", marketplace_id="ATVPDKIKX0DER"
+                )
 
                 mock_call.assert_called_once()
                 call_args = mock_call.call_args
@@ -263,9 +270,16 @@ class TestOrderAdapterIntegration(common.CommonConnectorAmazonSpapi):
 
     def _create_amazon_order(self, **kwargs):
         """Create a test Amazon order"""
+        partner = self.env["res.partner"].create(
+            {
+                "name": "Test Amazon Customer",
+                "email": "test@amazon.com",
+            }
+        )
         values = {
             "external_id": "111-1111111-1111111",
             "name": "111-1111111-1111111",
+            "partner_id": partner.id,
             "shop_id": self.shop.id,
             "backend_id": self.backend.id,
             "status": "Pending",

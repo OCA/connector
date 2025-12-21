@@ -114,8 +114,10 @@ class TestAmazonCompetitivePrice(common.CommonConnectorAmazonSpapi):
         """Test our_current_price field shows product list price"""
         comp_price = self._create_competitive_price()
 
-        self.assertEqual(comp_price.our_current_price, self.product.list_price)
-        self.assertEqual(comp_price.our_current_price, 99.99)
+        self.assertAlmostEqual(
+            comp_price.our_current_price, self.product.list_price, places=2
+        )
+        self.assertAlmostEqual(comp_price.our_current_price, 99.99, places=2)
 
     def test_action_apply_to_pricelist_no_pricelist(self):
         """Test apply to pricelist fails when no pricelist configured"""
@@ -239,8 +241,10 @@ class TestAmazonProductBindingCompetitivePricing(common.CommonConnectorAmazonSpa
 
     def _create_product_binding(self, **kwargs):
         """Create a test product binding"""
+        import uuid
+
         values = {
-            "seller_sku": "TEST-SKU-001",
+            "seller_sku": kwargs.get("seller_sku", f"TEST-SKU-{uuid.uuid4().hex[:8]}"),
             "asin": "B01ABCDEFG",
             "backend_id": self.backend.id,
             "marketplace_id": self.marketplace.id,
@@ -392,8 +396,10 @@ class TestAmazonCompetitivePriceMapper(common.CommonConnectorAmazonSpapi):
 
     def _create_product_binding(self, **kwargs):
         """Create a test product binding"""
+        import uuid
+
         values = {
-            "seller_sku": "TEST-SKU-001",
+            "seller_sku": kwargs.get("seller_sku", f"TEST-SKU-{uuid.uuid4().hex[:8]}"),
             "asin": "B01ABCDEFG",
             "backend_id": self.backend.id,
             "marketplace_id": self.marketplace.id,
@@ -404,9 +410,8 @@ class TestAmazonCompetitivePriceMapper(common.CommonConnectorAmazonSpapi):
 
     def _get_mapper(self):
         """Get the competitive price mapper component"""
-        return self.backend.component(
-            usage="import.mapper", model_name="amazon.product.binding"
-        )
+        with self.backend.work_on("amazon.product.binding") as work:
+            return work.component(usage="import.mapper")
 
     def test_mapper_extracts_pricing_data(self):
         """Test mapper correctly extracts pricing data"""

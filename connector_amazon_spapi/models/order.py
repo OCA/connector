@@ -446,10 +446,21 @@ class AmazonSaleOrder(models.Model):
         line_model = self.env["amazon.sale.order.line"]
 
         # Do not hit SP-API in tests unless explicitly allowed or mocked
-        is_mocked = hasattr(shop.backend_id._call_sp_api, "assert_called")
-        if config["test_enable"] and not is_mocked:
-            if not self.env.context.get("amazon_allow_orderitem_api"):
-                return
+        # Proceed if backend call or adapter method is mocked.
+        if config["test_enable"]:
+            backend_mocked = hasattr(shop.backend_id._call_sp_api, "assert_called")
+            adapter_mocked = False
+            # Create adapter once to check mocking state
+            with shop.backend_id.work_on("amazon.sale.order.line") as work:
+                test_adapter = work.component(usage="orders.adapter")
+                adapter_mocked = hasattr(
+                    test_adapter.get_order_items, "assert_called"
+                ) or hasattr(
+                    getattr(test_adapter.get_order_items, "mock", None), "assert_called"
+                )
+            if not backend_mocked and not adapter_mocked:
+                if not self.env.context.get("amazon_allow_orderitem_api"):
+                    return
 
         next_token = None
         while True:

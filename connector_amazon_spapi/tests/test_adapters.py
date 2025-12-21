@@ -108,12 +108,16 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
             # Create 25 ASINs (exceeds limit)
             too_many_asins = [f"B{str(i).zfill(9)}" for i in range(25)]
 
-            with self.assertRaises(ValueError) as context:
-                adapter.get_competitive_pricing(
-                    marketplace_id="ATVPDKIKX0DER", asins=too_many_asins
-                )
+            # Mock the API call to prevent 401 error
+            with mock.patch(
+                "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api"
+            ):
+                with self.assertRaises(ValueError) as context:
+                    adapter.get_competitive_pricing(
+                        marketplace_id="ATVPDKIKX0DER", asins=too_many_asins
+                    )
 
-            self.assertIn("maximum of 20", str(context.exception))
+                self.assertIn("maximum of 20", str(context.exception))
 
     def test_inventory_adapter_create_inventory_feed(self):
         """Test InventoryAdapter.create_inventory_feed calls backend correctly"""
@@ -124,8 +128,9 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
                 {"sku": "TEST-SKU-001", "quantity": 10, "fulfillment_latency": 2}
             ]
 
-            with mock.patch.object(
-                self.backend, "_call_sp_api", return_value={"feedId": "123"}
+            with mock.patch(
+                "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api",
+                return_value={"feedId": "123"},
             ) as mock_call:
                 adapter.create_inventory_feed(
                     marketplace_id="ATVPDKIKX0DER", inventory_data=inventory_data
@@ -139,8 +144,9 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
         with self.backend.work_on("amazon.product.binding") as work:
             adapter = work.component(usage="feed.adapter")
 
-            with mock.patch.object(
-                self.backend, "_call_sp_api", return_value={"feedDocumentId": "doc-123"}
+            with mock.patch(
+                "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api",
+                return_value={"feedDocumentId": "doc-123"},
             ) as mock_call:
                 adapter.create_feed_document(content_type="text/xml; charset=UTF-8")
 
@@ -154,8 +160,9 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
         with self.backend.work_on("amazon.product.binding") as work:
             adapter = work.component(usage="feed.adapter")
 
-            with mock.patch.object(
-                self.backend, "_call_sp_api", return_value={"feedId": "feed-123"}
+            with mock.patch(
+                "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api",
+                return_value={"feedId": "feed-123"},
             ) as mock_call:
                 adapter.get_feed("feed-123")
 
@@ -169,8 +176,9 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
         with self.backend.work_on("amazon.product.binding") as work:
             adapter = work.component(usage="catalog.adapter")
 
-            with mock.patch.object(
-                self.backend, "_call_sp_api", return_value={"items": []}
+            with mock.patch(
+                "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api",
+                return_value={"items": []},
             ) as mock_call:
                 adapter.search_catalog_items(
                     marketplace_id="ATVPDKIKX0DER", keywords="test product"
@@ -187,8 +195,9 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
         with self.backend.work_on("amazon.product.binding") as work:
             adapter = work.component(usage="catalog.adapter")
 
-            with mock.patch.object(
-                self.backend, "_call_sp_api", return_value={"asin": "B01ABCDEFG"}
+            with mock.patch(
+                "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api",
+                return_value={"asin": "B01ABCDEFG"},
             ) as mock_call:
                 adapter.get_catalog_item(
                     asin="B01ABCDEFG", marketplace_id="ATVPDKIKX0DER"
@@ -204,8 +213,9 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
         with self.backend.work_on("amazon.product.binding") as work:
             adapter = work.component(usage="listings.adapter")
 
-            with mock.patch.object(
-                self.backend, "_call_sp_api", return_value={"sku": "TEST-SKU-001"}
+            with mock.patch(
+                "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api",
+                return_value={"sku": "TEST-SKU-001"},
             ) as mock_call:
                 adapter.get_listings_item(
                     seller_sku="TEST-SKU-001", marketplace_ids=["ATVPDKIKX0DER"]
@@ -223,8 +233,9 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
 
             listings_data = {"productType": "PRODUCT", "attributes": {}}
 
-            with mock.patch.object(
-                self.backend, "_call_sp_api", return_value={"status": "ACCEPTED"}
+            with mock.patch(
+                "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api",
+                return_value={"status": "ACCEPTED"},
             ) as mock_call:
                 adapter.put_listings_item(
                     seller_sku="TEST-SKU-001",

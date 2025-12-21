@@ -116,26 +116,16 @@ class AmazonShop(models.Model):
     active = fields.Boolean(default=True)
     note = fields.Text(string="Notes")
 
-    @api.model
-    def create(self, vals):
-        # Handle batch creation (vals is a list of dicts)
-        if isinstance(vals, list):
-            for val in vals:
-                backend = None
-                if val.get("backend_id"):
-                    backend = self.env["amazon.backend"].browse(val["backend_id"])
-                if not val.get("warehouse_id") and backend and backend.warehouse_id:
-                    val["warehouse_id"] = backend.warehouse_id.id
-            return super().create(vals)
-
-        backend = None
-        if vals.get("backend_id"):
-            backend = self.env["amazon.backend"].browse(vals["backend_id"])
-
-        if not vals.get("warehouse_id") and backend and backend.warehouse_id:
-            vals["warehouse_id"] = backend.warehouse_id.id
-
-        return super().create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        # Handle batch creation - process each value dict
+        for vals in vals_list:
+            backend = None
+            if vals.get("backend_id"):
+                backend = self.env["amazon.backend"].browse(vals["backend_id"])
+            if not vals.get("warehouse_id") and backend and backend.warehouse_id:
+                vals["warehouse_id"] = backend.warehouse_id.id
+        return super().create(vals_list)
 
     def action_sync_orders(self):
         """Trigger order sync in background"""

@@ -98,9 +98,13 @@ class AmazonPricingAdapter(AmazonBaseAdapter):
         params = {"MarketplaceId": marketplace_id}
 
         if asins:
-            params["Asins"] = ",".join(asins[:20])
+            if len(asins) > 20:
+                raise ValueError("Amazon enforces a maximum of 20 ASINs per request")
+            params["Asins"] = ",".join(asins)
         elif skus:
-            params["Skus"] = ",".join(skus[:20])
+            if len(skus) > 20:
+                raise ValueError("Amazon enforces a maximum of 20 SKUs per request")
+            params["Skus"] = ",".join(skus)
 
         return self._call_api(
             "GET", "/products/pricing/v0/competitivePrice", params=params
@@ -244,12 +248,18 @@ class AmazonCatalogAdapter(AmazonBaseAdapter):
     _usage = "catalog.adapter"
 
     def search_catalog_items(
-        self, marketplace_ids, keywords=None, identifiers=None, identifier_type=None
+        self,
+        marketplace_ids=None,
+        keywords=None,
+        identifiers=None,
+        identifier_type=None,
+        marketplace_id=None,
     ):
         """Search catalog items
 
         Args:
             marketplace_ids: List of marketplace IDs
+            marketplace_id: Single marketplace ID (alternative to list)
             keywords: Search keywords
             identifiers: List of product identifiers (ASIN, UPC, etc.)
             identifier_type: Type of identifier ('ASIN', 'UPC', 'EAN', etc.)
@@ -257,7 +267,8 @@ class AmazonCatalogAdapter(AmazonBaseAdapter):
         Returns:
             dict: Catalog items matching search
         """
-        params = {"marketplaceIds": ",".join(marketplace_ids)}
+        ids_list = marketplace_ids or ([marketplace_id] if marketplace_id else [])
+        params = {"marketplaceIds": ",".join(ids_list)}
 
         if keywords:
             params["keywords"] = keywords
@@ -268,19 +279,23 @@ class AmazonCatalogAdapter(AmazonBaseAdapter):
 
         return self._call_api("GET", "/catalog/2022-04-01/items", params=params)
 
-    def get_catalog_item(self, asin, marketplace_ids, included_data=None):
+    def get_catalog_item(
+        self, asin, marketplace_ids=None, included_data=None, marketplace_id=None
+    ):
         """Get detailed catalog item information
 
         Args:
             asin: Product ASIN
             marketplace_ids: List of marketplace IDs
+            marketplace_id: Single marketplace ID (alternative to list)
             included_data: List of data types to include
                 ('attributes', 'identifiers', 'images', 'productTypes', etc.)
 
         Returns:
             dict: Detailed catalog item data
         """
-        params = {"marketplaceIds": ",".join(marketplace_ids)}
+        ids_list = marketplace_ids or ([marketplace_id] if marketplace_id else [])
+        params = {"marketplaceIds": ",".join(ids_list)}
 
         if included_data:
             params["includedData"] = ",".join(included_data)

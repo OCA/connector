@@ -67,8 +67,8 @@ class AmazonMarketplace(models.Model):
 
     active = fields.Boolean(default=True)
 
-    @api.model
-    def create(self, vals):
+    @api.model_create_multi
+    def create(self, vals_list):
         """Ensure a non-null currency_id on creation.
 
         Fallback order:
@@ -77,34 +77,33 @@ class AmazonMarketplace(models.Model):
         - Current company currency
         - Any available currency
         """
-        # Handle batch creation (vals is a list of dicts)
-        if isinstance(vals, list):
-            return super().create(vals)
+        # Process each value dict in the batch
+        for vals in vals_list:
+            # Ensure code is provided for the not-null constraint
+            if not vals.get("code"):
+                # Prefer explicit country_code
+                country_code = (vals.get("country_code") or "").upper()
+                if country_code:
+                    vals["code"] = country_code
+                else:
+                    name_hint = vals.get("name") or ""
+                    vals["code"] = (
+                        name_hint[:2].upper()
+                        or (vals.get("marketplace_id") or "MK")[:2]
+                    )
 
-        # Ensure code is provided for the not-null constraint
-        if not vals.get("code"):
-            # Prefer explicit country_code
-            country_code = (vals.get("country_code") or "").upper()
-            if country_code:
-                vals["code"] = country_code
-            else:
-                name_hint = vals.get("name") or ""
-                vals["code"] = (
-                    name_hint[:2].upper() or (vals.get("marketplace_id") or "MK")[:2]
-                )
+            if not vals.get("currency_id"):
+                Currency = self.env["res.currency"]
+                backend = None
+                backend_id = vals.get("backend_id")
+                if backend_id:
+                    backend = self.env["amazon.backend"].browse(backend_id)
 
-        if not vals.get("currency_id"):
-            Currency = self.env["res.currency"]
-            backend = None
-            backend_id = vals.get("backend_id")
-            if backend_id:
-                backend = self.env["amazon.backend"].browse(backend_id)
+                currency = self._resolve_currency(vals, Currency, backend)
+                if currency:
+                    vals["currency_id"] = currency.id
 
-            currency = self._resolve_currency(vals, Currency, backend)
-            if currency:
-                vals["currency_id"] = currency.id
-
-        return super().create(vals)
+        return super().create(vals_list)
 
     def get_delivery_carrier_for_amazon_shipping(self, ship_service_level):
         """Map Amazon shipping level to Odoo delivery carrier

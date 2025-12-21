@@ -134,7 +134,10 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
                     {"feedId": "123"},  # create_feed response
                 ],
             ) as mock_call:
-                result = adapter.create_inventory_feed(feed_content=feed_content)
+                result = adapter.create_inventory_feed(
+                    feed_content=feed_content,
+                    marketplace_ids=[self.marketplace.marketplace_id],
+                )
 
                 # Should call _call_sp_api twice (create_feed_document, then create_feed)
                 self.assertEqual(mock_call.call_count, 2)

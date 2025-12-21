@@ -204,20 +204,16 @@ class AmazonInventoryAdapter(AmazonBaseAdapter):
     _name = "amazon.inventory.adapter"
     _usage = "inventory.adapter"
 
-    def create_inventory_feed(self, feed_content, marketplace_ids=None):
+    def create_inventory_feed(self, feed_content, marketplace_ids):
         """Submit inventory/stock feed through Feeds API
 
         Args:
             feed_content: XML feed content as string
-            marketplace_ids: List of marketplace IDs (uses backend's primary if not provided)
+            marketplace_ids: List of marketplace IDs
 
         Returns:
             dict: Feed creation response with feedId
         """
-        if not marketplace_ids:
-            # Use backend's primary marketplace
-            marketplace_ids = [self.backend_record.marketplace_id.code]
-
         feed_adapter = self.component(usage="feed.adapter")
 
         # Create and submit feed document

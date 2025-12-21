@@ -354,6 +354,7 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
             # Mock mapper response
             mock_mapper.map_competitive_price.return_value = {
                 "product_binding_id": binding1.id,
+                "marketplace_id": self.marketplace.id,
                 "listing_price": 89.99,
                 "landed_price": 99.99,
                 "fetch_date": "2024-01-15 10:00:00",
@@ -401,6 +402,7 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
             # Mock mapper response
             mock_mapper.map_competitive_price.return_value = {
                 "product_binding_id": binding_enabled.id,
+                "marketplace_id": self.marketplace.id,
                 "listing_price": 89.99,
                 "landed_price": 99.99,
                 "fetch_date": "2024-01-15 10:00:00",
@@ -441,6 +443,7 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
             # Mock mapper response
             mock_mapper.map_competitive_price.return_value = {
                 "product_binding_id": binding_with_asin.id,
+                "marketplace_id": self.marketplace.id,
                 "listing_price": 89.99,
                 "landed_price": 99.99,
                 "fetch_date": "2024-01-15 10:00:00",

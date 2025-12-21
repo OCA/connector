@@ -28,6 +28,13 @@ class CommonConnectorAmazonSpapi(TransactionComponentCase):
                 "list_price": 99.99,
             }
         )
+        # Create partner for order tests
+        self.partner = self.env["res.partner"].create(
+            {
+                "name": "Test Customer",
+                "email": "test@example.com",
+            }
+        )
 
     def _create_backend(self, **kwargs):
         """Create a test backend record"""

@@ -28,6 +28,32 @@
         <field name="model">amazon.shop</field>
         <field name="arch" type="xml">
             <form string="Amazon Shop">
+                <header>
+                    <button
+                        name="action_sync_catalog"
+                        string="Sync Catalog"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button
+                        name="action_sync_orders"
+                        string="Sync Orders"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button
+                        name="action_push_stock"
+                        string="Push Stock"
+                        type="object"
+                        class="btn-secondary"
+                    />                    <button
+                        name="action_sync_competitive_prices"
+                        string="Sync Competitive Pricing"
+                        type="object"
+                        class="btn-secondary"
+                        attrs="{'invisible': [('sync_price', '=', False)]}"
+                    />
+                </header>
                 <sheet>
                     <group>
                         <field name="name" />
@@ -86,32 +112,8 @@
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers" />
                     <field name="message_ids" widget="mail_thread" />
+                    <field name="activity_ids" />
                 </div>
-                <footer>
-                    <button
-                        name="action_sync_catalog"
-                        string="Sync Catalog"
-                        type="object"
-                        class="btn-primary"
-                    />
-                    <button
-                        name="action_sync_orders"
-                        string="Sync Orders"
-                        type="object"
-                        class="btn-primary"
-                    />
-                    <button
-                        name="action_push_stock"
-                        string="Push Stock"
-                        type="object"
-                        class="btn-secondary"
-                    />                    <button
-                        name="action_sync_competitive_prices"
-                        string="Sync Competitive Pricing"
-                        type="object"
-                        class="btn-secondary"
-                        attrs="{'invisible': [('sync_price', '=', False)]}"
-                    />                </footer>
             </form>
         </field>
     </record>

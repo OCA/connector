@@ -517,9 +517,7 @@ class AmazonShop(models.Model):
 
         for idx, binding in enumerate(bindings, start=1):
             # Calculate available quantity considering safety buffer
-            available_qty = max(
-                0, binding.product_id.qty_available - binding.safety_stock_buffer
-            )
+            available_qty = max(0, binding.odoo_id.qty_available - binding.stock_buffer)
 
             xml_lines.extend(
                 [

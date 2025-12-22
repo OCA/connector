@@ -10,6 +10,13 @@ from . import common
 class TestAmazonShop(common.CommonConnectorAmazonSpapi):
     """Tests for amazon.shop model"""
 
+    def _set_qty_in_stock_location(self, product, quantity):
+        location = self.env.ref("stock.stock_location_stock")
+        quants = self.env["stock.quant"]._gather(product, location, strict=True)
+        # _update_available_quantity adds to current quantity; adjust to target
+        quantity -= sum(quants.mapped("quantity"))
+        self.env["stock.quant"]._update_available_quantity(product, location, quantity)
+
     def test_shop_creation(self):
         """Test creating a shop record"""
         self.assertEqual(self.shop.name, "Test Amazon Shop")
@@ -280,6 +287,7 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
                 {
                     "product_binding_id": binding1.id,
                     "marketplace_id": self.marketplace.id,
+                    "asin": "B08TEST001",
                     "listing_price": 89.99,
                     "landed_price": 99.99,
                     "fetch_date": "2024-01-15 10:00:00",
@@ -287,6 +295,7 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
                 {
                     "product_binding_id": binding2.id,
                     "marketplace_id": self.marketplace.id,
+                    "asin": "B08TEST002",
                     "listing_price": 89.99,
                     "landed_price": 99.99,
                     "fetch_date": "2024-01-15 10:00:00",
@@ -299,10 +308,13 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
             # Verify adapter called with correct params
             mock_adapter.get_competitive_pricing_bulk.assert_called_once()
             call_args = mock_adapter.get_competitive_pricing_bulk.call_args
-            self.assertEqual(call_args[0][0], self.marketplace.marketplace_id)
-            self.assertIn("B08TEST001", call_args[0][1])
-            self.assertIn("B08TEST002", call_args[0][1])
-            self.assertEqual(call_args[0][2], 20)  # Default chunk_size
+            self.assertEqual(
+                call_args.kwargs.get("marketplace_id"),
+                self.marketplace.marketplace_id,
+            )
+            self.assertIn("B08TEST001", call_args.kwargs.get("asins", []))
+            self.assertIn("B08TEST002", call_args.kwargs.get("asins", []))
+            self.assertEqual(call_args.kwargs.get("chunk_size"), 20)  # Default
 
             # Verify mapper called for each pricing data
             self.assertEqual(mock_mapper.map_competitive_price.call_count, 2)
@@ -325,6 +337,8 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
         self.env["amazon.competitive.price"].create(
             {
                 "product_binding_id": binding1.id,
+                "marketplace_id": self.marketplace.id,
+                "asin": "B08TEST001",
                 "listing_price": 79.99,
                 "landed_price": 89.99,
                 "fetch_date": old_fetch_date,
@@ -350,6 +364,7 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
             mock_mapper.map_competitive_price.return_value = {
                 "product_binding_id": binding1.id,
                 "marketplace_id": self.marketplace.id,
+                "asin": "B08TEST001",
                 "listing_price": 89.99,
                 "landed_price": 99.99,
                 "fetch_date": "2024-01-15 10:00:00",
@@ -361,7 +376,7 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
 
             # Verify only stale binding (binding1) was processed
             call_args = mock_adapter.get_competitive_pricing_bulk.call_args
-            asins = call_args[0][1]
+            asins = call_args.kwargs.get("asins", [])
             self.assertIn("B08TEST001", asins)
             # binding2 has no price record, should also be included
             self.assertIn("B08TEST002", asins)
@@ -398,6 +413,7 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
             mock_mapper.map_competitive_price.return_value = {
                 "product_binding_id": binding_enabled.id,
                 "marketplace_id": self.marketplace.id,
+                "asin": "B08TEST001",
                 "listing_price": 89.99,
                 "landed_price": 99.99,
                 "fetch_date": "2024-01-15 10:00:00",
@@ -408,7 +424,7 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
 
             # Verify only enabled binding was processed
             call_args = mock_adapter.get_competitive_pricing_bulk.call_args
-            asins = call_args[0][1]
+            asins = call_args.kwargs.get("asins", [])
             self.assertIn("B08TEST001", asins)
             self.assertNotIn("B08TEST002", asins)
 
@@ -439,6 +455,7 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
             mock_mapper.map_competitive_price.return_value = {
                 "product_binding_id": binding_with_asin.id,
                 "marketplace_id": self.marketplace.id,
+                "asin": "B08TEST001",
                 "listing_price": 89.99,
                 "landed_price": 99.99,
                 "fetch_date": "2024-01-15 10:00:00",
@@ -449,7 +466,7 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
 
             # Verify only binding with ASIN was processed
             call_args = mock_adapter.get_competitive_pricing_bulk.call_args
-            asins = call_args[0][1]
+            asins = call_args.kwargs.get("asins", [])
             self.assertIn("B08TEST001", asins)
             self.assertEqual(len(asins), 1)
 
@@ -481,7 +498,7 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
 
             # Verify chunk_size was passed to adapter
             call_args = mock_adapter.get_competitive_pricing_bulk.call_args
-            self.assertEqual(call_args[0][2], custom_chunk_size)
+            self.assertEqual(call_args.kwargs.get("chunk_size"), custom_chunk_size)
 
     def test_push_stock_creates_feed(self):
         """Test push_stock creates inventory feed and submits it."""
@@ -492,10 +509,14 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
         binding = self._create_product_binding(
             seller_sku="TEST-SKU-001", sync_stock=True
         )
-        binding.product_id.qty_available = 100.0
+
+        # Ensure predictable stock qty for the underlying Odoo product
+        self._set_qty_in_stock_location(binding.odoo_id, 100.0)
 
         # Call push_stock
-        self.shop.push_stock()
+        with mock.patch.object(type(self.env["amazon.feed"]), "with_delay") as m:
+            m.return_value = mock.Mock(submit_feed=mock.Mock())
+            self.shop.push_stock()
 
         # Verify feed was created
         feed = self.env["amazon.feed"].search(
@@ -536,14 +557,25 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
 
     def test_build_inventory_feed_xml_structure(self):
         """Test _build_inventory_feed_xml generates valid XML."""
-        # Create bindings
-        binding1 = self._create_product_binding(seller_sku="SKU-001")
-        binding1.product_id.qty_available = 50.0
-        binding1.safety_stock_buffer = 5.0
+        # Create bindings on distinct products to avoid shared stock values
+        product1 = self.env["product.product"].create(
+            {"name": "Test Product 1", "default_code": "SKU-001", "type": "product"}
+        )
+        product2 = self.env["product.product"].create(
+            {"name": "Test Product 2", "default_code": "SKU-002", "type": "product"}
+        )
 
-        binding2 = self._create_product_binding(seller_sku="SKU-002")
-        binding2.product_id.qty_available = 100.0
-        binding2.safety_stock_buffer = 10.0
+        binding1 = self._create_product_binding(
+            seller_sku="SKU-001", odoo_id=product1.id
+        )
+        binding1.stock_buffer = 5
+        self._set_qty_in_stock_location(binding1.odoo_id, 50.0)
+
+        binding2 = self._create_product_binding(
+            seller_sku="SKU-002", odoo_id=product2.id
+        )
+        binding2.stock_buffer = 10
+        self._set_qty_in_stock_location(binding2.odoo_id, 100.0)
 
         bindings = binding1 | binding2
 
@@ -566,8 +598,8 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
     def test_build_inventory_feed_xml_handles_negative_stock(self):
         """Test _build_inventory_feed_xml doesn't send negative quantities."""
         binding = self._create_product_binding(seller_sku="SKU-LOW")
-        binding.product_id.qty_available = 2.0
-        binding.safety_stock_buffer = 5.0  # Buffer > available
+        self._set_qty_in_stock_location(binding.odoo_id, 2.0)
+        binding.stock_buffer = 5  # Buffer > available
 
         xml_content = self.shop._build_inventory_feed_xml(binding)
 
@@ -627,18 +659,20 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
                 "external_id": "111-7777777-7777777",
                 "backend_id": self.backend.id,
                 "marketplace_id": self.marketplace.id,
+                "partner_id": self.partner.id,
                 "shipment_confirmed": False,
             }
         )
 
         # Create picking with tracking
+        carrier = self.env.ref("delivery.free_delivery_carrier")
         picking = self.env["stock.picking"].create(
             {
                 "picking_type_id": self.env.ref("stock.picking_type_out").id,
                 "location_id": self.env.ref("stock.stock_location_stock").id,
                 "location_dest_id": self.env.ref("stock.stock_location_customers").id,
                 "state": "done",
-                "carrier_id": self.env.ref("delivery.delivery_carrier").id,
+                "carrier_id": carrier.id,
                 "carrier_tracking_ref": "TRACK123",
             }
         )
@@ -671,7 +705,8 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
         self.shop.last_stock_sync = False
 
         # Push stock
-        with mock.patch.object(type(self.env["amazon.feed"]), "submit_feed"):
+        with mock.patch.object(type(self.env["amazon.feed"]), "with_delay") as m:
+            m.return_value = mock.Mock(submit_feed=mock.Mock())
             self.shop.push_stock()
 
         # Verify timestamp was updated
@@ -703,6 +738,7 @@ class TestAmazonShop(common.CommonConnectorAmazonSpapi):
             mock_mapper.map_competitive_price.return_value = {
                 "product_binding_id": binding.id,
                 "marketplace_id": self.marketplace.id,
+                "asin": "B08TEST001",
                 "listing_price": 89.99,
                 "landed_price": 99.99,
                 "fetch_date": "2024-01-15 10:00:00",

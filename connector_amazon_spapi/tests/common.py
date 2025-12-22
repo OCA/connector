@@ -24,7 +24,7 @@ class CommonConnectorAmazonSpapi(TransactionComponentCase):
             {
                 "name": "Test Product",
                 "default_code": "TEST-SKU-001",
-                "type": "service",
+                "type": "product",
                 "list_price": 99.99,
             }
         )

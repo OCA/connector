@@ -43,6 +43,12 @@ class TestAmazonCompetitivePrice(common.CommonConnectorAmazonSpapi):
         timestamp = int(time() * 1000000)  # microsecond precision
         unique_suffix = uuid.uuid4().hex[:8]
 
+        # Only set defaults if not explicitly provided
+        if "competitive_price_id" not in kwargs:
+            kwargs["competitive_price_id"] = f"test-{timestamp}-{unique_suffix}"
+        if "fetch_date" not in kwargs:
+            kwargs["fetch_date"] = datetime.now()
+
         values = {
             "product_binding_id": self.product_binding.id,
             "asin": "B01ABCDEFG",
@@ -56,8 +62,6 @@ class TestAmazonCompetitivePrice(common.CommonConnectorAmazonSpapi):
             "is_buy_box_winner": True,
             "number_of_offers_new": 5,
             "number_of_offers_used": 2,
-            "competitive_price_id": f"test-{timestamp}-{unique_suffix}",
-            "fetch_date": datetime.now(),
         }
         values.update(kwargs)
         return self.env["amazon.competitive.price"].create(values)

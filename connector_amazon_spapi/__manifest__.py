@@ -14,7 +14,6 @@
         "stock",
         "product",
         "queue_job",
-        "mail",
         "delivery",
     ],
     "data": [

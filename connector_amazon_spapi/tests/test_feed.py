@@ -377,3 +377,59 @@ class TestFeedLifecycle(CommonConnectorAmazonSpapi):
         self.assertNotEqual(feed1.id, feed2.id)
         self.assertEqual(feed1.state, "draft")
         self.assertEqual(feed2.state, "draft")
+
+    @mock.patch(
+        "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api"
+    )
+    def test_create_feed_document_returns_upload_url(self, mock_call_api):
+        """Test _create_feed_document extracts S3 URL"""
+        feed = self.env["amazon.feed"].create(
+            {
+                "backend_id": self.backend.id,
+                "marketplace_id": self.marketplace.id,
+                "feed_type": "POST_INVENTORY_AVAILABILITY_DATA",
+                "state": "draft",
+                "payload_json": '<?xml version="1.0"?><test/>',
+            }
+        )
+
+        mock_call_api.return_value = {
+            "feedDocumentId": "doc-456",
+            "url": "https://s3.amazonaws.com/feed/upload",
+        }
+
+        result = feed._create_feed_document()
+
+        # The method returns the full response dict
+        self.assertEqual(result["feedDocumentId"], "doc-456")
+        self.assertIn("s3.amazonaws.com", result["url"])
+
+    @mock.patch("requests.put")
+    def test_upload_feed_content_uses_correct_headers(self, mock_put):
+        """Test _upload_feed_content sends proper S3 headers"""
+        feed = self.env["amazon.feed"].create(
+            {
+                "backend_id": self.backend.id,
+                "marketplace_id": self.marketplace.id,
+                "feed_type": "POST_INVENTORY_AVAILABILITY_DATA",
+                "state": "draft",
+                "payload_json": '<?xml version="1.0"?><xml>test</xml>',
+            }
+        )
+
+        mock_put.return_value.status_code = 200
+
+        feed._upload_feed_content("https://s3-test-url")
+
+        # Verify PUT was called with correct parameters
+        mock_put.assert_called_once()
+        call_kwargs = mock_put.call_args[1]
+        # Content-Type includes charset=UTF-8
+        self.assertEqual(
+            call_kwargs["headers"]["Content-Type"], "text/xml; charset=UTF-8"
+        )
+        # Data can be bytes or str, so decode if needed for comparison
+        data = call_kwargs["data"]
+        if isinstance(data, bytes):
+            data = data.decode("utf-8")
+        self.assertEqual(data, '<?xml version="1.0"?><xml>test</xml>')

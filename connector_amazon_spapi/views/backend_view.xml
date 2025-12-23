@@ -28,6 +28,11 @@
                         type="object"
                         class="btn-primary"
                     />
+                    <button
+                        name="action_fetch_marketplaces"
+                        type="object"
+                        string="Fetch Marketplaces"
+                    />
                 </header>
                 <sheet>
                     <group>

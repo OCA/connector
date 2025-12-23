@@ -158,7 +158,6 @@ class AmazonBackend(models.Model):
                 "GET",
                 "/sellers/v1/marketplaceParticipations",
             )
-
             if result.get("payload"):
                 return {
                     "type": "ir.actions.client",
@@ -184,3 +183,112 @@ class AmazonBackend(models.Model):
                     "sticky": True,
                 },
             }
+
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": "Connection Failed",
+                "message": "No marketplaces returned by SP-API.",
+                "type": "warning",
+                "sticky": False,
+            },
+        }
+
+    def action_fetch_marketplaces(self):
+        """Fetch marketplaces from SP-API and upsert records.
+
+        Uses ``/sellers/v1/marketplaceParticipations`` to discover the
+        marketplaces this seller participates in, then creates or updates
+        ``amazon.marketplace`` entries linked to this backend.
+        """
+        self.ensure_one()
+
+        result = self._call_sp_api("GET", "/sellers/v1/marketplaceParticipations")
+        payload = result.get("payload") or []
+
+        if not payload:
+            return {
+                "type": "ir.actions.client",
+                "tag": "display_notification",
+                "params": {
+                    "title": "No Marketplaces",
+                    "message": "No marketplace participations returned by SP-API.",
+                    "type": "warning",
+                    "sticky": False,
+                },
+            }
+
+        Marketplace = self.env["amazon.marketplace"]
+        Currency = self.env["res.currency"]
+
+        created = 0
+        updated = 0
+
+        for item in payload:
+            marketplace = item.get("marketplace", {})
+            marketplace_id = marketplace.get("id") or marketplace.get("MarketplaceId")
+            if not marketplace_id:
+                continue
+
+            country_code = (marketplace.get("countryCode") or "").upper()
+            currency_code = marketplace.get("defaultCurrencyCode")
+            name = marketplace.get("name") or marketplace_id
+
+            currency = False
+            if currency_code:
+                currency = Currency.search([("name", "=", currency_code)], limit=1)
+
+            vals = {
+                "name": name,
+                "code": country_code or marketplace_id[:2],
+                "marketplace_id": marketplace_id,
+                "backend_id": self.id,
+                "country_code": country_code,
+                "region": self.region,
+            }
+            if currency:
+                vals["currency_id"] = currency.id
+
+            # Prefer the already-linked marketplaces to avoid missing the
+            # record when the database search ignores an unflushed cache.
+            existing = self.marketplace_ids.filtered(
+                lambda m: m.marketplace_id == marketplace_id
+            )
+            if not existing:
+                existing = Marketplace.search(
+                    [
+                        ("backend_id", "=", self.id),
+                        ("marketplace_id", "=", marketplace_id),
+                    ],
+                    limit=1,
+                )
+
+            # Some legacy records may lack the marketplace identifier but have
+            # a matching country code; fall back to that to ensure updates.
+            if not existing and vals.get("code"):
+                existing = Marketplace.search(
+                    [
+                        ("backend_id", "=", self.id),
+                        ("code", "=", vals["code"]),
+                    ],
+                    limit=1,
+                )
+
+            if existing:
+                existing.write(vals)
+                updated += 1
+            else:
+                Marketplace.create(vals)
+                created += 1
+
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": "Marketplaces Synced",
+                "message": f"Created {created}, updated {updated} marketplace(s).",
+                "type": "success",
+                "sticky": False,
+            },
+        }

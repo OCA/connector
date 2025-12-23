@@ -225,6 +225,78 @@ class TestAmazonBackend(common.CommonConnectorAmazonSpapi):
         self.assertEqual(result["type"], "ir.actions.client")
         self.assertEqual(result["params"]["type"], "danger")
 
+    @mock.patch("requests.request")
+    def test_action_fetch_marketplaces_create_and_update(self, mock_request):
+        """Fetch marketplaces creates new records and updates existing ones"""
+        future_time = datetime.now() + timedelta(hours=1)
+        self.backend.write(
+            {
+                "access_token": "valid-token",
+                "token_expires_at": future_time,
+            }
+        )
+
+        existing_marketplace = self.env["amazon.marketplace"].create(
+            {
+                "name": "Old US Name",
+                "code": "US",
+                "marketplace_id": "ATVPDKIKX0DER",
+                "backend_id": self.backend.id,
+                "country_code": "US",
+                "region": self.backend.region,
+            }
+        )
+
+        mock_response = mock.Mock()
+        mock_response.json.return_value = {
+            "payload": [
+                {
+                    "marketplace": {
+                        "id": "ATVPDKIKX0DER",
+                        "countryCode": "US",
+                        "defaultCurrencyCode": "USD",
+                        "name": "Amazon.com",
+                    }
+                },
+                {
+                    "marketplace": {
+                        "id": "A1F83G7XSQSF3T",
+                        "countryCode": "GB",
+                        "defaultCurrencyCode": "GBP",
+                        "name": "Amazon.co.uk",
+                    }
+                },
+            ]
+        }
+        mock_request.return_value = mock_response
+
+        result = self.backend.action_fetch_marketplaces()
+
+        self.assertEqual(result["params"]["type"], "success")
+
+        updated = self.env["amazon.marketplace"].browse(existing_marketplace.id)
+        self.assertEqual(updated.name, "Amazon.com")
+        self.assertEqual(updated.country_code, "US")
+        self.assertEqual(updated.region, self.backend.region)
+        self.assertTrue(updated.currency_id)
+
+        created = self.env["amazon.marketplace"].search(
+            [
+                ("marketplace_id", "=", "A1F83G7XSQSF3T"),
+                ("backend_id", "=", self.backend.id),
+            ],
+            limit=1,
+        )
+        self.assertTrue(created)
+        self.assertEqual(created.name, "Amazon.co.uk")
+        self.assertEqual(created.country_code, "GB")
+        self.assertEqual(created.region, self.backend.region)
+        self.assertTrue(created.currency_id)
+
+        request_kwargs = mock_request.call_args.kwargs
+        self.assertEqual(request_kwargs["method"], "GET")
+        self.assertIn("/sellers/v1/marketplaceParticipations", request_kwargs["url"])
+
     def test_backend_with_multiple_shops(self):
         """Test backend with multiple shops"""
         shop2 = self._create_shop(

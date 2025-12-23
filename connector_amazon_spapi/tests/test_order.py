@@ -1,6 +1,9 @@
 # Copyright 2025 Kencove
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
+
+import json
+import os
 from datetime import datetime, timedelta
 from unittest import mock
 
@@ -8,6 +11,20 @@ from odoo import fields
 from odoo.tests.common import tagged
 
 from . import common
+
+
+# Helper to load ordersV0.json
+def load_orders_api_sample():
+    here = os.path.dirname(__file__)
+    with open(os.path.join(here, "ordersV0.json"), "r") as f:
+        data = json.load(f)
+    # Find the sample response for /orders/v0/orders
+    try:
+        return data["paths"]["/orders/v0/orders"]["get"]["responses"]["200"][
+            "examples"
+        ]["application/json"]["payload"]["Orders"]
+    except Exception:
+        return []
 
 
 class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
@@ -27,8 +44,14 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
         "odoo.addons.connector_amazon_spapi.models.backend.AmazonBackend._call_sp_api"
     )
     def test_create_order_from_amazon_data(self, mock_call_sp_api):
-        """Test creating order from Amazon API data"""
-        sample_order = self._create_sample_amazon_order()
+        """Test creating order from Amazon API data using ordersV0.json"""
+        orders = load_orders_api_sample()
+        assert orders, "ordersV0.json did not load sample orders"
+        sample_order = orders[0]
+
+        # Patch FulfillmentChannel to a valid value if present
+        if "FulfillmentChannel" in sample_order:
+            sample_order["FulfillmentChannel"] = "MFN"  # or "AFN"
 
         order_obj = self.env["amazon.sale.order"]
         order = order_obj._create_or_update_from_amazon(self.shop, sample_order)
@@ -253,8 +276,10 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
         self.assertEqual(len(lines), 0)
 
     def test_order_fields_match_amazon_order_data(self):
-        """Test order record contains fields from Amazon order data"""
-        sample_order = self._create_sample_amazon_order()
+        """Test order record contains fields from Amazon order data (ordersV0.json)"""
+        orders = load_orders_api_sample()
+        assert orders, "ordersV0.json did not load sample orders"
+        sample_order = orders[0]
 
         order = self._create_amazon_order(
             external_id=sample_order["AmazonOrderId"],

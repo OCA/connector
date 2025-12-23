@@ -21,6 +21,14 @@
         <field name="model">amazon.backend</field>
         <field name="arch" type="xml">
             <form string="Amazon Backend">
+                <header>
+                    <button
+                        name="action_test_connection"
+                        string="Test Connection"
+                        type="object"
+                        class="btn-primary"
+                    />
+                </header>
                 <sheet>
                     <group>
                         <field name="name" />

@@ -167,8 +167,9 @@ class AmazonShop(models.Model):
             ).isoformat()
 
         # Call SP-API Orders endpoint with pagination support
+        ids_list = [self.marketplace_id.marketplace_id] if self.marketplace_id else []
         params = {
-            "MarketplaceIds": self.marketplace_id.marketplace_id,
+            "MarketplaceIds": ",".join(ids_list),
             "CreatedAfter": created_after,
         }
 

@@ -30,7 +30,7 @@
                         string="Fetch Competitive Prices"
                         type="object"
                         class="oe_highlight"
-                        invisible="not asin or not marketplace_id"
+                        attrs="{'invisible': ['|', ('asin', '=', False), ('marketplace_id', '=', False)]}"
                     />
                 </header>
                 <sheet>
@@ -40,7 +40,7 @@
                             type="object"
                             class="oe_stat_button"
                             icon="fa-line-chart"
-                            invisible="competitive_price_count == 0"
+                            attrs="{'invisible': [('competitive_price_count', '=', 0)]}"
                         >
                             <field
                                 name="competitive_price_count"

@@ -1,4 +1,12 @@
+import logging
+from datetime import datetime, timedelta
+
+import requests
+
 from odoo import api, fields, models
+from odoo.exceptions import UserError
+
+_logger = logging.getLogger(__name__)
 
 
 class AmazonBackend(models.Model):
@@ -81,12 +89,6 @@ class AmazonBackend(models.Model):
     def _refresh_access_token(self):
         """Refresh LWA access token using refresh token"""
         self.ensure_one()
-        from datetime import datetime, timedelta
-
-        import requests
-
-        from odoo.exceptions import UserError
-
         url = self._get_lwa_token_url()
         payload = {
             "grant_type": "refresh_token",
@@ -115,24 +117,18 @@ class AmazonBackend(models.Model):
     def _get_access_token(self):
         """Get valid access token, refreshing if necessary"""
         self.ensure_one()
-        from datetime import datetime
-
         if (
             not self.access_token
             or not self.token_expires_at
             or self.token_expires_at <= datetime.now()
         ):
-            return self._refresh_access_token()
+            self._refresh_access_token()
 
         return self.access_token
 
     def _call_sp_api(self, method, endpoint, params=None, json_data=None):
         """Make authenticated SP-API call"""
         self.ensure_one()
-        import requests
-
-        from odoo.exceptions import UserError
-
         access_token = self._get_access_token()
         url = f"{self._get_sp_api_endpoint()}{endpoint}"
 
@@ -237,7 +233,7 @@ class AmazonBackend(models.Model):
 
         for item in payload:
             marketplace = item.get("marketplace", {})
-            marketplace_id = marketplace.get("id") or marketplace.get("MarketplaceId")
+            marketplace_id = marketplace.get("id")
             if not marketplace_id:
                 continue
 
@@ -251,7 +247,7 @@ class AmazonBackend(models.Model):
 
             vals = {
                 "name": name,
-                "code": country_code or marketplace_id[:2],
+                "code": country_code,
                 "marketplace_id": marketplace_id,
                 "backend_id": self.id,
                 "country_code": country_code,
@@ -274,17 +270,6 @@ class AmazonBackend(models.Model):
                     limit=1,
                 )
 
-            # Some legacy records may lack the marketplace identifier but have
-            # a matching country code; fall back to that to ensure updates.
-            if not existing and vals.get("code"):
-                existing = Marketplace.search(
-                    [
-                        ("backend_id", "=", self.id),
-                        ("code", "=", vals["code"]),
-                    ],
-                    limit=1,
-                )
-
             if existing:
                 existing.write(vals)
                 updated += 1
@@ -292,13 +277,27 @@ class AmazonBackend(models.Model):
                 Marketplace.create(vals)
                 created += 1
 
-        return {
-            "type": "ir.actions.client",
-            "tag": "display_notification",
-            "params": {
-                "title": "Marketplaces Synced",
-                "message": f"Created {created}, updated {updated} marketplace(s).",
-                "type": "success",
-                "sticky": False,
-            },
-        }
+        if created or updated:
+            # Log the update/create event to the Odoo server log
+            _logger.info(
+                "[AmazonBackend] Created %d, updated %d marketplace(s) for backend ID %s",
+                created,
+                updated,
+                self.id,
+            )
+            # Reload the form view to update marketplace_ids
+            return {
+                "type": "ir.actions.client",
+                "tag": "reload",
+            }
+        else:
+            return {
+                "type": "ir.actions.client",
+                "tag": "display_notification",
+                "params": {
+                    "title": "Marketplaces Synced",
+                    "message": "No marketplaces created or updated.",
+                    "type": "info",
+                    "sticky": False,
+                },
+            }

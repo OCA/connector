@@ -64,7 +64,7 @@ class AmazonOrdersAdapter(AmazonBaseAdapter):
             dict: API response with OrderItems list and NextToken
         """
         params = {"NextToken": next_token} if next_token else None
-        endpoint = f"/orders/v0/orders/{amazon_order_id}/orderitems"
+        endpoint = f"/orders/v0/orders/{amazon_order_id}/orderItems"
         return self._call_api("GET", endpoint, params=params)
 
     def get_order(self, amazon_order_id):

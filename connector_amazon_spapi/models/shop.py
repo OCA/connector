@@ -1,9 +1,14 @@
 import logging
+from datetime import datetime, timedelta
 
 from odoo import api, fields, models
+from odoo.exceptions import UserError
 from odoo.tools import config
 
 _logger = logging.getLogger(__name__)
+
+# import os
+# os.environ['QUEUE_JOB__NO_DELAY'] = '1'
 
 
 class AmazonShop(models.Model):
@@ -151,10 +156,6 @@ class AmazonShop(models.Model):
     def sync_orders(self):
         """Sync orders from Amazon SP-API"""
         self.ensure_one()
-        from datetime import datetime, timedelta
-
-        from odoo.exceptions import UserError
-
         if not self.import_orders:
             return
 
@@ -245,8 +246,6 @@ class AmazonShop(models.Model):
         catalog-items-api-v2020-12-01-reference
         """
         self.ensure_one()
-        from odoo.exceptions import UserError
-
         try:
             # Call Catalog Items API to get active listings
             # Note: This uses the ListingsItems endpoint for seller's active inventory
@@ -382,8 +381,6 @@ class AmazonShop(models.Model):
             hourly_shops.action_push_stock()
 
         # Daily shops (run at midnight)
-        from datetime import datetime
-
         if datetime.now().hour == 0:
             daily_shops = self.search(
                 [
@@ -397,8 +394,6 @@ class AmazonShop(models.Model):
 
     def cron_sync_orders(self):
         """Cron job to import orders for shops based on their order sync interval."""
-        from datetime import datetime
-
         # Hourly shops
         hourly_shops = self.search(
             [

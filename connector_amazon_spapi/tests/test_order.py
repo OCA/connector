@@ -115,7 +115,7 @@ class TestAmazonOrder(common.CommonConnectorAmazonSpapi):
         mock_call_sp_api.assert_called_once()
         call_args = mock_call_sp_api.call_args
         self.assertIn(
-            "/orders/v0/orders/111-1111111-1111111/orderitems", call_args[0][1]
+            "/orders/v0/orders/111-1111111-1111111/orderItems", call_args[0][1]
         )
 
     @mock.patch(

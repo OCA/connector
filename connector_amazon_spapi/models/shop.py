@@ -482,6 +482,18 @@ class AmazonShop(models.Model):
         # Build inventory feed XML following Amazon's specification
         feed_xml = self._build_inventory_feed_xml(bindings)
 
+        # Check if in read-only mode
+        if self.backend_id.read_only_mode:
+            _logger.info(
+                "[READ-ONLY MODE] Would push stock for %d products to Amazon. "
+                "Feed XML preview:\n%s",
+                len(bindings),
+                feed_xml[:1000] + ("..." if len(feed_xml) > 1000 else ""),
+            )
+            # Update last sync timestamp even in read-only mode
+            self.last_stock_sync = fields.Datetime.now()
+            return
+
         # Create feed record for tracking
         feed = self.env["amazon.feed"].create(
             {

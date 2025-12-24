@@ -65,6 +65,27 @@ class AmazonFeed(models.Model):
         if self.state not in ("draft", "error"):
             raise UserError(_("Feed must be in draft or error state to submit"))
 
+        # Check if backend is in read-only mode
+        if self.backend_id.read_only_mode:
+            _logger.info(
+                "[READ-ONLY MODE] Feed %s (%s) would be submitted to Amazon. "
+                "Payload preview:\n%s",
+                self.id,
+                self.feed_type,
+                self.payload_json[:1000]
+                + ("..." if len(self.payload_json) > 1000 else ""),
+            )
+            self.write(
+                {
+                    "state": "done",
+                    "last_status_update": datetime.now(),
+                    "last_state_message": (
+                        "READ-ONLY MODE: Feed not actually submitted to Amazon"
+                    ),
+                }
+            )
+            return
+
         try:
             self.write({"state": "submitting", "last_status_update": datetime.now()})
 

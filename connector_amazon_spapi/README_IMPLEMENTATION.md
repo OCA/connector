@@ -85,10 +85,17 @@ SP-API integration functionality.
    - **LWA Refresh Token**: Generated via authorization flow
    - **Company**: Select your company
    - **Warehouse**: Default warehouse for orders
+   - **Test Mode**: Enable for testing (shows additional options)
+   - **Read-Only Mode**: Enable to test without writing to Amazon (see below)
 
 3. Save and click **Test Connection** button
    - Should display success message with marketplace count
    - If error, check credentials and endpoint configuration
+
+**Testing Mode**: For safe testing and verification, enable both **Test Mode** and
+**Read-Only Mode**. This allows you to verify product mappings, order imports, and
+competitive pricing without actually pushing stock updates or shipment tracking to
+Amazon. See [READ_ONLY_MODE.md](README_READ_ONLY_MODE.md) for details.
 
 ### Step 2: Configure Shops
 

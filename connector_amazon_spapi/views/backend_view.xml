@@ -43,6 +43,11 @@
                         <field name="company_id" />
                         <field name="warehouse_id" />
                         <field name="test_mode" />
+                        <field
+                            name="read_only_mode"
+                            widget="boolean_toggle"
+                            attrs="{'invisible': [('test_mode', '=', False)]}"
+                        />
                     </group>
                     <group string="Credentials">
                         <field name="seller_id" />

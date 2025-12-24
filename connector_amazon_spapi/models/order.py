@@ -50,6 +50,171 @@ class AmazonSaleOrder(models.Model):
         ),
     ]
 
+    def _get_last_done_picking(self):
+        """Get the most recent fully done delivery picking for this order."""
+        self.ensure_one()
+        pickings = self.odoo_id.picking_ids.filtered(
+            lambda p: p.state == "done"
+            and p.picking_type_code == "outgoing"
+            and p.location_dest_id.usage == "customer"
+        )
+        return pickings.sorted(key=lambda p: p.date_done, reverse=True)[:1]
+
+    def push_shipment(self):
+        """Push shipment confirmation and tracking to Amazon via Feed API.
+
+        This creates a POST_ORDER_FULFILLMENT_DATA feed to notify Amazon
+        that the order has shipped and provide tracking details.
+        """
+        self.ensure_one()
+
+        if self.shipment_confirmed:
+            _logger.info(
+                "Shipment already confirmed for Amazon order %s", self.external_id
+            )
+            return
+
+        picking = self._get_last_done_picking()
+        if not picking:
+            _logger.warning(
+                "No done delivery picking found for Amazon order %s", self.external_id
+            )
+            return
+
+        # Extract tracking information
+        carrier_name = picking.carrier_id.name if picking.carrier_id else ""
+        tracking_ref = picking.carrier_tracking_ref or ""
+
+        if not tracking_ref:
+            _logger.warning(
+                "No tracking reference for Amazon order %s picking %s",
+                self.external_id,
+                picking.name,
+            )
+
+        # Build fulfillment feed XML
+        feed_xml = self._build_fulfillment_feed_xml(picking, carrier_name, tracking_ref)
+
+        # Check if in read-only mode
+        if self.backend_id.read_only_mode:
+            _logger.info(
+                "[READ-ONLY MODE] Would push shipment for Amazon order %s. "
+                "Tracking: %s %s. Feed XML preview:\n%s",
+                self.external_id,
+                carrier_name,
+                tracking_ref,
+                feed_xml[:500] + ("..." if len(feed_xml) > 500 else ""),
+            )
+            # Update timestamp even in read-only mode for testing purposes
+            self.write(
+                {
+                    "last_shipment_push": fields.Datetime.now(),
+                }
+            )
+            return
+
+        # Create and submit feed
+        feed = self.env["amazon.feed"].create(
+            {
+                "backend_id": self.backend_id.id,
+                "marketplace_id": self.marketplace_id.id,
+                "feed_type": "POST_ORDER_FULFILLMENT_DATA",
+                "state": "draft",
+                "payload_json": feed_xml,
+                "name": f"Shipment for {self.external_id}",
+            }
+        )
+
+        feed.with_delay().submit_feed()
+
+        # Mark as confirmed and update timestamp
+        self.write(
+            {
+                "shipment_confirmed": True,
+                "last_shipment_push": fields.Datetime.now(),
+            }
+        )
+
+    def _build_fulfillment_feed_xml(self, picking, carrier_name, tracking_ref):
+        """Build XML feed for order fulfillment notification.
+
+        Returns XML string following Amazon's Order Fulfillment Feed schema.
+        Ref: https://sellercentral.amazon.com/gp/help/200387280
+        """
+        merchant_id = self.backend_id.seller_id
+        ship_date = (
+            picking.date_done.strftime("%Y-%m-%dT%H:%M:%S")
+            if picking.date_done
+            else datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+        )
+
+        xml_lines = [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<AmazonEnvelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"',
+            '    xsi:noNamespaceSchemaLocation="amzn-envelope.xsd">',
+            "  <Header>",
+            "    <DocumentVersion>1.01</DocumentVersion>",
+            "    <MerchantIdentifier>" + merchant_id + "</MerchantIdentifier>",
+            "  </Header>",
+            "  <MessageType>OrderFulfillment</MessageType>",
+            "  <Message>",
+            "    <MessageID>1</MessageID>",
+            "    <OrderFulfillment>",
+            f"      <AmazonOrderID>{self.external_id}</AmazonOrderID>",
+            f"      <FulfillmentDate>{ship_date}</FulfillmentDate>",
+        ]
+
+        # Add carrier and tracking if available
+        if carrier_name:
+            xml_lines.append("      <FulfillmentData>")
+            xml_lines.append(f"        <CarrierName>{carrier_name}</CarrierName>")
+            if tracking_ref:
+                xml_lines.append(
+                    f"        <ShippingMethod>{tracking_ref}</ShippingMethod>"
+                )
+                xml_lines.append(
+                    f"        <ShipperTrackingNumber>{tracking_ref}"
+                    "</ShipperTrackingNumber>"
+                )
+            xml_lines.append("      </FulfillmentData>")
+
+        # Add line items (shipped quantities)
+        for move in picking.move_ids.filtered(lambda m: m.state == "done"):
+            # Try to find corresponding order line to get Amazon item ID
+            order_line = self.odoo_id.order_line.filtered(
+                lambda l: l.product_id == move.product_id
+            )[:1]
+
+            if order_line:
+                # Find Amazon line binding for external_id
+                amazon_line = self.env["amazon.sale.order.line"].search(
+                    [
+                        ("amazon_order_id", "=", self.id),
+                        ("odoo_id", "=", order_line.id),
+                    ],
+                    limit=1,
+                )
+                if amazon_line and amazon_line.external_id:
+                    xml_lines.extend(
+                        [
+                            "      <Item>",
+                            f"        <AmazonOrderItemCode>"
+                            f"{amazon_line.external_id}</AmazonOrderItemCode>",
+                            f"        <Quantity>{int(move.quantity)}</Quantity>",
+                            "      </Item>",
+                        ]
+                    )
+
+        xml_lines.extend(
+            [
+                "    </OrderFulfillment>",
+                "  </Message>",
+                "</AmazonEnvelope>",
+            ]
+        )
+
+        return "\n".join(xml_lines)
+
     @api.model
     def _create_or_update_from_amazon(self, shop, amazon_order):  # noqa: C901
         """Create or update Odoo order from Amazon order data"""

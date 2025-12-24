@@ -28,6 +28,16 @@ class AmazonBackend(models.Model):
     aws_external_id = fields.Char(string="AWS External ID")
     endpoint = fields.Char(string="SP-API Endpoint")
     test_mode = fields.Boolean()
+    read_only_mode = fields.Boolean(
+        string="Read-Only Mode (Testing)",
+        default=False,
+        help=(
+            "When enabled, all write operations to Amazon (stock updates, "
+            "shipment tracking, etc.) will be logged instead of actually "
+            "submitted. Use this for testing and verification without "
+            "affecting your Amazon account."
+        ),
+    )
     enable_price_sync = fields.Boolean(default=True)
     enable_stock_sync = fields.Boolean(default=True)
     company_id = fields.Many2one(

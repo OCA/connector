@@ -62,7 +62,7 @@ class TestAmazonAdapters(common.CommonConnectorAmazonSpapi):
                 call_args = mock_call.call_args
                 self.assertEqual(call_args[0][0], "GET")
                 self.assertIn("111-1111111-1111111", call_args[0][1])
-                self.assertIn("orderitems", call_args[0][1].lower())
+                self.assertIn("orderItems", call_args[0][1])
 
     def test_pricing_adapter_get_competitive_pricing(self):
         """Test PricingAdapter.get_competitive_pricing calls backend correctly"""

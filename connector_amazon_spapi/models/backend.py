@@ -285,10 +285,20 @@ class AmazonBackend(models.Model):
                 updated,
                 self.id,
             )
-            # Reload the form view to update marketplace_ids
+            # Notify success and reload form to display fetched marketplaces
             return {
                 "type": "ir.actions.client",
-                "tag": "reload",
+                "tag": "display_notification",
+                "params": {
+                    "title": "Marketplaces Synced",
+                    "message": f"Created {created}, updated {updated} marketplace(s).",
+                    "type": "success",
+                    "sticky": False,
+                    "next": {
+                        "type": "ir.actions.client",
+                        "tag": "reload",
+                    },
+                },
             }
         else:
             return {

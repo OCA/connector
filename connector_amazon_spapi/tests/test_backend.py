@@ -272,7 +272,11 @@ class TestAmazonBackend(common.CommonConnectorAmazonSpapi):
 
         result = self.backend.action_fetch_marketplaces()
 
+        # Verify notification with success type
         self.assertEqual(result["params"]["type"], "success")
+        # Verify reload action is chained via next
+        self.assertEqual(result["params"]["next"]["type"], "ir.actions.client")
+        self.assertEqual(result["params"]["next"]["tag"], "reload")
 
         updated = self.env["amazon.marketplace"].browse(existing_marketplace.id)
         self.assertEqual(updated.name, "Amazon.com")

@@ -387,7 +387,8 @@ class AmazonListingsAdapter(AmazonBaseAdapter):
             params["includedData"] = ",".join(included_data)
 
         endpoint = (
-            f"/listings/2021-08-01/items/{self.backend_record.seller_id}/{self.backend_record.seller_sku}"
+            "/listings/2021-08-01/items/"
+            f"{self.backend_record.seller_id}/{self.backend_record.seller_sku}"
         )
         return self._call_api("GET", endpoint, params=params)
 

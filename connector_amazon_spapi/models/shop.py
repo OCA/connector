@@ -8,7 +8,6 @@ from odoo.tools import config
 _logger = logging.getLogger(__name__)
 
 
-
 class AmazonShop(models.Model):
     _name = "amazon.shop"
     _description = "Amazon Shop"
@@ -255,7 +254,7 @@ class AmazonShop(models.Model):
                 result = adapter.get_listings_item(
                     marketplace_ids=[self.marketplace_id.marketplace_id],
                 )
-            
+
             if isinstance(result, dict):
                 listings = [result]
             elif isinstance(result, list):
@@ -270,7 +269,7 @@ class AmazonShop(models.Model):
                 sku = listing.get("sku", None)
                 asin = None
                 if (
-                    listing.get("summaries") 
+                    listing.get("summaries")
                     and listing.get("summaries")[0]
                     and listing.get("summaries")[0].get("asin")
                 ):

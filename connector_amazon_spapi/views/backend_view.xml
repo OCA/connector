@@ -51,6 +51,7 @@
                     </group>
                     <group string="Credentials">
                         <field name="seller_id" />
+                        <field name="seller_sku" />
                         <field name="lwa_client_id" password="True" />
                         <field name="lwa_client_secret" password="True" />
                         <field name="lwa_refresh_token" password="True" />

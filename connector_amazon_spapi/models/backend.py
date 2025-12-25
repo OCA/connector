@@ -24,6 +24,7 @@ class AmazonBackend(models.Model):
         selection=_select_versions, required=True, default="spapi"
     )
     seller_id = fields.Char(required=True, string="Seller ID")
+    seller_sku = fields.Char(required=True, string="Seller SKU")
     region = fields.Selection(
         selection=[("na", "North America"), ("eu", "Europe"), ("fe", "Far East")],
         required=True,

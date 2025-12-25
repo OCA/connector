@@ -7,8 +7,6 @@ from odoo.tools import config
 
 _logger = logging.getLogger(__name__)
 
-# import os
-# os.environ['QUEUE_JOB__NO_DELAY'] = '1'
 
 
 class AmazonShop(models.Model):
@@ -253,23 +251,32 @@ class AmazonShop(models.Model):
             # Use adapter for API calls via work_on context
             with self.backend_id.work_on("amazon.product.binding") as work:
                 adapter = work.component(usage="listings.adapter")
+                # Fetch all listings for the seller and marketplace
                 result = adapter.get_listings_item(
-                    seller_sku="*",  # This endpoint needs refinement for listing all
                     marketplace_ids=[self.marketplace_id.marketplace_id],
                 )
-            # Note: Amazon Listings API doesn't have a "list all" endpoint.
-            # Iterate through known SKUs or use the catalog adapter instead.
+            
+            if isinstance(result, dict):
+                listings = [result]
+            elif isinstance(result, list):
+                listings = result
+            else:
+                listings = []
 
-            listings = result.get("listings", [])
             binding_model = self.env["amazon.product.binding"]
             created_count = 0
             updated_count = 0
-
             for listing in listings:
-                sku = listing.get("sku")
-                asin = listing.get("asin")
+                sku = listing.get("sku", None)
+                asin = None
+                if (
+                    listing.get("summaries") 
+                    and listing.get("summaries")[0]
+                    and listing.get("summaries")[0].get("asin")
+                ):
+                    asin = listing["summaries"][0]["asin"]
 
-                if not sku:
+                if not sku or not asin:
                     continue
 
                 # Check if binding already exists

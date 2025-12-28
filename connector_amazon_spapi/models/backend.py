@@ -1,10 +1,8 @@
 import logging
-from datetime import datetime, timedelta
 
-import requests
+from sp_api.api import Sellers
 
 from odoo import api, fields, models
-from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -73,10 +71,6 @@ class AmazonBackend(models.Model):
     access_token = fields.Char(readonly=True)
     token_expires_at = fields.Datetime(readonly=True)
 
-    @api.model
-    def _get_lwa_token_url(self):
-        return "https://api.amazon.com/auth/o2/token"
-
     def _get_sp_api_endpoint(self):
         """Get SP-API endpoint based on region"""
         self.ensure_one()
@@ -87,85 +81,22 @@ class AmazonBackend(models.Model):
         }
         return self.endpoint or endpoints.get(self.region)
 
-    def _refresh_access_token(self):
-        """Refresh LWA access token using refresh token"""
-        self.ensure_one()
-        url = self._get_lwa_token_url()
-        payload = {
-            "grant_type": "refresh_token",
-            "refresh_token": self.lwa_refresh_token,
-            "client_id": self.lwa_client_id,
-            "client_secret": self.lwa_client_secret,
-        }
-
-        try:
-            response = requests.post(url, data=payload, timeout=30)
-            response.raise_for_status()
-            data = response.json()
-
-            self.write(
-                {
-                    "access_token": data["access_token"],
-                    "token_expires_at": datetime.now()
-                    + timedelta(seconds=data["expires_in"] - 60),
-                }
-            )
-
-            return data["access_token"]
-        except Exception as e:
-            raise UserError(f"Failed to refresh LWA access token: {str(e)}") from e
-
-    def _get_access_token(self):
-        """Get valid access token, refreshing if necessary"""
-        self.ensure_one()
-        if (
-            not self.access_token
-            or not self.token_expires_at
-            or self.token_expires_at <= datetime.now()
-        ):
-            self._refresh_access_token()
-
-        return self.access_token
-
-    def _call_sp_api(self, method, endpoint, params=None, json_data=None):
-        """Make authenticated SP-API call"""
-        self.ensure_one()
-        access_token = self._get_access_token()
-        url = f"{self._get_sp_api_endpoint()}{endpoint}"
-
-        headers = {
-            "x-amz-access-token": access_token,
-            "Content-Type": "application/json",
-        }
-
-        try:
-            response = requests.request(
-                method=method,
-                url=url,
-                headers=headers,
-                params=params,
-                json=json_data,
-                timeout=30,
-            )
-            response.raise_for_status()
-            return response.json()
-        except requests.exceptions.HTTPError as e:
-            raise UserError(
-                f"SP-API HTTP Error: {e.response.status_code} - {e.response.text}"
-            ) from e
-        except Exception as e:
-            raise UserError(f"SP-API Call Failed: {str(e)}") from e
+    def get_credentials(self):
+        credentials = dict(
+            refresh_token=self.lwa_refresh_token,
+            lwa_app_id=self.lwa_client_id,
+            lwa_client_secret=self.lwa_client_secret,
+        )
+        return credentials
 
     def action_test_connection(self):
         """Test SP-API connection by fetching marketplace participations"""
         self.ensure_one()
 
         try:
-            result = self._call_sp_api(
-                "GET",
-                "/sellers/v1/marketplaceParticipations",
-            )
-            if result.get("payload"):
+            client = Sellers(credentials=self.get_credentials())
+            result = client.get_marketplace_participation()
+            if result.payload:
                 return {
                     "type": "ir.actions.client",
                     "tag": "display_notification",
@@ -173,7 +104,7 @@ class AmazonBackend(models.Model):
                         "title": "Connection Successful",
                         "message": (
                             f"Connected to Amazon SP-API. "
-                            f"Found {len(result['payload'])} marketplace(s)."
+                            f"Found {len(result.payload)} marketplace(s)."
                         ),
                         "type": "success",
                         "sticky": False,
@@ -211,8 +142,9 @@ class AmazonBackend(models.Model):
         """
         self.ensure_one()
 
-        result = self._call_sp_api("GET", "/sellers/v1/marketplaceParticipations")
-        payload = result.get("payload") or []
+        client = Sellers(credentials=self.get_credentials())
+        result = client.get_marketplace_participation()
+        payload = result.payload or []
 
         if not payload:
             return {

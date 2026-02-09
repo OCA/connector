@@ -209,7 +209,8 @@ class Database(object):
 
     def __init__(self, db_name):
         self.db_name = db_name
-        self.conn = psycopg2.connect(openerp.sql_db.dsn(db_name)[1])
+        session_pool_suffix = config.get("db_session_pool_mode_suffix", '')
+        self.conn = psycopg2.connect(openerp.sql_db.dsn(db_name + session_pool_suffix)[1])
         self.conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         self.has_connector = self._has_connector()
         if self.has_connector:

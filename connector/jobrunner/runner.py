@@ -112,7 +112,7 @@ Caveat
        of running Odoo is obviously not for production purposes.
 """
 
-from contextlib import closing
+from contextlib import closing, contextmanager
 import logging
 import os
 import re
@@ -290,15 +290,16 @@ class Database(object):
             """)
             cr.execute("LISTEN connector")
 
+    @contextmanager
     def select_jobs(self, where, args):
         query = ("SELECT %s, uuid, id as seq, date_created, "
                  "priority, eta, state "
                  "FROM queue_job WHERE %s" %
                  ('channel' if self.has_channel else 'NULL',
                   where))
-        with closing(self.conn.cursor()) as cr:
+        with closing(self.conn.cursor("select_jobs", withhold=True)) as cr:
             cr.execute(query, args)
-            return list(cr.fetchall())
+            yield cr
 
     def set_job_enqueued(self, uuid):
         with closing(self.conn.cursor()) as cr:
@@ -347,8 +348,9 @@ class ConnectorRunner(object):
                 _logger.debug('connector is not installed for db %s', db_name)
             else:
                 self.db_by_name[db_name] = db
-                for job_data in db.select_jobs('state in %s', (NOT_DONE,)):
-                    self.channel_manager.notify(db_name, *job_data)
+                with db.select_jobs('state in %s', (NOT_DONE,)) as cr:
+                    for job_data in cr.fetchall():
+                        self.channel_manager.notify(db_name, *job_data)
                 _logger.info('connector runner ready for db %s', db_name)
 
     def run_jobs(self):
@@ -368,11 +370,12 @@ class ConnectorRunner(object):
                     break
                 notification = db.conn.notifies.pop()
                 uuid = notification.payload
-                job_datas = db.select_jobs('uuid = %s', (uuid,))
-                if job_datas:
-                    self.channel_manager.notify(db.db_name, *job_datas[0])
-                else:
-                    self.channel_manager.remove_job(uuid)
+                with db.select_jobs('uuid = %s', (uuid,)) as cr:
+                    job_datas = cr.fetchone()
+                    if job_datas:
+                        self.channel_manager.notify(db.db_name, *job_datas)
+                    else:
+                        self.channel_manager.remove_job(uuid)
 
     def wait_notification(self):
         for db in self.db_by_name.values():

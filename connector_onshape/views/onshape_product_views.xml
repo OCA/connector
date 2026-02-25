@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Product Binding Form View -->
+    <record id="view_onshape_product_product_form" model="ir.ui.view">
+        <field name="name">onshape.product.product.form</field>
+        <field name="model">onshape.product.product</field>
+        <field name="arch" type="xml">
+            <form string="Onshape Product Binding">
+                <sheet>
+                    <group>
+                        <group string="Binding">
+                            <field name="backend_id" />
+                            <field name="odoo_id" />
+                            <field name="external_id" />
+                            <field name="match_type" />
+                            <field name="sync_date" />
+                        </group>
+                        <group string="Onshape Data">
+                            <field name="onshape_document_id" />
+                            <field name="onshape_element_id" />
+                            <field name="onshape_part_id" />
+                            <field name="onshape_name" />
+                            <field name="onshape_part_number" />
+                            <field name="onshape_description" />
+                            <field name="onshape_material" />
+                            <field name="onshape_appearance" />
+                            <field name="onshape_state" />
+                            <field name="onshape_revision" />
+                            <field name="onshape_url" widget="url" />
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Physical Properties">
+                            <field name="onshape_mass" />
+                            <field name="onshape_volume" />
+                            <field name="onshape_surface_area" />
+                        </group>
+                        <group string="People &amp; Project">
+                            <field name="onshape_author" />
+                            <field name="onshape_designer" />
+                            <field name="onshape_vendor" />
+                            <field name="onshape_project" />
+                        </group>
+                    </group>
+                    <group>
+                        <field
+                            name="onshape_thumbnail"
+                            widget="image"
+                            options="{'size': [300, 300]}"
+                        />
+                    </group>
+                    <group
+                        string="Custom Properties"
+                        attrs="{'invisible': [('onshape_custom_properties', '=', False)]}"
+                    >
+                        <field
+                            name="onshape_custom_properties"
+                            nolabel="1"
+                            colspan="2"
+                        />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Product Binding Tree View -->
+    <record id="view_onshape_product_product_tree" model="ir.ui.view">
+        <field name="name">onshape.product.product.tree</field>
+        <field name="model">onshape.product.product</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="odoo_id" />
+                <field name="onshape_name" />
+                <field name="onshape_part_number" />
+                <field name="match_type" />
+                <field
+                    name="onshape_state"
+                    decoration-success="onshape_state == 'released'"
+                    decoration-warning="onshape_state == 'pending'"
+                    decoration-danger="onshape_state == 'obsolete'"
+                />
+                <field name="onshape_material" />
+                <field name="onshape_revision" optional="hide" />
+                <field name="onshape_mass" optional="hide" />
+                <field name="onshape_vendor" optional="hide" />
+                <field name="sync_date" />
+                <field name="backend_id" groups="base.group_multi_company" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Product Binding Search View -->
+    <record id="view_onshape_product_product_search" model="ir.ui.view">
+        <field name="name">onshape.product.product.search</field>
+        <field name="model">onshape.product.product</field>
+        <field name="arch" type="xml">
+            <search string="Onshape Product Bindings">
+                <field name="odoo_id" />
+                <field name="onshape_name" />
+                <field name="onshape_part_number" />
+                <field name="onshape_material" />
+                <field name="onshape_vendor" />
+                <field name="onshape_author" />
+                <filter
+                    name="released"
+                    string="Released"
+                    domain="[('onshape_state', '=', 'released')]"
+                />
+                <filter
+                    name="in_progress"
+                    string="In Progress"
+                    domain="[('onshape_state', '=', 'in_progress')]"
+                />
+                <separator />
+                <filter
+                    name="exact_match"
+                    string="Exact Match"
+                    domain="[('match_type', 'in', ['exact_filename', 'exact_filename_versioned'])]"
+                />
+                <filter
+                    name="auto_created"
+                    string="Auto Created"
+                    domain="[('match_type', '=', 'auto_created')]"
+                />
+                <group expand="0" string="Group By">
+                    <filter
+                        name="group_state"
+                        string="State"
+                        context="{'group_by': 'onshape_state'}"
+                    />
+                    <filter
+                        name="group_match"
+                        string="Match Type"
+                        context="{'group_by': 'match_type'}"
+                    />
+                    <filter
+                        name="group_document"
+                        string="Document"
+                        context="{'group_by': 'onshape_document_id'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_onshape_product_product" model="ir.actions.act_window">
+        <field name="name">Onshape Product Bindings</field>
+        <field name="res_model">onshape.product.product</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_onshape_product_product_search" />
+    </record>
+
+    <menuitem
+        id="menu_onshape_products"
+        name="Product Bindings"
+        parent="menu_onshape_data"
+        action="action_onshape_product_product"
+        sequence="20"
+    />
+
+</odoo>

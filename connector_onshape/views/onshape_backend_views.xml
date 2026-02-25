@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Backend Form View -->
+    <record id="view_onshape_backend_form" model="ir.ui.view">
+        <field name="name">onshape.backend.form</field>
+        <field name="model">onshape.backend</field>
+        <field name="arch" type="xml">
+            <form string="Onshape Backend">
+                <header>
+                    <button
+                        name="action_check_credentials"
+                        string="Check Credentials"
+                        type="object"
+                        class="btn-primary"
+                        attrs="{'invisible': [('state', '=', 'active')]}"
+                    />
+                    <button
+                        name="action_activate"
+                        string="Activate"
+                        type="object"
+                        class="btn-primary"
+                        attrs="{'invisible': [('state', '!=', 'checked')]}"
+                    />
+                    <button
+                        name="action_import_documents"
+                        string="Import Documents"
+                        type="object"
+                        attrs="{'invisible': [('state', '!=', 'active')]}"
+                    />
+                    <button
+                        name="action_import_products"
+                        string="Import Products"
+                        type="object"
+                        attrs="{'invisible': [('state', '!=', 'active')]}"
+                    />
+                    <button
+                        name="action_import_boms"
+                        string="Import BOMs"
+                        type="object"
+                        attrs="{'invisible': [('state', '!=', 'active')]}"
+                    />
+                    <button
+                        name="action_export_part_numbers"
+                        string="Export Part Numbers"
+                        type="object"
+                        attrs="{'invisible': [('state', '!=', 'active')]}"
+                    />
+                    <field
+                        name="state"
+                        widget="statusbar"
+                        statusbar_visible="draft,checked,active"
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_open_documents"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-file-o"
+                        >
+                            <field
+                                name="document_count"
+                                widget="statinfo"
+                                string="Documents"
+                            />
+                        </button>
+                        <button
+                            name="action_open_product_bindings"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-cube"
+                        >
+                            <field
+                                name="product_binding_count"
+                                widget="statinfo"
+                                string="Products"
+                            />
+                        </button>
+                        <button
+                            name="action_open_bom_bindings"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-sitemap"
+                        >
+                            <field
+                                name="bom_binding_count"
+                                widget="statinfo"
+                                string="BOMs"
+                            />
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Backend Name" /></h1>
+                    </div>
+                    <group>
+                        <group string="Connection">
+                            <field name="base_url" />
+                            <field name="auth_mode" />
+                            <field name="team_id" />
+                        </group>
+                        <group
+                            string="HMAC Authentication"
+                            attrs="{'invisible': [('auth_mode', '!=', 'hmac')]}"
+                        >
+                            <field name="api_key" password="True" />
+                            <field name="api_secret" password="True" />
+                        </group>
+                        <group
+                            string="OAuth2 Authentication"
+                            attrs="{'invisible': [('auth_mode', '!=', 'oauth2')]}"
+                        >
+                            <field name="oauth2_client_id" />
+                            <field name="oauth2_client_secret" password="True" />
+                            <field name="oauth2_token" password="True" />
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Import Settings">
+                            <field name="import_products_since" />
+                            <field name="auto_create_products" />
+                            <field
+                                name="default_product_category_id"
+                                attrs="{'invisible': [('auto_create_products', '=', False)]}"
+                            />
+                        </group>
+                        <group string="Webhooks">
+                            <field name="webhook_secret" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Backend Tree View -->
+    <record id="view_onshape_backend_tree" model="ir.ui.view">
+        <field name="name">onshape.backend.tree</field>
+        <field name="model">onshape.backend</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="base_url" />
+                <field name="auth_mode" />
+                <field name="state" />
+                <field name="document_count" string="Docs" />
+                <field name="product_binding_count" string="Products" />
+                <field name="bom_binding_count" string="BOMs" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_onshape_backend" model="ir.actions.act_window">
+        <field name="name">Onshape Backends</field>
+        <field name="res_model">onshape.backend</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem
+        id="menu_onshape_root"
+        name="Onshape"
+        web_icon="connector_onshape,static/description/icon.png"
+        sequence="100"
+    />
+
+    <menuitem
+        id="menu_onshape_config"
+        name="Configuration"
+        parent="menu_onshape_root"
+        sequence="90"
+    />
+
+    <menuitem
+        id="menu_onshape_backend"
+        name="Backends"
+        parent="menu_onshape_config"
+        action="action_onshape_backend"
+        sequence="10"
+    />
+
+    <menuitem
+        id="menu_onshape_data"
+        name="Onshape Data"
+        parent="menu_onshape_root"
+        sequence="10"
+    />
+
+    <menuitem
+        id="menu_onshape_import_wizard"
+        name="Import from Onshape"
+        parent="menu_onshape_data"
+        action="connector_onshape.action_onshape_import_wizard"
+        sequence="5"
+    />
+
+</odoo>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Extend product.template form to show Onshape info -->
+    <record id="view_product_template_form_onshape" model="ir.ui.view">
+        <field name="name">product.template.form.onshape</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view" />
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button
+                    name="%(action_onshape_document)d"
+                    type="action"
+                    class="oe_stat_button"
+                    icon="fa-cogs"
+                    attrs="{'invisible': [('onshape_document_count', '=', 0)]}"
+                >
+                    <field
+                        name="onshape_document_count"
+                        widget="statinfo"
+                        string="Onshape Docs"
+                    />
+                </button>
+            </div>
+        </field>
+    </record>
+
+    <!-- Extend product.product form to show Onshape link -->
+    <record id="view_product_product_form_onshape" model="ir.ui.view">
+        <field name="name">product.product.form.onshape</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view" />
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button
+                    name="%(action_onshape_product_product)d"
+                    type="action"
+                    class="oe_stat_button"
+                    icon="fa-cogs"
+                    attrs="{'invisible': [('onshape_linked', '=', False)]}"
+                    context="{'search_default_odoo_id': active_id}"
+                >
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Onshape</span>
+                    </div>
+                </button>
+            </div>
+            <group name="group_general" position="after">
+                <group
+                    string="Onshape"
+                    attrs="{'invisible': [('onshape_linked', '=', False)]}"
+                >
+                    <field name="onshape_linked" invisible="1" />
+                    <field name="onshape_url" widget="url" string="Open in Onshape" />
+                </group>
+            </group>
+        </field>
+    </record>
+
+    <!-- Extend product tree to show Onshape linked indicator -->
+    <record id="view_product_product_tree_onshape" model="ir.ui.view">
+        <field name="name">product.product.tree.onshape</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_product_tree_view" />
+        <field name="arch" type="xml">
+            <field name="default_code" position="after">
+                <field name="onshape_linked" string="Onshape" widget="boolean" />
+            </field>
+        </field>
+    </record>
+
+</odoo>

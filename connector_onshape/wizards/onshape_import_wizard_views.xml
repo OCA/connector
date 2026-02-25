@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_onshape_import_wizard_form" model="ir.ui.view">
+        <field name="name">onshape.import.wizard.form</field>
+        <field name="model">onshape.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import from Onshape">
+                <group>
+                    <field name="backend_id" />
+                    <field name="import_type" />
+                    <field
+                        name="auto_create_products"
+                        attrs="{'invisible': [('import_type', '=', 'documents')]}"
+                    />
+                </group>
+                <footer>
+                    <button
+                        name="action_import"
+                        string="Start Import"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_onshape_import_wizard" model="ir.actions.act_window">
+        <field name="name">Import from Onshape</field>
+        <field name="res_model">onshape.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

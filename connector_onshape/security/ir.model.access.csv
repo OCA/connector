@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_onshape_backend_user,onshape.backend user,model_onshape_backend,group_onshape_user,1,0,0,0
+access_onshape_backend_manager,onshape.backend manager,model_onshape_backend,group_onshape_manager,1,1,1,1
+access_onshape_document_user,onshape.document user,model_onshape_document,group_onshape_user,1,0,0,0
+access_onshape_document_manager,onshape.document manager,model_onshape_document,group_onshape_manager,1,1,1,1
+access_onshape_document_element_user,onshape.document.element user,model_onshape_document_element,group_onshape_user,1,0,0,0
+access_onshape_document_element_manager,onshape.document.element manager,model_onshape_document_element,group_onshape_manager,1,1,1,1
+access_onshape_product_product_user,onshape.product.product user,model_onshape_product_product,group_onshape_user,1,0,0,0
+access_onshape_product_product_manager,onshape.product.product manager,model_onshape_product_product,group_onshape_manager,1,1,1,1
+access_onshape_mrp_bom_user,onshape.mrp.bom user,model_onshape_mrp_bom,group_onshape_user,1,0,0,0
+access_onshape_mrp_bom_manager,onshape.mrp.bom manager,model_onshape_mrp_bom,group_onshape_manager,1,1,1,1
+access_onshape_import_wizard_manager,onshape.import.wizard manager,model_onshape_import_wizard,group_onshape_manager,1,1,1,1

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="channel_onshape" model="queue.job.channel">
+        <field name="name">onshape</field>
+        <field name="parent_id" ref="queue_job.channel_root" />
+    </record>
+
+</odoo>

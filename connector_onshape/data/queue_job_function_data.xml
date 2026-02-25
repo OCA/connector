@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="job_function_import_documents" model="queue.job.function">
+        <field name="model_id" ref="model_onshape_backend" />
+        <field name="method">action_import_documents</field>
+        <field name="channel_id" ref="channel_onshape" />
+        <field name="retry_pattern" eval="{'1': 60, '2': 180, '3': 600}" />
+    </record>
+
+    <record id="job_function_import_products" model="queue.job.function">
+        <field name="model_id" ref="model_onshape_backend" />
+        <field name="method">action_import_products</field>
+        <field name="channel_id" ref="channel_onshape" />
+        <field name="retry_pattern" eval="{'1': 60, '2': 180, '3': 600}" />
+    </record>
+
+    <record id="job_function_import_boms" model="queue.job.function">
+        <field name="model_id" ref="model_onshape_backend" />
+        <field name="method">action_import_boms</field>
+        <field name="channel_id" ref="channel_onshape" />
+        <field name="retry_pattern" eval="{'1': 60, '2': 180, '3': 600}" />
+    </record>
+
+    <record id="job_function_export_product" model="queue.job.function">
+        <field name="model_id" ref="model_onshape_product_product" />
+        <field name="method">export_record</field>
+        <field name="channel_id" ref="channel_onshape" />
+        <field name="retry_pattern" eval="{'1': 60, '2': 180, '3': 600}" />
+    </record>
+
+</odoo>

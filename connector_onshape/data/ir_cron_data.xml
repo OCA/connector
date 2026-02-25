@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <record id="ir_cron_import_onshape_documents" model="ir.cron">
+        <field name="name">Onshape: Import Documents</field>
+        <field name="model_id" ref="model_onshape_backend" />
+        <field name="state">code</field>
+        <field name="code">model.cron_import_documents()</field>
+        <field name="interval_number">6</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="active" eval="False" />
+        <field name="doall" eval="False" />
+    </record>
+
+    <record id="ir_cron_import_onshape_products" model="ir.cron">
+        <field name="name">Onshape: Import Products</field>
+        <field name="model_id" ref="model_onshape_backend" />
+        <field name="state">code</field>
+        <field name="code">model.cron_import_products()</field>
+        <field name="interval_number">6</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="active" eval="False" />
+        <field name="doall" eval="False" />
+    </record>
+
+    <record id="ir_cron_import_onshape_boms" model="ir.cron">
+        <field name="name">Onshape: Import BOMs</field>
+        <field name="model_id" ref="model_onshape_backend" />
+        <field name="state">code</field>
+        <field name="code">model.cron_import_boms()</field>
+        <field name="interval_number">12</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="active" eval="False" />
+        <field name="doall" eval="False" />
+    </record>
+
+</odoo>

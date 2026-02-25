@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- BOM Binding action (must be defined before views that reference it) -->
+    <record id="action_onshape_bom_binding" model="ir.actions.act_window">
+        <field name="name">Onshape BOM Bindings</field>
+        <field name="res_model">onshape.mrp.bom</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Extend mrp.bom form to show Onshape info -->
+    <record id="view_mrp_bom_form_onshape" model="ir.ui.view">
+        <field name="name">mrp.bom.form.onshape</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view" />
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button
+                    name="%(action_onshape_bom_binding)d"
+                    type="action"
+                    class="oe_stat_button"
+                    icon="fa-cogs"
+                    attrs="{'invisible': [('onshape_linked', '=', False)]}"
+                    context="{'search_default_odoo_id': active_id}"
+                >
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_text">Onshape</span>
+                    </div>
+                </button>
+            </div>
+            <field name="product_tmpl_id" position="after">
+                <field name="onshape_linked" invisible="1" />
+            </field>
+        </field>
+    </record>
+
+    <!-- BOM Binding Tree -->
+    <record id="view_onshape_mrp_bom_tree" model="ir.ui.view">
+        <field name="name">onshape.mrp.bom.tree</field>
+        <field name="model">onshape.mrp.bom</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="odoo_id" />
+                <field name="onshape_document_id" />
+                <field name="external_id" />
+                <field name="match_score" widget="progressbar" />
+                <field name="sync_date" />
+                <field name="backend_id" groups="base.group_multi_company" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- BOM Binding Form -->
+    <record id="view_onshape_mrp_bom_form" model="ir.ui.view">
+        <field name="name">onshape.mrp.bom.form</field>
+        <field name="model">onshape.mrp.bom</field>
+        <field name="arch" type="xml">
+            <form string="Onshape BOM Binding">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="backend_id" />
+                            <field name="odoo_id" />
+                            <field name="external_id" />
+                            <field name="sync_date" />
+                        </group>
+                        <group>
+                            <field name="onshape_document_id" />
+                            <field name="onshape_element_id" />
+                            <field name="match_score" />
+                            <field name="last_bom_hash" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_onshape_boms"
+        name="BOM Bindings"
+        parent="menu_onshape_data"
+        action="action_onshape_bom_binding"
+        sequence="30"
+    />
+
+</odoo>

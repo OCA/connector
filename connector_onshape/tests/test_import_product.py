@@ -15,21 +15,21 @@ class TestProductImportMapper(OnshapeTestCase):
 
     def test_exact_filename_match(self):
         mapper = self._get_mapper()
-        part_data = {"name": "KF-BOLT-001", "properties": []}
+        part_data = {"name": "HW-BOLT-001", "properties": []}
         product, match_type = mapper.match_product(part_data)
         self.assertEqual(product, self.product_bolt)
         self.assertEqual(match_type, "exact_filename")
 
     def test_exact_filename_with_extension(self):
         mapper = self._get_mapper()
-        part_data = {"name": "KF-BOLT-001.ipt", "properties": []}
+        part_data = {"name": "HW-BOLT-001.ipt", "properties": []}
         product, match_type = mapper.match_product(part_data)
         self.assertEqual(product, self.product_bolt)
         self.assertEqual(match_type, "exact_filename")
 
     def test_exact_filename_with_version(self):
         mapper = self._get_mapper()
-        part_data = {"name": "KF-BOLT-001.0001", "properties": []}
+        part_data = {"name": "HW-BOLT-001.0001", "properties": []}
         product, match_type = mapper.match_product(part_data)
         self.assertEqual(product, self.product_bolt)
         self.assertEqual(match_type, "exact_filename")
@@ -39,7 +39,7 @@ class TestProductImportMapper(OnshapeTestCase):
         part_data = {
             "name": "Some random name",
             "properties": [
-                {"name": "Part Number", "value": "KF-NUT-001"},
+                {"name": "Part Number", "value": "HW-NUT-001"},
             ],
         }
         product, match_type = mapper.match_product(part_data)
@@ -73,12 +73,12 @@ class TestProductImportMapper(OnshapeTestCase):
     def test_map_record_extracts_fields(self):
         mapper = self._get_mapper()
         vals = mapper.map_record(MOCK_PARTS[0])
-        self.assertEqual(vals["onshape_name"], "KF-BOLT-001")
+        self.assertEqual(vals["onshape_name"], "HW-BOLT-001")
         self.assertEqual(vals["onshape_material"], "Steel")
         self.assertEqual(vals["onshape_description"], "Hex bolt")
         self.assertEqual(vals["onshape_appearance"], "Zinc Plated")
         self.assertEqual(vals["onshape_vendor"], "Fastenal")
-        self.assertEqual(vals["onshape_project"], "Fence Kit A")
+        self.assertEqual(vals["onshape_project"], "Project Alpha")
         self.assertEqual(vals["onshape_revision"], "B")
 
     def test_map_record_custom_properties(self):
@@ -133,7 +133,7 @@ class TestProductBinding(OnshapeTestCase):
                 "onshape_document_id": doc.id,
                 "onshape_element_id": "elem_ps_001",
                 "onshape_part_id": "part_001",
-                "onshape_name": "KF-BOLT-001",
+                "onshape_name": "HW-BOLT-001",
                 "match_type": "exact_filename",
             }
         )

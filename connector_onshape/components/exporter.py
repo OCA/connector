@@ -55,7 +55,9 @@ class OnshapeProductExporter(Component):
 
         items = meta.get("items", [])
         if not items:
-            binding.write({"sync_date": fields.Datetime.now()})
+            _logger.info(
+                "No metadata items for binding %s — skipping export", binding.id
+            )
             return
 
         for part_item in items:

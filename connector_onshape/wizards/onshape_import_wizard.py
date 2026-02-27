@@ -32,6 +32,7 @@ class OnshapeImportWizard(models.TransientModel):
     auto_create_products = fields.Boolean(
         string="Auto-create Products",
         help="Create new Odoo products for unmatched Onshape parts.",
+        default=lambda self: self._default_backend_id().auto_create_products,
     )
 
     @api.model

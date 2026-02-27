@@ -37,14 +37,14 @@ MOCK_ELEMENTS = [
 MOCK_PARTS = [
     {
         "partId": "part_001",
-        "name": "KF-BOLT-001",
+        "name": "HW-BOLT-001",
         "properties": [
             {"name": "Part Number", "propertyId": "pn_001", "value": ""},
             {"name": "Description", "propertyId": "desc_001", "value": "Hex bolt"},
             {"name": "Material", "propertyId": "mat_001", "value": "Steel"},
             {"name": "Appearance", "propertyId": "app_001", "value": "Zinc Plated"},
             {"name": "Vendor", "propertyId": "vnd_001", "value": "Fastenal"},
-            {"name": "Project", "propertyId": "prj_001", "value": "Fence Kit A"},
+            {"name": "Project", "propertyId": "prj_001", "value": "Project Alpha"},
             {"name": "Revision", "propertyId": "rev_001", "value": "B"},
             {
                 "name": "Custom Finish",
@@ -95,13 +95,13 @@ MOCK_ASSEMBLY_BOM = {
     "bomTable": {
         "items": [
             {
-                "name": "KF-BOLT-001",
-                "partNumber": "KF-BOLT-001",
+                "name": "HW-BOLT-001",
+                "partNumber": "HW-BOLT-001",
                 "quantity": 4,
             },
             {
-                "name": "KF-NUT-001",
-                "partNumber": "KF-NUT-001",
+                "name": "HW-NUT-001",
+                "partNumber": "HW-NUT-001",
                 "quantity": 4,
             },
             {
@@ -134,14 +134,14 @@ class OnshapeTestCase(TransactionComponentCase):
         cls.product_bolt = cls.env["product.product"].create(
             {
                 "name": "Hex Bolt 3/8-16",
-                "default_code": "KF-BOLT-001",
+                "default_code": "HW-BOLT-001",
                 "type": "product",
             }
         )
         cls.product_nut = cls.env["product.product"].create(
             {
                 "name": "Hex Nut 3/8-16",
-                "default_code": "KF-NUT-001",
+                "default_code": "HW-NUT-001",
                 "type": "product",
             }
         )

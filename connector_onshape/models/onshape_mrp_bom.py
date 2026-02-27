@@ -62,18 +62,17 @@ class OnshapeMrpBom(models.Model):
     @api.depends(
         "onshape_document_id.backend_id.base_url",
         "onshape_document_id.onshape_document_id",
+        "onshape_document_id.onshape_default_workspace_id",
         "onshape_element_id",
     )
     def _compute_onshape_url(self):
         for rec in self:
             doc = rec.onshape_document_id
-            if doc and doc.backend_id.base_url and doc.onshape_document_id:
-                workspace = doc.onshape_default_workspace_id or ""
-                elem = rec.onshape_element_id or ""
-                rec.onshape_url = (
-                    f"{doc.backend_id.base_url}"
-                    f"/documents/{doc.onshape_document_id}"
-                    f"/w/{workspace}/e/{elem}"
-                )
+            base = doc.backend_id.base_url if doc else False
+            did = doc.onshape_document_id if doc else False
+            workspace = doc.onshape_default_workspace_id if doc else False
+            elem = rec.onshape_element_id
+            if base and did and workspace and elem:
+                rec.onshape_url = f"{base}/documents/{did}/w/{workspace}/e/{elem}"
             else:
                 rec.onshape_url = False

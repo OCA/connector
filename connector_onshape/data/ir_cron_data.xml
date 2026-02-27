@@ -6,6 +6,7 @@
         <field name="model_id" ref="model_onshape_backend" />
         <field name="state">code</field>
         <field name="code">model.cron_import_documents()</field>
+        <field name="user_id" ref="base.user_root" />
         <field name="interval_number">6</field>
         <field name="interval_type">hours</field>
         <field name="numbercall">-1</field>
@@ -18,6 +19,7 @@
         <field name="model_id" ref="model_onshape_backend" />
         <field name="state">code</field>
         <field name="code">model.cron_import_products()</field>
+        <field name="user_id" ref="base.user_root" />
         <field name="interval_number">6</field>
         <field name="interval_type">hours</field>
         <field name="numbercall">-1</field>
@@ -30,6 +32,7 @@
         <field name="model_id" ref="model_onshape_backend" />
         <field name="state">code</field>
         <field name="code">model.cron_import_boms()</field>
+        <field name="user_id" ref="base.user_root" />
         <field name="interval_number">12</field>
         <field name="interval_type">hours</field>
         <field name="numbercall">-1</field>

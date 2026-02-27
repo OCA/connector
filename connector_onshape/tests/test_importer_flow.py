@@ -97,7 +97,7 @@ class TestProductRecordImporter(OnshapeTestCase):
                 element=elem,
                 part_data={
                     "partId": "part_bolt",
-                    "name": "KF-BOLT-001",
+                    "name": "HW-BOLT-001",
                     "properties": [],
                 },
             )
@@ -118,7 +118,7 @@ class TestProductRecordImporter(OnshapeTestCase):
                 element=elem,
                 part_data={
                     "partId": "part_bolt",
-                    "name": "KF-BOLT-001",
+                    "name": "HW-BOLT-001",
                     "properties": [],
                 },
             )
@@ -129,7 +129,7 @@ class TestProductRecordImporter(OnshapeTestCase):
                 element=elem,
                 part_data={
                     "partId": "part_bolt",
-                    "name": "KF-BOLT-001",
+                    "name": "HW-BOLT-001",
                     "properties": [
                         {"name": "Material", "value": "Stainless"},
                     ],

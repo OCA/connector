@@ -20,7 +20,7 @@ class TestProductListener(OnshapeTestCase):
         )
         # Write with connector_no_export - should not queue any job
         self.product_bolt.with_context(connector_no_export=True).write(
-            {"default_code": "KF-BOLT-002"}
+            {"default_code": "HW-BOLT-002"}
         )
         # If we got here without error, the skip_if worked
 

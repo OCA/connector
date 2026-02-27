@@ -132,9 +132,32 @@ class OnshapeAdapter(Component):
         except ValueError:
             _logger.debug("Non-integer rate limit header: %s", remaining)
 
+    def _try_refresh_oauth2(self, resp, attempt):
+        """Refresh OAuth2 token on 401 (first attempt only)."""
+        backend = self._get_backend()
+        if resp.status_code == 401 and backend.auth_mode == "oauth2" and attempt == 0:
+            new_token = backend._oauth2_refresh_token()
+            if new_token.get("access_token"):
+                _logger.info("OAuth2 token refreshed, retrying request")
+                return True
+        return False
+
     def _check_retryable(self, resp, attempt):
         """Return wait seconds if request should be retried, else None."""
         if resp.status_code == 402:
+            backend = self._get_backend()
+            if backend.auth_mode == "oauth2":
+                _logger.error(
+                    "Onshape API quota exhausted (402) with OAuth2. "
+                    "Publish the app on the Onshape App Store to bypass "
+                    "quota, or contact api-support@onshape.com."
+                )
+                raise OnshapeQuotaError(
+                    "Onshape API quota exhausted. Your OAuth2 app must be "
+                    "publicly published on the Onshape App Store to bypass "
+                    "the annual limit. Contact api-support@onshape.com or "
+                    "onshape-developer-relations@ptc.com."
+                )
             _logger.error(
                 "Onshape API quota exhausted (402). " "Consider switching to OAuth2."
             )
@@ -194,6 +217,10 @@ class OnshapeAdapter(Component):
                 )
                 last_resp = resp
                 self._log_rate_limit(resp)
+
+                # Refresh OAuth2 token on 401 and retry
+                if self._try_refresh_oauth2(resp, attempt):
+                    continue
 
                 wait = self._check_retryable(resp, attempt)
                 if wait is not None:
@@ -320,7 +347,7 @@ class OnshapeAdapter(Component):
             raw=True,
         )
         if resp.status_code == 200:
-            return base64.b64encode(resp.content)
+            return base64.b64encode(resp.content).decode("utf-8")
         return None
 
     # --- Webhooks ---

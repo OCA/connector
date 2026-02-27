@@ -1,12 +1,20 @@
 # Copyright 2024 Kencove Farm Fence Supplies
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+import json
 import logging
+import secrets
+from urllib.parse import quote, urlencode
+
+import requests as req_lib
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
+
+ONSHAPE_OAUTH_AUTHORIZE = "https://oauth.onshape.com/oauth/authorize"
+ONSHAPE_OAUTH_TOKEN = "https://oauth.onshape.com/oauth/token"
 
 
 class OnshapeBackend(models.Model):
@@ -35,6 +43,16 @@ class OnshapeBackend(models.Model):
         string="OAuth2 Client Secret", groups="base.group_system"
     )
     oauth2_token = fields.Text(string="OAuth2 Token (JSON)", groups="base.group_system")
+    oauth2_csrf_token = fields.Char(groups="base.group_system")
+    oauth2_authorized = fields.Boolean(
+        compute="_compute_oauth2_authorized",
+        string="OAuth2 Authorized",
+    )
+    oauth2_redirect_uri = fields.Char(
+        compute="_compute_oauth2_redirect_uri",
+        string="OAuth2 Redirect URI",
+        help="Register this URL in your Onshape app's redirect URLs.",
+    )
     team_id = fields.Char(string="Onshape Team / Company ID")
     webhook_secret = fields.Char(groups="base.group_system")
     state = fields.Selection(
@@ -63,6 +81,21 @@ class OnshapeBackend(models.Model):
     )
     bom_binding_count = fields.Integer(compute="_compute_bom_binding_count")
 
+    def _compute_oauth2_authorized(self):
+        for rec in self:
+            token_str = rec.oauth2_token or "{}"
+            try:
+                token_data = json.loads(token_str)
+            except (ValueError, TypeError):
+                token_data = {}
+            rec.oauth2_authorized = bool(token_data.get("access_token"))
+
+    def _compute_oauth2_redirect_uri(self):
+        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+        uri = "%s/connector_onshape/oauth/callback" % base_url
+        for rec in self:
+            rec.oauth2_redirect_uri = uri
+
     @api.depends("document_ids")
     def _compute_document_count(self):
         for rec in self:
@@ -83,8 +116,102 @@ class OnshapeBackend(models.Model):
         with self.work_on("onshape.backend") as work:
             return work.component(usage="backend.adapter")
 
+    # --- OAuth2 flow ---
+
+    def action_oauth2_authorize(self):
+        """Redirect to Onshape OAuth2 authorization page."""
+        self.ensure_one()
+        if not self.oauth2_client_id:
+            raise UserError(_("Please set the OAuth2 Client ID and Secret first."))
+        csrf_token = secrets.token_urlsafe(32)
+        self.write({"oauth2_csrf_token": csrf_token})
+
+        # Onshape rejects JSON in the state parameter — use a plain opaque token.
+        # The callback resolves the backend by matching oauth2_csrf_token.
+        params = {
+            "response_type": "code",
+            "client_id": self.oauth2_client_id,
+            "redirect_uri": self.oauth2_redirect_uri,
+            "state": csrf_token,
+        }
+        auth_url = "%s?%s" % (
+            ONSHAPE_OAUTH_AUTHORIZE,
+            urlencode(params, quote_via=quote),
+        )
+        return {
+            "type": "ir.actions.act_url",
+            "url": auth_url,
+            "target": "self",
+        }
+
+    def _oauth2_exchange_code(self, code):
+        """Exchange authorization code for access + refresh tokens."""
+        self.ensure_one()
+        resp = req_lib.post(
+            ONSHAPE_OAUTH_TOKEN,
+            data={
+                "grant_type": "authorization_code",
+                "code": code,
+                "client_id": self.oauth2_client_id,
+                "client_secret": self.oauth2_client_secret,
+                "redirect_uri": self.oauth2_redirect_uri,
+            },
+            timeout=30,
+        )
+        resp.raise_for_status()
+        token_data = resp.json()
+        self.write(
+            {
+                "oauth2_token": json.dumps(token_data),
+                "oauth2_csrf_token": False,
+            }
+        )
+        _logger.info("OAuth2 token obtained for backend %s", self.id)
+
+    def _oauth2_refresh_token(self):
+        """Refresh an expired OAuth2 access token."""
+        self.ensure_one()
+        try:
+            token_data = json.loads(self.oauth2_token or "{}")
+        except (ValueError, TypeError):
+            return {}
+        refresh_token = token_data.get("refresh_token")
+        if not refresh_token:
+            _logger.error("No refresh token for backend %s — re-authorize.", self.id)
+            return {}
+        resp = req_lib.post(
+            ONSHAPE_OAUTH_TOKEN,
+            data={
+                "grant_type": "refresh_token",
+                "refresh_token": refresh_token,
+                "client_id": self.oauth2_client_id,
+                "client_secret": self.oauth2_client_secret,
+            },
+            timeout=30,
+        )
+        if resp.status_code != 200:
+            _logger.error(
+                "OAuth2 refresh failed for backend %s: %s",
+                self.id,
+                resp.text[:200],
+            )
+            return {}
+        new_token_data = resp.json()
+        self.write({"oauth2_token": json.dumps(new_token_data)})
+        _logger.info("OAuth2 token refreshed for backend %s", self.id)
+        return new_token_data
+
+    # --- Credential check ---
+
     def action_check_credentials(self):
         self.ensure_one()
+        if self.auth_mode == "oauth2" and not self.oauth2_authorized:
+            raise UserError(
+                _(
+                    "Please authorize with Onshape first by clicking "
+                    "'Authorize with Onshape'."
+                )
+            )
         adapter = self._get_adapter()
         ok, message = adapter.check_credentials()
         if ok:

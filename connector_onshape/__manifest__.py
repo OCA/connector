@@ -8,6 +8,7 @@
     "author": "Kencove Farm Fence Supplies, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/connector",
     "license": "AGPL-3",
+    "development_status": "Beta",
     "depends": [
         "connector",
         "component",
@@ -17,7 +18,7 @@
         "mrp",
     ],
     "external_dependencies": {
-        "python": [],
+        "python": ["requests"],
     },
     "data": [
         "security/onshape_security.xml",
@@ -33,5 +34,5 @@
         "views/mrp_bom_views.xml",
     ],
     "installable": True,
-    "application": True,
+    "application": False,
 }

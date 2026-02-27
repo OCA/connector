@@ -54,7 +54,10 @@ class OnshapeWebhookController(http.Controller):
         signature = request.httprequest.headers.get(
             "X-onshape-webhook-signature-primary", ""
         )
-        if not self._validate_signature(raw_body, backend.webhook_secret, signature):
+        timestamp = request.httprequest.headers.get("X-onshape-webhook-timestamp", "")
+        if not self._validate_signature(
+            raw_body, backend.webhook_secret, signature, timestamp
+        ):
             _logger.warning(
                 "Webhook signature validation failed for backend %s",
                 backend_id,
@@ -82,11 +85,17 @@ class OnshapeWebhookController(http.Controller):
         _logger.debug("Unhandled webhook event: %s", event)
         return {"status": "ok", "message": "Event not handled"}
 
-    def _validate_signature(self, raw_body, secret, signature):
+    def _validate_signature(self, raw_body, secret, signature, timestamp=""):
+        """Validate Onshape webhook HMAC-SHA256 signature.
+
+        Onshape signs ``timestamp + "." + raw_body`` and sends the result
+        as a Base64-encoded HMAC-SHA256 digest.
+        """
+        message = timestamp.encode("utf-8") + b"." + raw_body if timestamp else raw_body
         expected = base64.b64encode(
             hmac.new(
                 secret.encode("utf-8"),
-                raw_body,
+                message,
                 digestmod=hashlib.sha256,
             ).digest()
         ).decode("ascii")

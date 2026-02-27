@@ -34,7 +34,7 @@ apps** are exempt. To set up OAuth2:
 2. Click **Create new OAuth application**
 3. Fill in:
 
-   * **Name**: Your app name (e.g. ``Kencove Odoo Connector``)
+   * **Name**: Your app name (e.g. ``My Odoo Connector``)
    * **Primary Format**: ``com.yourcompany.odoo-connector`` (cannot change later)
    * **Redirect URLs**: ``https://your-odoo.com/connector_onshape/oauth/callback``
    * **OAuth Scopes**: ``OAuth2Read``, ``OAuth2Write``

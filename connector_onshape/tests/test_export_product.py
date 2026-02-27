@@ -23,7 +23,7 @@ class TestProductExportMapper(OnshapeTestCase):
             mapper = work.component(usage="export.mapper")
             vals = mapper.map_record(binding)
 
-        self.assertEqual(vals["Part Number"], "KF-BOLT-001")
+        self.assertEqual(vals["Part Number"], "HW-BOLT-001")
         self.assertEqual(vals["Description"], "Hex Bolt 3/8-16")
 
     def test_export_mapper_empty_sku(self):

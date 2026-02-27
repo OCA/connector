@@ -9,6 +9,13 @@
             <form string="Onshape Backend">
                 <header>
                     <button
+                        name="action_oauth2_authorize"
+                        string="Authorize with Onshape"
+                        type="object"
+                        class="btn-primary"
+                        attrs="{'invisible': ['|', ('auth_mode', '!=', 'oauth2'), ('oauth2_authorized', '=', True)]}"
+                    />
+                    <button
                         name="action_check_credentials"
                         string="Check Credentials"
                         type="object"
@@ -113,7 +120,12 @@
                         >
                             <field name="oauth2_client_id" />
                             <field name="oauth2_client_secret" password="True" />
-                            <field name="oauth2_token" password="True" />
+                            <field
+                                name="oauth2_redirect_uri"
+                                widget="CopyClipboardChar"
+                                help="Register this URL in your Onshape app settings as the OAuth redirect URL."
+                            />
+                            <field name="oauth2_authorized" />
                         </group>
                     </group>
                     <group>
@@ -126,7 +138,7 @@
                             />
                         </group>
                         <group string="Webhooks">
-                            <field name="webhook_secret" />
+                            <field name="webhook_secret" password="True" />
                         </group>
                     </group>
                 </sheet>

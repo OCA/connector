@@ -125,7 +125,6 @@ class OnshapeBackend(models.Model):
             raise UserError(_("Please set the OAuth2 Client ID and Secret first."))
         csrf_token = secrets.token_urlsafe(32)
         self.write({"oauth2_csrf_token": csrf_token})
-
         # Onshape rejects JSON in the state parameter — use a plain opaque token.
         # The callback resolves the backend by matching oauth2_csrf_token.
         params = {
@@ -147,18 +146,37 @@ class OnshapeBackend(models.Model):
     def _oauth2_exchange_code(self, code):
         """Exchange authorization code for access + refresh tokens."""
         self.ensure_one()
+        redirect_uri = self.oauth2_redirect_uri
+        client_id = (self.oauth2_client_id or "").strip()
+        client_secret = (self.oauth2_client_secret or "").strip()
+        # Onshape requires credentials in the POST body (not Basic Auth).
+        # Use a raw string body so the trailing '=' in client_id/secret
+        # is sent literally (not URL-encoded as %3D).
+        body = (
+            "grant_type=authorization_code"
+            "&code=%s"
+            "&redirect_uri=%s"
+            "&client_id=%s"
+            "&client_secret=%s"
+        ) % (
+            code,
+            quote(redirect_uri, safe=""),
+            client_id,
+            client_secret,
+        )
         resp = req_lib.post(
             ONSHAPE_OAUTH_TOKEN,
-            data={
-                "grant_type": "authorization_code",
-                "code": code,
-                "client_id": self.oauth2_client_id,
-                "client_secret": self.oauth2_client_secret,
-                "redirect_uri": self.oauth2_redirect_uri,
-            },
+            data=body,
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
             timeout=30,
         )
-        resp.raise_for_status()
+        if resp.status_code != 200:
+            _logger.error(
+                "OAuth2 token exchange failed for backend %s: %s",
+                self.id,
+                resp.text[:200],
+            )
+            resp.raise_for_status()
         token_data = resp.json()
         self.write(
             {
@@ -179,14 +197,21 @@ class OnshapeBackend(models.Model):
         if not refresh_token:
             _logger.error("No refresh token for backend %s — re-authorize.", self.id)
             return {}
+        # Raw string body — Onshape may not decode %3D in client_id
+        body = (
+            "grant_type=refresh_token"
+            "&refresh_token=%s"
+            "&client_id=%s"
+            "&client_secret=%s"
+        ) % (
+            refresh_token,
+            (self.oauth2_client_id or "").strip(),
+            (self.oauth2_client_secret or "").strip(),
+        )
         resp = req_lib.post(
             ONSHAPE_OAUTH_TOKEN,
-            data={
-                "grant_type": "refresh_token",
-                "refresh_token": refresh_token,
-                "client_id": self.oauth2_client_id,
-                "client_secret": self.oauth2_client_secret,
-            },
+            data=body,
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
             timeout=30,
         )
         if resp.status_code != 200:
@@ -205,28 +230,46 @@ class OnshapeBackend(models.Model):
 
     def action_check_credentials(self):
         self.ensure_one()
-        if self.auth_mode == "oauth2" and not self.oauth2_authorized:
-            raise UserError(
-                _(
-                    "Please authorize with Onshape first by clicking "
-                    "'Authorize with Onshape'."
+        if self.auth_mode == "oauth2":
+            # Use sudo() to read the group-restricted oauth2_token field
+            sudo_rec = self.sudo()
+            token_str = sudo_rec.oauth2_token or ""
+            csrf_pending = bool(sudo_rec.oauth2_csrf_token)
+            try:
+                token_data = json.loads(token_str) if token_str else {}
+            except (ValueError, TypeError):
+                token_data = {}
+            if not token_data.get("access_token"):
+                if csrf_pending:
+                    raise UserError(
+                        _(
+                            "OAuth2 authorization is still pending. "
+                            "Please complete the authorization in the Onshape "
+                            "window that was opened, then try again."
+                        )
+                    )
+                if token_str and not token_data.get("access_token"):
+                    raise UserError(
+                        _(
+                            "OAuth2 token was saved but does not contain an "
+                            "access_token. The token exchange may have failed. "
+                            "Please click 'Authorize with Onshape' to retry. "
+                            "Check the server logs for details."
+                        )
+                    )
+                raise UserError(
+                    _(
+                        "No OAuth2 token found. Please click "
+                        "'Authorize with Onshape' to start the "
+                        "authorization flow, approve access on Onshape, "
+                        "and wait to be redirected back."
+                    )
                 )
-            )
         adapter = self._get_adapter()
         ok, message = adapter.check_credentials()
-        if ok:
-            self.write({"state": "checked"})
-            return {
-                "type": "ir.actions.client",
-                "tag": "display_notification",
-                "params": {
-                    "title": _("Credentials Verified"),
-                    "message": message,
-                    "type": "success",
-                    "sticky": False,
-                },
-            }
-        raise UserError(_("Credential check failed: %s") % message)
+        if not ok:
+            raise UserError(_("Credential check failed: %s") % message)
+        self.write({"state": "checked"})
 
     def action_activate(self):
         self.ensure_one()

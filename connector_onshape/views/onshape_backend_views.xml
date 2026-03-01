@@ -175,14 +175,22 @@
         id="menu_onshape_root"
         name="Onshape"
         web_icon="connector_onshape,static/description/icon.png"
+        action="action_onshape_backend"
         sequence="100"
+    />
+
+    <menuitem
+        id="menu_onshape_data"
+        name="Onshape Data"
+        parent="menu_onshape_root"
+        sequence="10"
     />
 
     <menuitem
         id="menu_onshape_config"
         name="Configuration"
         parent="menu_onshape_root"
-        sequence="90"
+        sequence="12"
     />
 
     <menuitem
@@ -190,13 +198,6 @@
         name="Backends"
         parent="menu_onshape_config"
         action="action_onshape_backend"
-        sequence="10"
-    />
-
-    <menuitem
-        id="menu_onshape_data"
-        name="Onshape Data"
-        parent="menu_onshape_root"
         sequence="10"
     />
 

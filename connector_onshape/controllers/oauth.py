@@ -19,8 +19,9 @@ class OnshapeOAuthController(http.Controller):
     4. Onshape redirects here with ?code=...
     5. We exchange the code for access + refresh tokens.
 
-    Note: Onshape does not return the ``state`` parameter in the callback,
-    so we look up the pending backend by its stored CSRF token instead.
+    Note: Onshape does not always return the ``state`` parameter in the
+    callback, so we look up the pending backend by its stored CSRF token
+    as a fallback.
     """
 
     def _resolve_backend(self, state):
@@ -73,14 +74,23 @@ class OnshapeOAuthController(http.Controller):
             _logger.error("OAuth2 CSRF token mismatch for backend %s", backend.id)
             return request.redirect("/web")
 
-        # Exchange code for token
+        # Exchange code for token — include action so Odoo renders the menu
+        action_id = request.env.ref(
+            "connector_onshape.action_onshape_backend", raise_if_not_found=False
+        )
+        action_param = "&action=%d" % action_id.id if action_id else ""
+        form_url = "/web#id=%d&model=onshape.backend&view_type=form%s" % (
+            backend.id,
+            action_param,
+        )
         try:
             backend._oauth2_exchange_code(code)
             _logger.info("OAuth2 authorization successful for backend %s", backend.id)
         except Exception:
             _logger.exception("OAuth2 token exchange failed for backend %s", backend.id)
+            # Clear the CSRF token so the user can retry
+            backend.write({"oauth2_csrf_token": False})
+            return request.redirect(form_url)
 
         # Redirect back to the backend form
-        return request.redirect(
-            "/web#id=%d&model=onshape.backend&view_type=form" % backend.id
-        )
+        return request.redirect(form_url)

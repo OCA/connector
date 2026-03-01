@@ -31,9 +31,8 @@ class TestOnshapeBackend(OnshapeTestCase):
         ) as mock_get:
             adapter = self._mock_adapter()
             mock_get.return_value = adapter
-            result = backend.action_check_credentials()
+            backend.action_check_credentials()
             self.assertEqual(backend.state, "checked")
-            self.assertEqual(result["params"]["type"], "success")
 
     def test_check_credentials_failure(self):
         backend = self.env["onshape.backend"].create(

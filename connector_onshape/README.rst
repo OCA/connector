@@ -1,7 +1,3 @@
-.. image:: https://odoo-community.org/readme-banner-image
-   :target: https://odoo-community.org/get-involved?utm_source=readme
-   :alt: Odoo Community Association
-
 =================
 Onshape Connector
 =================
@@ -17,7 +13,7 @@ Onshape Connector
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fconnector-lightgray.png?logo=github
@@ -33,25 +29,25 @@ Onshape Connector
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
 This module provides bidirectional synchronization between Odoo and
-`Onshape <https://www.onshape.com>`_ cloud CAD/PLM platform.
+`Onshape <https://www.onshape.com>`__ cloud CAD/PLM platform.
 
 It synchronizes:
 
-* **Documents**: Import Onshape documents and their elements (part studios,
-  assemblies, drawings).
-* **Products**: Bind Onshape parts to Odoo products using a 4-strategy
+- **Documents**: Import Onshape documents and their elements (part
+  studios, assemblies, drawings).
+- **Products**: Bind Onshape parts to Odoo products using a 4-strategy
   SKU matching algorithm (exact filename, part number, McMaster catalog,
   case-insensitive).
-* **Bills of Materials**: Import Onshape assembly BOMs as ``mrp.bom`` records
-  with component match scoring.
-* **Metadata Export**: Push Odoo product SKUs and names back to Onshape
+- **Bills of Materials**: Import Onshape assembly BOMs as ``mrp.bom``
+  records with component match scoring.
+- **Metadata Export**: Push Odoo product SKUs and names back to Onshape
   part metadata (Part Number, Description fields).
-* **Webhooks**: Receive real-time notifications from Onshape for metadata
-  changes, workflow transitions, and revision creation.
+- **Webhooks**: Receive real-time notifications from Onshape for
+  metadata changes, workflow transitions, and revision creation.
 
-The module uses the OCA Connector framework with queue_job for asynchronous
-processing and supports both HMAC (API Key) and OAuth2 (App Store)
-authentication modes.
+The module uses the OCA Connector framework with queue_job for
+asynchronous processing and supports both HMAC (API Key) and OAuth2 (App
+Store) authentication modes.
 
 **Table of contents**
 
@@ -62,23 +58,28 @@ Configuration
 =============
 
 Onshape Developer Portal Setup
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------
 
-Before configuring the Odoo backend, you need API credentials from Onshape.
+Before configuring the Odoo backend, you need API credentials from
+Onshape.
 
 **HMAC API Keys (quickest to start):**
 
 1. Sign in at https://cad.onshape.com
+
 2. Go to your **User Menu** (top-right) > **My Account** > **API keys**
    (or visit https://dev-portal.onshape.com/keys directly)
+
 3. Click **Create new API key**
+
 4. Give it a name (e.g. ``Odoo Connector``) and select scopes:
 
-   * ``OAuth2Read`` — read documents, parts, assemblies, metadata
-   * ``OAuth2Write`` — write metadata (Part Number, Description)
-   * ``OAuth2Delete`` — only if you need webhook management
+   - ``OAuth2Read`` — read documents, parts, assemblies, metadata
+   - ``OAuth2Write`` — write metadata (Part Number, Description)
+   - ``OAuth2Delete`` — only if you need webhook management
 
-5. Copy the **Access key** and **Secret key** — the secret is shown only once.
+5. Copy the **Access key** and **Secret key** — the secret is shown only
+   once.
 
 **Finding your Team / Company ID:**
 
@@ -90,81 +91,110 @@ Before configuring the Odoo backend, you need API credentials from Onshape.
 **OAuth2 App Store (recommended for production):**
 
 HMAC keys and private OAuth2 apps count against an annual API quota
-(~10,000 calls/user/year for Enterprise). Only **publicly listed App Store
-apps** are exempt. To set up OAuth2:
+(~10,000 calls/user/year for Enterprise). Only **publicly listed App
+Store apps** are exempt. To set up OAuth2:
 
 1. Go to https://dev-portal.onshape.com > **OAuth applications**
+
 2. Click **Create new OAuth application**
+
 3. Fill in:
 
-   * **Name**: Your app name (e.g. ``My Odoo Connector``)
-   * **Primary Format**: ``com.yourcompany.odoo-connector`` (cannot change later)
-   * **Redirect URLs**: ``https://your-odoo.com/connector_onshape/oauth/callback``
-   * **OAuth Scopes**: ``OAuth2Read``, ``OAuth2Write``
+   - **Name**: Your app name (e.g. ``My Odoo Connector``)
+   - **Primary Format**: ``com.yourcompany.odoo-connector`` (cannot
+     change later)
+   - **Redirect URLs**:
+     ``https://your-odoo.com/connector_onshape/oauth/callback``
+   - **OAuth Scopes**: ``OAuth2Read``, ``OAuth2Write``
 
-4. For quota exemption, submit the app for App Store review
-   by emailing ``onshape-developer-relations@ptc.com``
+4. For quota exemption, submit the app for App Store review by emailing
+   ``onshape-developer-relations@ptc.com``
 
 Odoo Backend Configuration
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------
 
 1. Install the ``connector_onshape`` module.
-2. Go to **Onshape > Configuration > Backends** and create a new backend.
+
+2. Go to **Onshape > Configuration > Backends** and create a new
+   backend.
+
 3. Fill in the connection details:
 
-   * **Base URL**: ``https://cad.onshape.com`` (default)
-   * **Authentication Mode**: HMAC or OAuth2
-   * **API Key / Secret**: From step above (HMAC mode)
-   * **Team / Company ID**: From step above
+   - **Base URL**: ``https://cad.onshape.com`` (default)
+   - **Authentication Mode**: HMAC or OAuth2
+   - **Team / Company ID**: From step above
 
-4. Click **Check Credentials** — should show a green success notification.
-5. Click **Activate** to enable the backend.
+4. For **HMAC** mode, enter the **API Access Key** and **API Secret
+   Key**.
+
+5. For **OAuth2** mode:
+
+   a. Enter the **OAuth2 Client ID** and **Client Secret** from the
+   Onshape Developer Portal. Make sure you copy the **complete** secret
+   including any trailing ``=`` padding characters (base64 encoding).
+
+   b. Copy the **OAuth2 Redirect URI** shown on the form (click the
+   clipboard icon) and register it in your Onshape app's redirect URLs.
+
+   c. Click **Authorize with Onshape** — you will be redirected to
+   Onshape to approve access. After approval, Onshape redirects back to
+   Odoo and the token is stored automatically.
+
+   d. The **OAuth2 Authorized** checkbox confirms the token was
+   obtained.
+
+6. Click **Check Credentials** — should show a green success
+   notification.
+
+7. Click **Activate** to enable the backend.
 
 Import Settings
-~~~~~~~~~~~~~~~
+---------------
 
-* **Auto-create Products**: When enabled, creates new Odoo products for
-  Onshape parts that don't match any existing SKU. When disabled, unmatched
-  parts are skipped (no binding created).
-* **Default Product Category**: Category assigned to auto-created products.
-* **Import Products Since**: Only import parts modified after this date
+- **Auto-create Products**: When enabled, creates new Odoo products for
+  Onshape parts that don't match any existing SKU. When disabled,
+  unmatched parts are skipped (no binding created).
+- **Default Product Category**: Category assigned to auto-created
+  products.
+- **Import Products Since**: Only import parts modified after this date
   (for incremental sync).
 
 Webhooks (Real-Time Sync)
-~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------
 
 Webhooks push Onshape changes to Odoo in real time instead of waiting
 for the next scheduled sync.
 
-1. In Odoo, note your backend ID (visible in the URL when viewing the backend
-   form, e.g. ``/web#id=1&model=onshape.backend``).
+1. In Odoo, note your backend ID (visible in the URL when viewing the
+   backend form, e.g. ``/web#id=1&model=onshape.backend``).
 
 2. Your webhook URL is:
    ``https://your-odoo-instance.com/connector_onshape/webhook/<backend_id>``
 
-3. Generate a webhook secret (any random string, e.g. ``openssl rand -hex 32``)
-   and enter it in the **Webhook Secret** field on the backend form.
+3. Generate a webhook secret (any random string, e.g.
+   ``openssl rand -hex 32``) and enter it in the **Webhook Secret**
+   field on the backend form.
 
 4. Register the webhook in Onshape. You can do this via the Onshape API
-   or by clicking the **Register Webhook** button (if available) on the backend.
-   The module listens for these events:
+   or by clicking the **Register Webhook** button (if available) on the
+   backend. The module listens for these events:
 
-   * ``onshape.model.lifecycle.metadata`` — re-imports part metadata
-   * ``onshape.workflow.transition`` — updates lifecycle state
-   * ``onshape.revision.created`` — marks parts as released
-   * ``onshape.model.lifecycle.createversion`` — logs version creation
+   - ``onshape.model.lifecycle.metadata`` — re-imports part metadata
+   - ``onshape.workflow.transition`` — updates lifecycle state
+   - ``onshape.revision.created`` — marks parts as released
+   - ``onshape.model.lifecycle.createversion`` — logs version creation
 
-5. Ensure your Odoo instance is reachable from the internet (Onshape must
-   be able to POST to the webhook URL).
+5. Ensure your Odoo instance is reachable from the internet (Onshape
+   must be able to POST to the webhook URL).
 
 Scheduled Sync (Cron Jobs)
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------
 
 Three cron jobs are created (disabled by default):
 
-* **Onshape: Import Documents** — every 6 hours
-* **Onshape: Import Products** — every 6 hours
-* **Onshape: Import BOMs** — every 12 hours
+- **Onshape: Import Documents** — every 6 hours
+- **Onshape: Import Products** — every 6 hours
+- **Onshape: Import BOMs** — every 12 hours
 
 Enable them in **Settings > Technical > Automation > Scheduled Actions**
 when you're ready for automatic background synchronization.
@@ -173,52 +203,53 @@ Usage
 =====
 
 Import Documents
-~~~~~~~~~~~~~~~~
+----------------
 
 Click **Import Documents** on the backend form to fetch all Onshape
 documents from your team. Documents are created with their elements
 (part studios, assemblies, drawings).
 
 Import Products
-~~~~~~~~~~~~~~~
+---------------
 
 Click **Import Products** to scan all part studio elements and create
 product bindings. The module uses a 4-strategy matching algorithm:
 
 1. **Exact filename**: Part name matches an Odoo product SKU
 2. **Part number**: Onshape Part Number metadata matches an Odoo SKU
-3. **McMaster catalog**: Extracted catalog numbers (e.g., 90185A632) match
+3. **McMaster catalog**: Extracted catalog numbers (e.g., 90185A632)
+   match
 4. **Case-insensitive**: Fallback case-insensitive match
 
 Unmatched parts will be auto-created as products if configured.
 
 Import BOMs
-~~~~~~~~~~~
+-----------
 
 Click **Import BOMs** to fetch assembly BOMs from Onshape and create
-``mrp.bom`` records. Each BOM includes a **match score** indicating
-what percentage of Onshape components were matched to Odoo products.
+``mrp.bom`` records. Each BOM includes a **match score** indicating what
+percentage of Onshape components were matched to Odoo products.
 
 Export Part Numbers
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
-Click **Export Part Numbers** to push Odoo product SKUs and names
-back to Onshape. This writes the ``default_code`` as "Part Number"
-and ``name`` as "Description" in Onshape metadata.
+Click **Export Part Numbers** to push Odoo product SKUs and names back
+to Onshape. This writes the ``default_code`` as "Part Number" and
+``name`` as "Description" in Onshape metadata.
 
 Automatic Export
-~~~~~~~~~~~~~~~~
+----------------
 
-When a product's ``default_code`` or ``name`` is changed in Odoo,
-a background job is automatically queued to export the update to
-Onshape (if the product is bound to an Onshape part).
+When a product's ``default_code`` or ``name`` is changed in Odoo, a
+background job is automatically queued to export the update to Onshape
+(if the product is bound to an Onshape part).
 
 Import Wizard
-~~~~~~~~~~~~~
+-------------
 
-Use **Onshape > Onshape Data > Import from Onshape** for a guided
-import process with options for documents-only, documents+products,
-or full sync including BOMs.
+Use **Onshape > Onshape Data > Import from Onshape** for a guided import
+process with options for documents-only, documents+products, or full
+sync including BOMs.
 
 Bug Tracker
 ===========
@@ -234,17 +265,17 @@ Credits
 =======
 
 Authors
-~~~~~~~
+-------
 
 * Kencove Farm Fence Supplies
 
 Contributors
-~~~~~~~~~~~~
+------------
 
-* Don Kendall <dkendall@kencove.com>
+- Don Kendall dkendall@kencove.com
 
 Maintainers
-~~~~~~~~~~~
+-----------
 
 This module is maintained by the OCA.
 

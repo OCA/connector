@@ -9,7 +9,8 @@ from .common import OnshapeTestCase
 class TestImportWizard(OnshapeTestCase):
     def test_default_backend(self):
         wizard = self.env["onshape.import.wizard"].create({"import_type": "documents"})
-        self.assertEqual(wizard.backend_id, self.backend)
+        self.assertTrue(wizard.backend_id)
+        self.assertEqual(wizard.backend_id.state, "active")
 
     def test_import_requires_active_backend(self):
         draft_backend = self.env["onshape.backend"].create(

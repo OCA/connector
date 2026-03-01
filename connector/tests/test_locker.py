@@ -15,6 +15,10 @@ from odoo.addons.queue_job.exception import RetryableJobError
 class TestLocker(TransactionComponentRegistryCase):
     def setUp(self):
         super().setUp()
+        self._setup_registry(self)
+        self.comp_registry.load_components("component_event")
+        self.comp_registry.load_components("connector")
+
         self.backend = mock.MagicMock(name="backend")
         self.backend.env = self.env
 
@@ -27,18 +31,26 @@ class TestLocker(TransactionComponentRegistryCase):
         @self.addCleanup
         def reset_cr2():
             # rollback and close the cursor, and reset the environments
-            self.env2.reset()
+            self.env2.transaction.reset()
             self.cr2.rollback()
             self.cr2.close()
 
     def test_lock(self):
         """Lock a record"""
         main_partner = self.env.ref("base.main_partner")
-        work = WorkContext(model_name="res.partner", collection=self.backend)
+        work = WorkContext(
+            model_name="res.partner",
+            collection=self.backend,
+            components_registry=self.comp_registry,
+        )
         work.component("record.locker").lock(main_partner)
 
         main_partner2 = self.env2.ref("base.main_partner")
-        work2 = WorkContext(model_name="res.partner", collection=self.backend2)
+        work2 = WorkContext(
+            model_name="res.partner",
+            collection=self.backend2,
+            components_registry=self.comp_registry,
+        )
         locker2 = work2.component("record.locker")
         with self.assertRaises(RetryableJobError):
             locker2.lock(main_partner2)

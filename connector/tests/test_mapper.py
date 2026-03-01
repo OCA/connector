@@ -23,6 +23,7 @@ class TestMapper(TransactionComponentRegistryCase):
     def setUp(self):
         super().setUp()
         self._setup_registry(self)
+        self.comp_registry.load_components("component_event")
         self.comp_registry.load_components("connector")
 
     def test_mapping_decorator(self):
@@ -113,7 +114,6 @@ class TestMapper(TransactionComponentRegistryCase):
             def name(self):
                 pass
 
-        # pylint: disable=R7980
         class FryMapperInherit(Component):
             _inherit = "fry.mapper"
 
@@ -658,6 +658,7 @@ class TestMapperRecordsets(TransactionComponentRegistryCase):
     def setUp(self):
         super().setUp()
         self._setup_registry(self)
+        self.comp_registry.load_components("component_event")
         self.comp_registry.load_components("connector")
 
         backend_record = mock.Mock()
@@ -679,7 +680,14 @@ class TestMapperRecordsets(TransactionComponentRegistryCase):
 
         self._build_components(MyMapper)
 
-        partner = self.env.ref("base.res_partner_address_4")
+        # Simplified mirror of self.env.ref('base.res_partner_2')
+        res_partner_2 = self.env["res.partner"].create({"name": "Deco Addict"})
+
+        # Simplified mirrof of self.env.ref('base.res_partner_address_4')
+        partner = self.env["res.partner"].create(
+            {"name": "Floyd Steward", "parent_id": res_partner_2.id}
+        )
+
         mapper = self.comp_registry["my.mapper"](self.work)
         map_record = mapper.map_record(partner)
         expected = {"parent_name": "Deco Addict"}
@@ -693,6 +701,7 @@ class TestMapperBinding(TransactionComponentRegistryCase):
     def setUp(self):
         super().setUp()
         self._setup_registry(self)
+        self.comp_registry.load_components("component_event")
         self.comp_registry.load_components("connector")
 
         backend_record = mock.Mock()

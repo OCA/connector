@@ -1,0 +1,3 @@
+odoo-addon-component @ git+https://github.com/OCA/connector.git@refs/pull/521/head#subdirectory=component
+odoo-addon-component_event @ git+https://github.com/OCA/connector.git@refs/pull/509/head#subdirectory=component_event
+odoo-addon-queue_job==19.0.*

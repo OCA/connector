@@ -8,14 +8,18 @@ from odoo.modules.registry import Registry
 from odoo.tests import common
 
 from odoo.addons.component.core import WorkContext
-from odoo.addons.component.tests.common import TransactionComponentCase
+from odoo.addons.component.tests.common import TransactionComponentRegistryCase
 from odoo.addons.connector.database import pg_try_advisory_lock
 from odoo.addons.queue_job.exception import RetryableJobError
 
 
-class TestAdvisoryLock(TransactionComponentCase):
+class TestAdvisoryLock(TransactionComponentRegistryCase):
     def setUp(self):
         super().setUp()
+        self._setup_registry(self)
+        self.comp_registry.load_components("component_event")
+        self.comp_registry.load_components("connector")
+
         self.registry2 = Registry(common.get_db_name())
         self.cr2 = self.registry2.cursor()
         self.env2 = api.Environment(self.cr2, self.env.uid, {})
@@ -23,7 +27,7 @@ class TestAdvisoryLock(TransactionComponentCase):
         @self.addCleanup
         def reset_cr2():
             # rollback and close the cursor, and reset the environments
-            self.env2.reset()
+            self.env2.transaction.reset()
             self.cr2.rollback()
             self.cr2.close()
 
@@ -50,7 +54,11 @@ class TestAdvisoryLock(TransactionComponentCase):
 
         backend = mock.MagicMock()
         backend.env = self.env
-        work = WorkContext(model_name="res.partner", collection=backend)
+        work = WorkContext(
+            model_name="res.partner",
+            collection=backend,
+            components_registry=self.comp_registry,
+        )
         # we test the function through a Component instance
         component = work.component_by_name("base.connector")
         # acquire the lock
@@ -60,7 +68,11 @@ class TestAdvisoryLock(TransactionComponentCase):
         # hence another PG transaction
         backend2 = mock.MagicMock()
         backend2.env = self.env2
-        work2 = WorkContext(model_name="res.partner", collection=backend2)
+        work2 = WorkContext(
+            model_name="res.partner",
+            collection=backend2,
+            components_registry=self.comp_registry,
+        )
         component2 = work2.component_by_name("base.connector")
         with self.assertRaises(RetryableJobError) as cm:
             component2.advisory_lock_or_retry(lock, retry_seconds=3)

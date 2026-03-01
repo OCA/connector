@@ -23,7 +23,7 @@ class TestAdvisoryLock(TransactionComponentCase):
         @self.addCleanup
         def reset_cr2():
             # rollback and close the cursor, and reset the environments
-            self.env2.reset()
+            self.env2.transaction.reset()
             self.cr2.rollback()
             self.cr2.close()
 
@@ -64,4 +64,4 @@ class TestAdvisoryLock(TransactionComponentCase):
         component2 = work2.component_by_name("base.connector")
         with self.assertRaises(RetryableJobError) as cm:
             component2.advisory_lock_or_retry(lock, retry_seconds=3)
-            self.assertEqual(cm.exception.seconds, 3)
+        self.assertEqual(cm.exception.seconds, 3)

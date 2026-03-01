@@ -1,7 +1,7 @@
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
-from odoo import _, models
+from odoo import models
 
 
 class QueueJob(models.Model):
@@ -25,7 +25,7 @@ class QueueJob(models.Model):
             # not handled
             return None
         action = {
-            "name": _("Related Record"),
+            "name": self.env._("Related Record"),
             "type": "ir.actions.act_window",
             "view_type": "form",
             "view_mode": "form",

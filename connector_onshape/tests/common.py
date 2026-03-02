@@ -127,7 +127,7 @@ class OnshapeTestCase(TransactionComponentCase):
                 "auth_mode": "hmac",
                 "api_key": "test_api_key",
                 "api_secret": "test_api_secret",
-                "team_id": "team_test_001",
+                "onshape_company_id": "team_test_001",
                 "state": "active",
             }
         )

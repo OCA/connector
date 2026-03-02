@@ -55,6 +55,12 @@ class OnshapeDocument(models.Model):
         compute="_compute_onshape_url",
         store=True,
     )
+    onshape_webhook_id = fields.Char(
+        string="Webhook ID",
+        index=True,
+        help="Onshape webhook ID registered for this document. "
+        "Empty means no active webhook.",
+    )
     owner = fields.Char()
     created_at = fields.Datetime(string="Created in Onshape")
     modified_at = fields.Datetime(string="Last Modified in Onshape")

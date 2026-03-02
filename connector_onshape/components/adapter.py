@@ -8,6 +8,7 @@ import json
 import logging
 import secrets
 import string
+import threading
 import time
 from datetime import datetime
 from urllib.parse import urlencode
@@ -21,12 +22,17 @@ _logger = logging.getLogger(__name__)
 MAX_RETRIES = 3
 RETRY_BACKOFF = 5
 
+# Per-backend lock for OAuth2 token refresh.  Prevents concurrent threads
+# from refreshing at the same time (second refresh invalidates the first).
+_OAUTH2_REFRESH_LOCKS = {}
+_OAUTH2_LOCKS_LOCK = threading.Lock()
+
 
 class OnshapeAdapter(Component):
     """API adapter for Onshape REST API.
 
     Supports HMAC authentication (ported from onshape_utils.py)
-    and OAuth2 bearer tokens (future).
+    and OAuth2 bearer tokens.
 
     Handles rate limiting (429), quota exhaustion (402), and retries.
     """
@@ -133,9 +139,37 @@ class OnshapeAdapter(Component):
             _logger.debug("Non-integer rate limit header: %s", remaining)
 
     def _try_refresh_oauth2(self, resp, attempt):
-        """Refresh OAuth2 token on 401 (first attempt only)."""
+        """Refresh OAuth2 token on 401 (first attempt only).
+
+        Uses a per-backend lock so that when multiple threads hit 401
+        simultaneously, only one performs the refresh and the others
+        reuse the new token.
+        """
         backend = self._get_backend()
-        if resp.status_code == 401 and backend.auth_mode == "oauth2" and attempt == 0:
+        if resp.status_code != 401 or backend.auth_mode != "oauth2" or attempt != 0:
+            return False
+
+        # Get or create a lock for this backend
+        backend_id = backend.id
+        with _OAUTH2_LOCKS_LOCK:
+            if backend_id not in _OAUTH2_REFRESH_LOCKS:
+                _OAUTH2_REFRESH_LOCKS[backend_id] = threading.Lock()
+            lock = _OAUTH2_REFRESH_LOCKS[backend_id]
+
+        # Read the token that produced the 401 so we can detect if
+        # another thread already refreshed while we waited for the lock.
+        stale_token = (backend.oauth2_token or "")[:50]
+
+        with lock:
+            # Re-read from DB — another thread may have refreshed already
+            backend.invalidate_recordset(["oauth2_token"])
+            current_token = (backend.oauth2_token or "")[:50]
+            if current_token != stale_token and current_token:
+                _logger.info(
+                    "OAuth2 token already refreshed by another thread, reusing"
+                )
+                return True
+
             new_token = backend._oauth2_refresh_token()
             if new_token.get("access_token"):
                 _logger.info("OAuth2 token refreshed, retrying request")
@@ -229,12 +263,24 @@ class OnshapeAdapter(Component):
 
                 if raw:
                     return resp
+                if resp.status_code >= 400:
+                    _logger.error(
+                        "Onshape API %s %s → %s: %s",
+                        method,
+                        path,
+                        resp.status_code,
+                        resp.text[:500],
+                    )
                 resp.raise_for_status()
                 if resp.status_code == 204:
                     return {}
                 return resp.json()
 
+            except requests.exceptions.HTTPError:
+                # Client/server HTTP errors — don't retry, let caller handle
+                raise
             except requests.exceptions.RequestException:
+                # Connection errors, timeouts — retry with backoff
                 if attempt < MAX_RETRIES - 1:
                     time.sleep(RETRY_BACKOFF)
                     continue
@@ -275,7 +321,7 @@ class OnshapeAdapter(Component):
         params = {"offset": offset, "limit": limit, "sortColumn": "name"}
         if owner_id:
             params["owner"] = owner_id
-            params["ownerType"] = 1  # team
+            params["ownerType"] = 1  # company
         return self._request("GET", "/api/v6/documents", query_params=params)
 
     def read_document(self, document_id):
@@ -352,28 +398,45 @@ class OnshapeAdapter(Component):
 
     # --- Webhooks ---
 
-    def register_webhook(self, url, events=None):
+    # Events that can be registered per-document (no company required)
+    DOCUMENT_EVENTS = [
+        "onshape.model.lifecycle.metadata",
+        "onshape.model.lifecycle.createversion",
+    ]
+    # Events that require a companyId (Enterprise/Professional plans only)
+    COMPANY_EVENTS = [
+        "onshape.workflow.transition",
+        "onshape.revision.created",
+    ]
+
+    def register_webhook(self, url, events=None, document_id=None):
         backend = self._get_backend()
         if events is None:
-            events = [
-                "onshape.model.lifecycle.metadata",
-                "onshape.workflow.transition",
-                "onshape.revision.created",
-                "onshape.model.lifecycle.createversion",
-            ]
+            if backend.onshape_company_id:
+                events = self.DOCUMENT_EVENTS + self.COMPANY_EVENTS
+            else:
+                events = self.DOCUMENT_EVENTS
         body = {
             "url": url,
             "events": events,
+            "options": {"collapseEvents": True},
         }
-        if backend.team_id:
-            body["companyId"] = backend.team_id
+        if backend.onshape_company_id:
+            body["companyId"] = backend.onshape_company_id
+        elif document_id:
+            body["documentId"] = document_id
         return self._request("POST", "/api/v6/webhooks", json_body=body)
 
     def list_webhooks(self):
         return self._request("GET", "/api/v6/webhooks")
 
     def delete_webhook(self, webhook_id):
-        return self._request("DELETE", f"/api/v6/webhooks/{webhook_id}")
+        try:
+            return self._request("DELETE", f"/api/v6/webhooks/{webhook_id}")
+        except requests.exceptions.HTTPError as e:
+            if e.response is not None and e.response.status_code == 404:
+                return {}  # Already deleted / expired
+            raise
 
 
 class OnshapeQuotaError(Exception):

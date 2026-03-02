@@ -23,6 +23,7 @@
                             <field name="owner" />
                             <field name="created_at" />
                             <field name="modified_at" />
+                            <field name="onshape_webhook_id" readonly="1" />
                             <field
                                 name="thumbnail"
                                 widget="image"
@@ -79,6 +80,7 @@
                 <field name="document_type" />
                 <field name="owner" />
                 <field name="modified_at" />
+                <field name="onshape_webhook_id" optional="hide" />
                 <field name="backend_id" groups="base.group_multi_company" />
             </tree>
         </field>
@@ -107,6 +109,12 @@
                     name="drawings"
                     string="Drawings"
                     domain="[('document_type', '=', 'drawing')]"
+                />
+                <separator />
+                <filter
+                    name="no_webhook"
+                    string="No Webhook"
+                    domain="[('onshape_webhook_id', '=', False)]"
                 />
                 <group expand="0" string="Group By">
                     <filter

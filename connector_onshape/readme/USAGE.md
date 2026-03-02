@@ -1,7 +1,7 @@
 ## Import Documents
 
 Click **Import Documents** on the backend form to fetch all Onshape
-documents from your team. Documents are created with their elements
+documents from your Onshape account. Documents are created with their elements
 (part studios, assemblies, drawings).
 
 ## Import Products

@@ -439,12 +439,13 @@ Onshape.</p>
 <li>Copy the <strong>Access key</strong> and <strong>Secret key</strong> — the secret is shown only
 once.</li>
 </ol>
-<p><strong>Finding your Team / Company ID:</strong></p>
+<p><strong>Finding your Company ID (Enterprise/Professional only):</strong></p>
 <ol class="arabic simple">
 <li>Go to <a class="reference external" href="https://cad.onshape.com">https://cad.onshape.com</a></li>
-<li>Click <strong>Teams</strong> in the left sidebar</li>
-<li>Click on your team — the URL will show the team ID:
-<tt class="docutils literal"><span class="pre">https://cad.onshape.com/team/&lt;TEAM_ID&gt;</span></tt></li>
+<li>Click <strong>Company</strong> in the left sidebar</li>
+<li>The URL will show the company ID:
+<tt class="docutils literal"><span class="pre">https://cad.onshape.com/company/&lt;COMPANY_ID&gt;</span></tt></li>
+<li>Leave this field empty on Education/Student/Free plans.</li>
 </ol>
 <p><strong>OAuth2 App Store (recommended for production):</strong></p>
 <p>HMAC keys and private OAuth2 apps count against an annual API quota
@@ -478,7 +479,8 @@ backend.</p>
 <ul class="simple">
 <li><strong>Base URL</strong>: <tt class="docutils literal"><span class="pre">https://cad.onshape.com</span></tt> (default)</li>
 <li><strong>Authentication Mode</strong>: HMAC or OAuth2</li>
-<li><strong>Team / Company ID</strong>: From step above</li>
+<li><strong>Onshape Company ID</strong>: From step above (leave empty for EDU/Free
+plans)</li>
 </ul>
 </li>
 <li><p class="first">For <strong>HMAC</strong> mode, enter the <strong>API Access Key</strong> and <strong>API Secret
@@ -520,25 +522,34 @@ products.</li>
 <p>Webhooks push Onshape changes to Odoo in real time instead of waiting
 for the next scheduled sync.</p>
 <ol class="arabic simple">
-<li>In Odoo, note your backend ID (visible in the URL when viewing the
-backend form, e.g. <tt class="docutils literal">/web#id=1&amp;model=onshape.backend</tt>).</li>
-<li>Your webhook URL is:
-<tt class="docutils literal"><span class="pre">https://your-odoo-instance.com/connector_onshape/webhook/&lt;backend_id&gt;</span></tt></li>
-<li>Generate a webhook secret (any random string, e.g.
-<tt class="docutils literal">openssl rand <span class="pre">-hex</span> 32</tt>) and enter it in the <strong>Webhook Secret</strong>
-field on the backend form.</li>
-<li>Register the webhook in Onshape. You can do this via the Onshape API
-or by clicking the <strong>Register Webhook</strong> button (if available) on the
-backend. The module listens for these events:<ul>
-<li><tt class="docutils literal">onshape.model.lifecycle.metadata</tt> — re-imports part metadata</li>
-<li><tt class="docutils literal">onshape.workflow.transition</tt> — updates lifecycle state</li>
-<li><tt class="docutils literal">onshape.revision.created</tt> — marks parts as released</li>
-<li><tt class="docutils literal">onshape.model.lifecycle.createversion</tt> — logs version creation</li>
+<li>Click <strong>Generate Secret</strong> on the backend form to create a webhook
+secret.</li>
+<li>Click <strong>Register Webhook</strong> to register webhooks with Onshape.<ul>
+<li><strong>Enterprise/Professional</strong> (Company ID set): registers a single
+company-wide webhook.</li>
+<li><strong>Education/Free</strong> (no Company ID): registers one webhook per
+document. New documents imported later get webhooks automatically.</li>
 </ul>
 </li>
-<li>Ensure your Odoo instance is reachable from the internet (Onshape
-must be able to POST to the webhook URL).</li>
+<li>The <strong>Webhook URL</strong> field (read-only) shows the endpoint URL. Ensure
+your Odoo instance is reachable from the internet at that address
+(Onshape must be able to POST to it).</li>
 </ol>
+<p>Clicking <strong>Register Webhook</strong> again cleans up stale duplicates and only
+registers for documents that are missing a webhook. The webhook ID is
+tracked on each document record.</p>
+<p>Events handled:</p>
+<ul class="simple">
+<li><tt class="docutils literal">onshape.model.lifecycle.metadata</tt> — re-imports part metadata</li>
+<li><tt class="docutils literal">onshape.model.lifecycle.createversion</tt> — syncs document on version
+creation</li>
+<li><tt class="docutils literal">onshape.workflow.transition</tt> — updates lifecycle state (Enterprise
+only)</li>
+<li><tt class="docutils literal">onshape.revision.created</tt> — marks parts as released (Enterprise
+only)</li>
+<li><tt class="docutils literal">webhook.unregister</tt> — clears tracked webhook ID when Onshape
+expires it</li>
+</ul>
 </div>
 <div class="section" id="scheduled-sync-cron-jobs">
 <h2><a class="toc-backref" href="#toc-entry-6">Scheduled Sync (Cron Jobs)</a></h2>
@@ -557,8 +568,8 @@ when you’re ready for automatic background synchronization.</p>
 <div class="section" id="import-documents">
 <h2><a class="toc-backref" href="#toc-entry-8">Import Documents</a></h2>
 <p>Click <strong>Import Documents</strong> on the backend form to fetch all Onshape
-documents from your team. Documents are created with their elements
-(part studios, assemblies, drawings).</p>
+documents from your Onshape account. Documents are created with their
+elements (part studios, assemblies, drawings).</p>
 </div>
 <div class="section" id="import-products">
 <h2><a class="toc-backref" href="#toc-entry-9">Import Products</a></h2>

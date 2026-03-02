@@ -53,6 +53,12 @@
                         type="object"
                         attrs="{'invisible': [('state', '!=', 'active')]}"
                     />
+                    <button
+                        name="action_register_webhook"
+                        string="Register Webhook"
+                        type="object"
+                        attrs="{'invisible': [('state', '!=', 'active')]}"
+                    />
                     <field
                         name="state"
                         widget="statusbar"
@@ -105,7 +111,7 @@
                         <group string="Connection">
                             <field name="base_url" />
                             <field name="auth_mode" />
-                            <field name="team_id" />
+                            <field name="onshape_company_id" />
                         </group>
                         <group
                             string="HMAC Authentication"
@@ -138,7 +144,26 @@
                             />
                         </group>
                         <group string="Webhooks">
-                            <field name="webhook_secret" password="True" />
+                            <field
+                                name="webhook_url"
+                                widget="CopyClipboardChar"
+                                attrs="{'invisible': [('state', '!=', 'active')]}"
+                            />
+                            <label for="webhook_secret" />
+                            <div class="o_row">
+                                <field
+                                    name="webhook_secret"
+                                    widget="CopyClipboardChar"
+                                    password="True"
+                                />
+                                <button
+                                    name="action_generate_webhook_secret"
+                                    string="Generate Secret"
+                                    type="object"
+                                    class="btn-secondary"
+                                    icon="fa-refresh"
+                                />
+                            </div>
                         </group>
                     </group>
                 </sheet>

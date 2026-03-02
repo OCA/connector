@@ -53,8 +53,17 @@ class OnshapeBackend(models.Model):
         string="OAuth2 Redirect URI",
         help="Register this URL in your Onshape app's redirect URLs.",
     )
-    team_id = fields.Char(string="Onshape Team / Company ID")
+    onshape_company_id = fields.Char(
+        string="Onshape Company ID",
+        help="Enterprise/Professional plan company ID. "
+        "Required for company-wide webhooks. "
+        "Leave empty on Education/Student plans.",
+    )
     webhook_secret = fields.Char(groups="base.group_system")
+    webhook_url = fields.Char(
+        compute="_compute_webhook_url",
+        string="Webhook URL",
+    )
     state = fields.Selection(
         [("draft", "Draft"), ("checked", "Checked"), ("active", "Active")],
         default="draft",
@@ -95,6 +104,17 @@ class OnshapeBackend(models.Model):
         uri = "%s/connector_onshape/oauth/callback" % base_url
         for rec in self:
             rec.oauth2_redirect_uri = uri
+
+    def _compute_webhook_url(self):
+        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+        for rec in self:
+            if isinstance(rec.id, int):
+                rec.webhook_url = "%s/connector_onshape/webhook/%d" % (
+                    base_url,
+                    rec.id,
+                )
+            else:
+                rec.webhook_url = False
 
     @api.depends("document_ids")
     def _compute_document_count(self):
@@ -312,6 +332,154 @@ class OnshapeBackend(models.Model):
         bindings = self.product_binding_ids.filtered(lambda b: b.odoo_id.default_code)
         for binding in bindings:
             binding.with_delay().export_record()
+
+    def action_generate_webhook_secret(self):
+        """Generate a random webhook secret."""
+        self.ensure_one()
+        self.write({"webhook_secret": secrets.token_hex(32)})
+
+    def _cleanup_webhooks(self):
+        """Delete stale/duplicate webhooks for this backend's URL.
+
+        Compares webhook IDs from Onshape against tracked IDs stored on
+        documents.  Only deletes untracked (stale) webhooks; leaves
+        tracked ones in place so we don't needlessly re-register.
+        """
+        adapter = self._get_adapter()
+        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+        webhook_url = "%s/connector_onshape/webhook/%d" % (base_url, self.id)
+        result = adapter.list_webhooks()
+        items = result.get("items", []) if isinstance(result, dict) else []
+
+        # Collect tracked webhook IDs from documents
+        tracked_ids = set(
+            self.document_ids.filtered("onshape_webhook_id").mapped(
+                "onshape_webhook_id"
+            )
+        )
+
+        deleted = 0
+        for hook in items:
+            if hook.get("url") != webhook_url:
+                continue
+            hook_id = hook.get("id", "")
+            if hook_id in tracked_ids:
+                # This webhook is tracked by a document — keep it
+                continue
+            adapter.delete_webhook(hook_id)
+            deleted += 1
+
+        if deleted:
+            _logger.info(
+                "Cleaned up %d stale webhook(s) for backend %s",
+                deleted,
+                self.id,
+            )
+        return deleted
+
+    def _register_document_webhook(self, document):
+        """Register a webhook for a single document and store the ID.
+
+        Returns True if successful, False otherwise.
+        """
+        self.ensure_one()
+        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+        webhook_url = "%s/connector_onshape/webhook/%d" % (base_url, self.id)
+        adapter = self._get_adapter()
+        try:
+            result = adapter.register_webhook(
+                webhook_url, document_id=document.onshape_document_id
+            )
+            webhook_id = result.get("id", "") if isinstance(result, dict) else ""
+            if webhook_id:
+                document.write({"onshape_webhook_id": webhook_id})
+                _logger.info(
+                    "Registered webhook %s for document %s (%s)",
+                    webhook_id,
+                    document.name,
+                    document.onshape_document_id,
+                )
+                return True
+            _logger.warning(
+                "Webhook registration returned no ID for document %s",
+                document.onshape_document_id,
+            )
+        except Exception:
+            _logger.exception(
+                "Failed to register webhook for document %s (%s)",
+                document.name,
+                document.onshape_document_id,
+            )
+        return False
+
+    def action_register_webhook(self):
+        self.ensure_one()
+        self._check_active()
+        base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+        webhook_url = "%s/connector_onshape/webhook/%d" % (base_url, self.id)
+
+        if self.onshape_company_id:
+            # Enterprise path: company-wide webhook, clean up + register
+            self._cleanup_webhooks()
+            adapter = self._get_adapter()
+            adapter.register_webhook(webhook_url)
+            message = _("Company-wide webhook registered.")
+        else:
+            # Per-document path: clean up untracked webhooks, then register
+            # only for documents that don't already have a tracked webhook.
+            documents = self.document_ids
+            if not documents:
+                return {
+                    "type": "ir.actions.client",
+                    "tag": "display_notification",
+                    "params": {
+                        "title": _("No Documents"),
+                        "message": _(
+                            "No documents imported yet. Please click "
+                            "'Import Documents' first, then register webhooks."
+                        ),
+                        "type": "warning",
+                        "sticky": False,
+                    },
+                }
+            # Remove stale/duplicate webhooks (keeps tracked ones).
+            deleted = self._cleanup_webhooks()
+            # Only register for documents still missing a webhook.
+            need_webhook = documents.filtered(lambda d: not d.onshape_webhook_id)
+            if not need_webhook and not deleted:
+                return {
+                    "type": "ir.actions.client",
+                    "tag": "display_notification",
+                    "params": {
+                        "title": _("Webhooks Up To Date"),
+                        "message": _(
+                            "All %d document(s) already have active " "webhooks."
+                        )
+                        % len(documents),
+                        "type": "info",
+                        "sticky": False,
+                    },
+                }
+            registered = 0
+            for doc in need_webhook:
+                if self._register_document_webhook(doc):
+                    registered += 1
+            message = _(
+                "Webhooks registered for %(registered)d document(s). "
+                "%(deleted)d stale webhook(s) removed."
+            ) % {"registered": registered, "deleted": deleted}
+
+        _logger.info("Webhook registered for backend %s", self.id)
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": _("Webhook Registered"),
+                "message": message,
+                "type": "success",
+                "sticky": False,
+            },
+        }
 
     def _check_active(self):
         if self.state != "active":

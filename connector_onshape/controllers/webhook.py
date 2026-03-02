@@ -6,11 +6,23 @@ import hashlib
 import hmac
 import json
 import logging
+import threading
+import time
+from datetime import datetime
 
 from odoo import http
 from odoo.http import request
 
 _logger = logging.getLogger(__name__)
+
+# In-memory dedup cache: {dedup_key: timestamp}.
+# Prevents redundant processing when Onshape fires the same event
+# multiple times within a short window (common with per-document webhooks).
+# Protected by _DEDUP_LOCK because concurrent threads can race on
+# the read-check-write sequence.
+_RECENT_EVENTS = {}
+_DEDUP_LOCK = threading.Lock()
+_DEDUP_WINDOW = 5  # seconds
 
 
 class OnshapeWebhookController(http.Controller):
@@ -41,28 +53,38 @@ class OnshapeWebhookController(http.Controller):
             _logger.warning("Webhook received for unknown backend %s", backend_id)
             return {"status": "error", "message": "Unknown backend"}
 
-        # Validate HMAC signature (required)
+        # Validate HMAC signature when available.
+        # Enterprise plans: Onshape signs payloads with keys configured in
+        # the company admin panel. The webhook_secret field should match
+        # the primary or secondary key from Onshape's settings.
+        # EDU/Free plans: Onshape may not send signature headers.
         raw_body = request.httprequest.get_data()
-        if not backend.webhook_secret:
-            _logger.warning(
-                "Webhook secret not configured for backend %s. "
-                "Rejecting unauthenticated webhook.",
-                backend_id,
-            )
-            return {"status": "error", "message": "Webhook secret not configured"}
-
         signature = request.httprequest.headers.get(
             "X-onshape-webhook-signature-primary", ""
         )
         timestamp = request.httprequest.headers.get("X-onshape-webhook-timestamp", "")
-        if not self._validate_signature(
-            raw_body, backend.webhook_secret, signature, timestamp
-        ):
-            _logger.warning(
-                "Webhook signature validation failed for backend %s",
+        if signature:
+            if not backend.webhook_secret:
+                _logger.warning(
+                    "Webhook has signature but no secret configured "
+                    "for backend %s. Rejecting.",
+                    backend_id,
+                )
+                return {"status": "error", "message": "Webhook secret not configured"}
+            if not self._validate_signature(
+                raw_body, backend.webhook_secret, signature, timestamp
+            ):
+                _logger.warning(
+                    "Webhook signature validation failed for backend %s",
+                    backend_id,
+                )
+                return {"status": "error", "message": "Invalid signature"}
+        else:
+            _logger.debug(
+                "No signature header on webhook for backend %s — "
+                "skipping HMAC validation (EDU/Free plan).",
                 backend_id,
             )
-            return {"status": "error", "message": "Invalid signature"}
 
         try:
             payload = json.loads(raw_body)
@@ -75,6 +97,36 @@ class OnshapeWebhookController(http.Controller):
             event,
             backend_id,
         )
+
+        # Deduplicate rapid-fire identical events (webhookId excluded).
+        doc_id = payload.get("documentId", "")
+        dedup_key = (
+            backend_id,
+            event,
+            doc_id,
+            payload.get("versionName", ""),
+            payload.get("transitionName", ""),
+            payload.get("elementId", ""),
+            payload.get("partId", ""),
+        )
+        now = time.monotonic()
+        with _DEDUP_LOCK:
+            last_seen = _RECENT_EVENTS.get(dedup_key, 0)
+            if now - last_seen < _DEDUP_WINDOW:
+                _logger.info(
+                    "Skipping duplicate webhook: event=%s doc=%s (%.1fs ago)",
+                    event,
+                    doc_id,
+                    now - last_seen,
+                )
+                return {"status": "ok", "message": "Duplicate suppressed"}
+            _RECENT_EVENTS[dedup_key] = now
+            # Prune stale entries to avoid unbounded growth
+            if len(_RECENT_EVENTS) > 500:
+                cutoff = now - _DEDUP_WINDOW
+                stale = [k for k, v in _RECENT_EVENTS.items() if v < cutoff]
+                for k in stale:
+                    del _RECENT_EVENTS[k]
 
         # Dispatch by event type
         handler = self._get_event_handler(event)
@@ -107,6 +159,7 @@ class OnshapeWebhookController(http.Controller):
             "onshape.workflow.transition": self._handle_workflow_transition,
             "onshape.revision.created": self._handle_revision_created,
             "onshape.model.lifecycle.createversion": (self._handle_version_created),
+            "webhook.unregister": self._handle_webhook_unregister,
         }
         return handlers.get(event)
 
@@ -134,6 +187,9 @@ class OnshapeWebhookController(http.Controller):
         if not document:
             _logger.debug("Webhook metadata change for unknown doc %s", doc_id)
             return
+
+        # Sync document name/timestamps
+        self._sync_document(backend, doc_id)
 
         # Queue document-scoped product re-import (not full backend resync)
         backend.with_delay(
@@ -188,7 +244,7 @@ class OnshapeWebhookController(http.Controller):
         return request.env["onshape.product.product"].sudo().search(domain)
 
     def _handle_version_created(self, backend, payload):
-        """Log version creation (informational)."""
+        """Sync document on version creation."""
         doc_id = payload.get("documentId", "")
         version_name = payload.get("versionName", "")
         _logger.info(
@@ -196,3 +252,78 @@ class OnshapeWebhookController(http.Controller):
             doc_id,
             version_name,
         )
+        self._sync_document(backend, doc_id)
+
+    def _handle_webhook_unregister(self, backend, payload):
+        """Clear webhook tracking when Onshape expires/unregisters a webhook.
+
+        Onshape sends this event when a transient webhook expires or is
+        manually deleted. We look up the document by stored webhook ID
+        and clear the field so the next "Register Webhook" run re-creates it.
+        """
+        webhook_id = payload.get("webhookId", "")
+        if not webhook_id:
+            return
+        document = (
+            request.env["onshape.document"]
+            .sudo()
+            .search(
+                [
+                    ("backend_id", "=", backend.id),
+                    ("onshape_webhook_id", "=", webhook_id),
+                ],
+                limit=1,
+            )
+        )
+        if document:
+            document.write({"onshape_webhook_id": False})
+            _logger.info(
+                "Webhook %s expired/unregistered — cleared from document %s (%s)",
+                webhook_id,
+                document.name,
+                document.onshape_document_id,
+            )
+        else:
+            _logger.debug(
+                "webhook.unregister for unknown webhook ID %s on backend %s",
+                webhook_id,
+                backend.id,
+            )
+
+    def _sync_document(self, backend, doc_id):
+        """Re-fetch document data from Onshape and update local record."""
+        if not doc_id:
+            return
+        document = (
+            request.env["onshape.document"]
+            .sudo()
+            .search(
+                [
+                    ("backend_id", "=", backend.id),
+                    ("onshape_document_id", "=", doc_id),
+                ],
+                limit=1,
+            )
+        )
+        if not document:
+            return
+        try:
+            with backend.work_on("onshape.backend") as work:
+                adapter = work.component(usage="backend.adapter")
+            doc_data = adapter.read_document(doc_id)
+            vals = {}
+            name = doc_data.get("name")
+            if name and name != document.name:
+                vals["name"] = name
+            modified = doc_data.get("modifiedAt")
+            if modified:
+                try:
+                    dt = datetime.fromisoformat(modified.replace("Z", "+00:00"))
+                    vals["modified_at"] = dt.strftime("%Y-%m-%d %H:%M:%S")
+                except (ValueError, TypeError):
+                    _logger.debug("Could not parse modifiedAt %r", modified)
+            if vals:
+                document.write(vals)
+                _logger.info("Document %s synced: %s", doc_id, vals)
+        except Exception:
+            _logger.exception("Failed to sync document %s", doc_id)

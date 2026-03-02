@@ -4,6 +4,7 @@
 import hashlib
 import json
 import logging
+from datetime import datetime
 
 from odoo import fields
 
@@ -12,10 +13,26 @@ from odoo.addons.component.core import Component
 _logger = logging.getLogger(__name__)
 
 
+def _parse_iso_datetime(value):
+    """Convert ISO 8601 datetime string to Odoo-compatible naive format.
+
+    Handles the ``Z`` suffix that ``datetime.fromisoformat`` only supports
+    from Python 3.11+.
+    """
+    if not value:
+        return False
+    try:
+        # Replace Z suffix for Python < 3.11 compatibility
+        dt = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        return dt.strftime("%Y-%m-%d %H:%M:%S")
+    except (ValueError, TypeError):
+        return False
+
+
 class OnshapeDocumentBatchImporter(Component):
     """Batch importer for Onshape documents.
 
-    Lists all documents from the Onshape team and queues
+    Lists all documents from Onshape and queues
     individual record imports via queue_job.
     """
 
@@ -27,12 +44,12 @@ class OnshapeDocumentBatchImporter(Component):
     def run(self, backend, **kwargs):
         adapter = self.component(usage="backend.adapter")
         offset = 0
-        limit = 50
+        limit = 20
         total_queued = 0
 
         while True:
             result = adapter.search_documents(
-                owner_id=backend.team_id,
+                owner_id=backend.onshape_company_id,
                 offset=offset,
                 limit=limit,
             )
@@ -54,7 +71,7 @@ class OnshapeDocumentBatchImporter(Component):
                 if existing:
                     # Update name/timestamps
                     vals = {"name": doc_data.get("name", existing.name)}
-                    modified = doc_data.get("modifiedAt")
+                    modified = _parse_iso_datetime(doc_data.get("modifiedAt"))
                     if modified:
                         vals["modified_at"] = modified
                     existing.write(vals)
@@ -87,14 +104,22 @@ class OnshapeDocumentBatchImporter(Component):
             "onshape_document_id": doc_data["id"],
             "onshape_default_workspace_id": workspace_id,
             "owner": owner_data.get("name", ""),
-            "created_at": doc_data.get("createdAt"),
-            "modified_at": doc_data.get("modifiedAt"),
+            "created_at": _parse_iso_datetime(doc_data.get("createdAt")),
+            "modified_at": _parse_iso_datetime(doc_data.get("modifiedAt")),
         }
         document = self.env["onshape.document"].create(vals)
 
         # Import elements
         if workspace_id:
             self._import_elements(backend, document, workspace_id)
+
+        # Auto-register webhook for per-document mode (Free/EDU plans)
+        if (
+            not backend.onshape_company_id
+            and backend.state == "active"
+            and backend.webhook_secret
+        ):
+            backend._register_document_webhook(document)
 
         return document
 

@@ -81,12 +81,13 @@ Onshape.
 5. Copy the **Access key** and **Secret key** — the secret is shown only
    once.
 
-**Finding your Team / Company ID:**
+**Finding your Company ID (Enterprise/Professional only):**
 
 1. Go to https://cad.onshape.com
-2. Click **Teams** in the left sidebar
-3. Click on your team — the URL will show the team ID:
-   ``https://cad.onshape.com/team/<TEAM_ID>``
+2. Click **Company** in the left sidebar
+3. The URL will show the company ID:
+   ``https://cad.onshape.com/company/<COMPANY_ID>``
+4. Leave this field empty on Education/Student/Free plans.
 
 **OAuth2 App Store (recommended for production):**
 
@@ -122,7 +123,8 @@ Odoo Backend Configuration
 
    - **Base URL**: ``https://cad.onshape.com`` (default)
    - **Authentication Mode**: HMAC or OAuth2
-   - **Team / Company ID**: From step above
+   - **Onshape Company ID**: From step above (leave empty for EDU/Free
+     plans)
 
 4. For **HMAC** mode, enter the **API Access Key** and **API Secret
    Key**.
@@ -165,27 +167,35 @@ Webhooks (Real-Time Sync)
 Webhooks push Onshape changes to Odoo in real time instead of waiting
 for the next scheduled sync.
 
-1. In Odoo, note your backend ID (visible in the URL when viewing the
-   backend form, e.g. ``/web#id=1&model=onshape.backend``).
+1. Click **Generate Secret** on the backend form to create a webhook
+   secret.
 
-2. Your webhook URL is:
-   ``https://your-odoo-instance.com/connector_onshape/webhook/<backend_id>``
+2. Click **Register Webhook** to register webhooks with Onshape.
 
-3. Generate a webhook secret (any random string, e.g.
-   ``openssl rand -hex 32``) and enter it in the **Webhook Secret**
-   field on the backend form.
+   - **Enterprise/Professional** (Company ID set): registers a single
+     company-wide webhook.
+   - **Education/Free** (no Company ID): registers one webhook per
+     document. New documents imported later get webhooks automatically.
 
-4. Register the webhook in Onshape. You can do this via the Onshape API
-   or by clicking the **Register Webhook** button (if available) on the
-   backend. The module listens for these events:
+3. The **Webhook URL** field (read-only) shows the endpoint URL. Ensure
+   your Odoo instance is reachable from the internet at that address
+   (Onshape must be able to POST to it).
 
-   - ``onshape.model.lifecycle.metadata`` — re-imports part metadata
-   - ``onshape.workflow.transition`` — updates lifecycle state
-   - ``onshape.revision.created`` — marks parts as released
-   - ``onshape.model.lifecycle.createversion`` — logs version creation
+Clicking **Register Webhook** again cleans up stale duplicates and only
+registers for documents that are missing a webhook. The webhook ID is
+tracked on each document record.
 
-5. Ensure your Odoo instance is reachable from the internet (Onshape
-   must be able to POST to the webhook URL).
+Events handled:
+
+- ``onshape.model.lifecycle.metadata`` — re-imports part metadata
+- ``onshape.model.lifecycle.createversion`` — syncs document on version
+  creation
+- ``onshape.workflow.transition`` — updates lifecycle state (Enterprise
+  only)
+- ``onshape.revision.created`` — marks parts as released (Enterprise
+  only)
+- ``webhook.unregister`` — clears tracked webhook ID when Onshape
+  expires it
 
 Scheduled Sync (Cron Jobs)
 --------------------------
@@ -206,8 +216,8 @@ Import Documents
 ----------------
 
 Click **Import Documents** on the backend form to fetch all Onshape
-documents from your team. Documents are created with their elements
-(part studios, assemblies, drawings).
+documents from your Onshape account. Documents are created with their
+elements (part studios, assemblies, drawings).
 
 Import Products
 ---------------

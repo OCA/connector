@@ -17,6 +17,7 @@ class TestWorkOn(TransactionComponentRegistryCase):
     def setUp(self):
         super().setUp()
         self._setup_registry(self)
+        self.collection = self.env[self.collection._name]
 
     def tearDown(self):
         self._teardown_registry(self)

@@ -1,3 +1,7 @@
+.. image:: https://odoo-community.org/readme-banner-image
+   :target: https://odoo-community.org/get-involved?utm_source=readme
+   :alt: Odoo Community Association
+
 ==========
 Components
 ==========
@@ -13,17 +17,17 @@ Components
 .. |badge1| image:: https://img.shields.io/badge/maturity-Production%2FStable-green.png
     :target: https://odoo-community.org/page/development-status
     :alt: Production/Stable
-.. |badge2| image:: https://img.shields.io/badge/licence-LGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/license-LGPL--3-blue.png
     :target: http://www.gnu.org/licenses/lgpl-3.0-standalone.html
     :alt: License: LGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fconnector-lightgray.png?logo=github
-    :target: https://github.com/OCA/connector/tree/18.0/component
+    :target: https://github.com/OCA/connector/tree/19.0/component
     :alt: OCA/connector
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/connector-18-0/connector-18-0-component
+    :target: https://translation.odoo-community.org/projects/connector-19-0/connector-19-0-component
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/connector&target_branch=18.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/connector&target_branch=19.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
@@ -75,7 +79,7 @@ component level):
 In order for tests using components to work, you will need to use the
 base class provided by \`odoo.addons.component.tests.common\`:
 
--  TransactionComponentCase
+- TransactionComponentCase
 
 There are also some specific base classes for testing the component
 registry, using the ComponentRegistryCase as a base class. See the
@@ -87,27 +91,27 @@ Changelog
 16.0.1.0.0 (2022-10-04)
 -----------------------
 
--  [MIGRATION] from 15.0
+- [MIGRATION] from 15.0
 
 15.0.1.0.0 (2021-11-25)
 -----------------------
 
--  [MIGRATION] from 14.0
+- [MIGRATION] from 14.0
 
 14.0.1.0.0 (2020-10-22)
 -----------------------
 
--  [MIGRATION] from 13.0
+- [MIGRATION] from 13.0
 
 13.0.1.0.0 (2019-10-23)
 -----------------------
 
--  [MIGRATION] from 12.0
+- [MIGRATION] from 12.0
 
 12.0.1.0.0 (2018-10-02)
 -----------------------
 
--  [MIGRATION] from 11.0 branched at rev. 324e006
+- [MIGRATION] from 11.0 branched at rev. 324e006
 
 Bug Tracker
 ===========
@@ -115,7 +119,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/connector/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/connector/issues/new?body=module:%20component%0Aversion:%2018.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/connector/issues/new?body=module:%20component%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -130,16 +134,10 @@ Authors
 Contributors
 ------------
 
--  Guewen Baconnier <guewen.baconnier@camptocamp.com>
--  Laurent Mignon <laurent.mignon@acsone.eu>
--  Simone Orsi <simone.orsi@camptocamp.com>
--  Thien Vo <thienvh@trobz.com>
-
-Other credits
--------------
-
-The migration of this module from 17.0 to 18.0 was financially supported
-by Camptocamp.
+- Guewen Baconnier <guewen.baconnier@camptocamp.com>
+- Laurent Mignon <laurent.mignon@acsone.eu>
+- Simone Orsi <simone.orsi@camptocamp.com>
+- Thien Vo <thienvh@trobz.com>
 
 Maintainers
 -----------
@@ -162,6 +160,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-guewen| 
 
-This module is part of the `OCA/connector <https://github.com/OCA/connector/tree/18.0/component>`_ project on GitHub.
+This module is part of the `OCA/connector <https://github.com/OCA/connector/tree/19.0/component>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

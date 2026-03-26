@@ -46,6 +46,9 @@ class ComponentMixin:
 
     # pylint: disable=W8106
     def setUp(self):
+        self.setUpComponentRegistryReady()
+
+    def setUpComponentRegistryReady(self):
         # should be ready only during tests, never during installation
         # of addons
         self._components_registry.ready = True

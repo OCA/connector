@@ -110,10 +110,7 @@ class TestComponent(TransactionComponentRegistryCase):
 
     def test_component_get_by_name_wrong_model(self):
         """Use component_by_name with a model not in _apply_on"""
-        msg = (
-            "Component with name 'component2' can't be used "
-            "for model 'res.partner'.*"
-        )
+        msg = "Component with name 'component2' can't be used for model 'res.partner'.*"
         with self.get_base() as base:
             with self.assertRaisesRegex(NoComponentError, msg):
                 # we ask for the model 'component2' but we are working

@@ -699,6 +699,7 @@ class AbstractComponent(metaclass=MetaComponent):
     def __init__(self, work_context):
         super().__init__()
         self.work = work_context
+        self.env = work_context.env
 
     @classmethod
     def _component_match(cls, work, usage=None, model_name=None, **kw):
@@ -725,11 +726,6 @@ class AbstractComponent(metaclass=MetaComponent):
     def collection(self):
         """Collection we are working with"""
         return self.work.collection
-
-    @property
-    def env(self):
-        """Current Odoo environment, the one of the collection record"""
-        return self.work.env
 
     @property
     def model(self):

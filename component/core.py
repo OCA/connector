@@ -696,10 +696,21 @@ class AbstractComponent(metaclass=MetaComponent):
     #: Component purpose ('import.mapper', ...).
     _usage = None
 
+    _env = None
+
     def __init__(self, work_context):
         super().__init__()
         self.work = work_context
         self.env = work_context.env
+
+    @property
+    def env(self):
+        """Return the current Odoo env"""
+        return self._env
+
+    @env.setter
+    def env(self, value):
+        self._env = value
 
     @classmethod
     def _component_match(cls, work, usage=None, model_name=None, **kw):

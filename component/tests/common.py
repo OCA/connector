@@ -46,10 +46,6 @@ class ComponentMixin:
                     )
                 )
 
-    # pylint: disable=W8106
-    def setUp(self):
-        self.setUpComponentRegistryReady()
-
     def setUpComponentRegistryReady(self):
         # should be ready only during tests, never during installation
         # of addons
@@ -73,6 +69,10 @@ class TransactionComponentCase(common.TransactionCase, ComponentMixin):
     def setUpClass(cls):
         super().setUpClass()
         cls.setUpComponent()
+
+    def setUp(self):
+        super().setUp()
+        self.setUpComponentRegistryReady()
 
 
 class ComponentRegistryCase:

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-05 16:56+0000\n"
-"PO-Revision-Date: 2026-01-22 19:50+0000\n"
+"PO-Revision-Date: 2026-06-21 17:32+0000\n"
 "Last-Translator: Matjaz Mozetic <matjaz@luxim.si>\n"
 "Language-Team: Slovenian (https://www.transifex.com/oca/teams/23907/sl/)\n"
 "Language: sl\n"
@@ -53,12 +53,12 @@ msgstr "Zadnjič posodobljeno"
 #. module: test_component
 #: model:ir.model.fields,field_description:test_component.field_test_component_collection__name
 msgid "Name"
-msgstr ""
+msgstr "Naziv"
 
 #. module: test_component
 #: model:ir.model,name:test_component.model_test_component_collection
 msgid "Test Component Collection"
-msgstr ""
+msgstr "Testna zbirka komponent"
 
 #~ msgid "Last Modified on"
 #~ msgstr "Zadnjič spremenjeno"

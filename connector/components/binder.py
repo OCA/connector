@@ -37,6 +37,19 @@ class Binder(AbstractComponent):
     _odoo_field = "odoo_id"  # override in sub-classes
     _sync_date_field = "sync_date"  # override in sub-classes
 
+    def _is_empty_id(self, value):
+        """Return ``True`` if ``value`` is an empty identifier
+
+        ``None``, ``False``, ``True`` and ``""`` mean "no ID", but ``0`` is a
+        valid one.
+
+        :param value: identifier to check, e.g. an external ID
+        :return: True if the identifier is empty
+        :rtype: bool
+        """
+        # ``False == 0`` and ``True == 1`` both evaluate to ``True``
+        return value is None or isinstance(value, bool) or value == ""
+
     def to_internal(self, external_id, unwrap=False):
         """Give the Odoo recordset for an external ID
 
@@ -49,21 +62,21 @@ class Binder(AbstractComponent):
         :rtype: recordset
         """
         context = self.env.context
-        bindings = self.model.with_context(active_test=False).search(
-            [
-                (self._external_field, "=", external_id),
-                (self._backend_field, "=", self.backend_record.id),
-            ]
-        )
-        if not bindings:
-            if unwrap:
-                return self.model.browse()[self._odoo_field]
-            return self.model.browse()
-        bindings.ensure_one()
+        bindings = self.model
+        # Searching an empty external ID would match every binding of the
+        # backend which is not bound yet.
+        if not self._is_empty_id(external_id):
+            bindings = self.model.with_context(active_test=False).search(
+                [
+                    (self._external_field, "=", external_id),
+                    (self._backend_field, "=", self.backend_record.id),
+                ]
+            )
+        if bindings:
+            bindings.ensure_one()
         if unwrap:
             bindings = bindings[self._odoo_field]
-        bindings = bindings.with_context(**context)
-        return bindings
+        return bindings.with_context(**context)
 
     def to_external(self, binding, wrap=False):
         """Give the external ID for an Odoo binding ID
@@ -98,10 +111,10 @@ class Binder(AbstractComponent):
         :param binding: Odoo record to bind
         :type binding: int
         """
-        # Prevent False, None, or "", but not 0
-        assert (external_id or external_id == 0) and binding, (
-            "external_id or binding missing, " f"got: {external_id}, {binding}"
-        )
+        # Prevent None, False, True or "", but not 0
+        assert (
+            not self._is_empty_id(external_id) and binding
+        ), f"external_id or binding missing, got: {external_id}, {binding}"
         # avoid to trigger the export when we modify the `external_id`
         now_fmt = fields.Datetime.now()
         if isinstance(binding, models.BaseModel):

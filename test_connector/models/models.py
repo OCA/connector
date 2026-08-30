@@ -27,7 +27,7 @@ class ConnectorTestBinding(models.Model):
         required=True,
         ondelete="restrict",
     )
-    external_id = fields.Integer(string="ID on External")
+    external_id = fields.Char(string="ID on External")
     odoo_id = fields.Many2one(
         comodel_name="connector.test.record",
         string="Test Record",

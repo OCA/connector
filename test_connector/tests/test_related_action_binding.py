@@ -19,7 +19,7 @@ class TestRelatedActionBinding(TransactionComponentCase):
     def test_unwrap_binding(self):
         """Call the unwrap binding related action"""
         binding = self.env["connector.test.binding"].create(
-            {"backend_id": self.backend_record.id, "external_id": 99}
+            {"backend_id": self.backend_record.id, "external_id": "99"}
         )
 
         job = binding.with_delay().job_related_action_unwrap()
@@ -57,7 +57,7 @@ class TestRelatedActionBinding(TransactionComponentCase):
     def test_unwrap_binding_not_exists(self):
         """Call the related action on the model on non-existing record"""
         binding = self.env["connector.test.binding"].create(
-            {"backend_id": self.backend_record.id, "external_id": 99}
+            {"backend_id": self.backend_record.id, "external_id": "99"}
         )
 
         job = binding.with_delay().job_related_action_unwrap()

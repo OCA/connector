@@ -78,6 +78,28 @@ class TestDefaultBinder(TransactionComponentCase):
                     self.assertFalse(binder.to_internal(external_id))
                     self.assertFalse(binder.to_internal(external_id, unwrap=True))
 
+    def test_to_internal_returned_context(self):
+        """The returned recordset keeps the environment context"""
+        # The search is done with ``active_test=False``: this should not leak in
+        # the returned recordset, whether a binding is found or not.
+        backend = self.backend_record.with_context(test_key="42")
+        with backend.work_on("connector.test.binding") as work:
+            binder = work.component(usage="binder")
+            expected_context = binder.env.context
+            self.assertEqual(expected_context.get("test_key"), "42")
+
+            test_record = self.env["connector.test.record"].create({})
+            test_binding = self.env["connector.test.binding"].create(
+                {"backend_id": self.backend_record.id, "odoo_id": test_record.id}
+            )
+            binder.bind("99", test_binding)
+
+            # Bound external ID, unbound one and empty one
+            for external_id in ("99", "1234", False):
+                for unwrap in (False, True):
+                    record = binder.to_internal(external_id, unwrap=unwrap)
+                    self.assertEqual(record.env.context, expected_context)
+
     def test_bind_empty_external_id(self):
         """Binding an empty external ID raise an error"""
         with self.backend_record.work_on("connector.test.binding") as work:

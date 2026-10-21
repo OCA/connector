@@ -1,0 +1,1 @@
+odoo-addon-component @ git+https://github.com/ForgeFlow/connector@20.0-mig-component#subdirectory=component

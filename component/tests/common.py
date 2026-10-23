@@ -219,9 +219,7 @@ class TransactionComponentRegistryCase(common.TransactionCase, ComponentRegistry
     # pylint: disable=W8106
     @classmethod
     def setUpClass(cls):
-        # resolve an inheritance issue (common.TransactionCase does not use
-        # super)
-        common.TransactionCase.setUpClass()
+        super().setUpClass()
         cls.env = cls.env(
             context=dict(
                 cls.env.context,
@@ -236,4 +234,4 @@ class TransactionComponentRegistryCase(common.TransactionCase, ComponentRegistry
 
     @classmethod
     def tearDownClass(cls):
-        common.TransactionCase.tearDownClass()
+        super().tearDownClass()

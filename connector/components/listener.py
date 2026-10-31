@@ -22,7 +22,7 @@ class ConnectorListener(AbstractComponent):
     """Base Backend Adapter for the connectors"""
 
     _name = "base.connector.listener"
-    _inherit = ["base.connector", "base.event.listener"]
+    _inherit = ["base.connector", "base.event.listener"]  # noqa: RUF012
 
     def no_connector_export(self, record):
         """Return if the 'connector_no_export' has been set in context

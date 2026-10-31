@@ -45,7 +45,7 @@ class ConnectorBackend(models.AbstractModel):
     """
 
     _name = "connector.backend"
-    _inherit = ["collection.base"]
+    _inherit = ["collection.base"]  # noqa: RUF012
     _description = "Connector Backend"
 
 

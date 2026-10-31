@@ -562,8 +562,10 @@ class Mapper(AbstractComponent):
     _inherit = "base.connector"
     _usage = "mapper"
 
-    direct = []  # direct conversion of a field to another (from_attr, to_attr)
-    children = []  # conversion of sub-records (from_attr, to_attr, model)
+    # direct conversion of a field to another (from_attr, to_attr)
+    direct = []  # noqa: RUF012
+    # conversion of sub-records (from_attr, to_attr, model)
+    children = []  # noqa: RUF012
 
     _map_methods = None
 
@@ -727,7 +729,7 @@ class Mapper(AbstractComponent):
                 fieldname = self._direct_source_field_name(from_attr)
                 changed_by.add(fieldname)
 
-        for _method_name, method_def in self._map_methods.items():
+        for method_def in self._map_methods.values():
             changed_by |= method_def.changed_by
         return changed_by
 

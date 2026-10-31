@@ -220,7 +220,7 @@ class TestMapper(TransactionComponentRegistryCase):
 
         class ThirdMapper(Component):
             _name = "third.mapper"
-            _inherit = ["fry.mapper", "farnsworth.mapper"]
+            _inherit = ["fry.mapper", "farnsworth.mapper"]  # noqa: RUF012
             _apply_on = "res.users"
 
             @changed_by("email", "street")
@@ -257,7 +257,7 @@ class TestMapper(TransactionComponentRegistryCase):
             _inherit = "base.import.mapper"
             _apply_on = "res.users"
 
-            direct = [("name", "out_name")]
+            direct = [("name", "out_name")]  # noqa: RUF012
 
             @mapping
             def street(self, record):
@@ -281,7 +281,7 @@ class TestMapper(TransactionComponentRegistryCase):
             _inherit = "base.import.mapper"
             _apply_on = "res.users"
 
-            direct = [("name", "out_name")]
+            direct = [("name", "out_name")]  # noqa: RUF012
 
             @mapping
             def street(self, record):
@@ -310,7 +310,7 @@ class TestMapper(TransactionComponentRegistryCase):
             _name = "my.mapper"
             _inherit = "base.import.mapper"
 
-            direct = [("name", "out_name")]
+            direct = [("name", "out_name")]  # noqa: RUF012
 
             @mapping
             def street(self, record):
@@ -351,7 +351,7 @@ class TestMapper(TransactionComponentRegistryCase):
             _name = "my.mapper"
             _inherit = "base.import.mapper"
 
-            direct = [("name", "out_name")]
+            direct = [("name", "out_name")]  # noqa: RUF012
 
             def finalize(self, record, values):
                 result = super().finalize(record, values)
@@ -376,7 +376,7 @@ class TestMapper(TransactionComponentRegistryCase):
             _name = "my.mapper"
             _inherit = "base.import.mapper"
 
-            direct = [("name", "out_name"), ("street", "out_street")]
+            direct = [("name", "out_name"), ("street", "out_street")]  # noqa: RUF012
 
             @changed_by("country")
             @mapping
@@ -409,7 +409,7 @@ class TestMapper(TransactionComponentRegistryCase):
             _name = "my.mapper"
             _inherit = "base.import.mapper"
 
-            direct = [(do_nothing("name"), "out_name")]
+            direct = [(do_nothing("name"), "out_name")]  # noqa: RUF012
 
         self._build_components(MyMapper)
 
@@ -449,7 +449,7 @@ class TestMapper(TransactionComponentRegistryCase):
             _name = "my.mapper"
             _inherit = "base.import.mapper"
 
-            direct = [(convert("name", int), "out_name")]
+            direct = [(convert("name", int), "out_name")]  # noqa: RUF012
 
         self._build_components(MyMapper)
 
@@ -468,7 +468,7 @@ class TestMapper(TransactionComponentRegistryCase):
             _name = "my.mapper"
             _inherit = "base.import.mapper"
 
-            direct = [(none("in_f"), "out_f"), (none("in_t"), "out_t")]
+            direct = [(none("in_f"), "out_f"), (none("in_t"), "out_t")]  # noqa: RUF012
 
         self._build_components(MyMapper)
 
@@ -487,7 +487,7 @@ class TestMapper(TransactionComponentRegistryCase):
             _name = "my.mapper"
             _inherit = "base.import.mapper"
 
-            direct = [
+            direct = [  # noqa: RUF012
                 (none(convert("in_f", bool)), "out_f"),
                 (none(convert("in_t", bool)), "out_t"),
             ]
@@ -511,7 +511,7 @@ class TestMapper(TransactionComponentRegistryCase):
             _name = "my.mapper"
             _inherit = "base.import.mapper"
 
-            direct = [
+            direct = [  # noqa: RUF012
                 ("field", "field2"),
                 ("no_field", "no_field2"),
                 (convert("name", int), "out_name"),
@@ -536,7 +536,7 @@ class TestMapper(TransactionComponentRegistryCase):
             _name = "my.mapper"
             _inherit = "base.export.mapper"
 
-            direct = [
+            direct = [  # noqa: RUF012
                 ("field", "field2"),
                 ("no_field", "no_field2"),
                 (convert("name", int), "out_name"),
@@ -622,7 +622,7 @@ class TestMapper(TransactionComponentRegistryCase):
             _name = "my.mapper"
             _inherit = "base.export.mapper"
 
-            direct = [
+            direct = [  # noqa: RUF012
                 ("street", "out_street"),
                 (none("in_t"), "out_t"),
                 (none(convert("in_f", bool)), "out_f"),
@@ -676,7 +676,7 @@ class TestMapperRecordsets(TransactionComponentRegistryCase):
             _name = "my.mapper"
             _inherit = "base.import.mapper"
 
-            direct = [(follow_m2o_relations("parent_id.name"), "parent_name")]
+            direct = [(follow_m2o_relations("parent_id.name"), "parent_name")]  # noqa: RUF012
 
         self._build_components(MyMapper)
         res_partner_2 = self.env["res.partner"].create({"name": "Deco Addict"})
@@ -726,7 +726,7 @@ class TestMapperBinding(TransactionComponentRegistryCase):
             _inherit = "base.import.mapper"
             _apply_on = "res.partner"
 
-            direct = [(m2o_to_external("country_id"), "country")]
+            direct = [(m2o_to_external("country_id"), "country")]  # noqa: RUF012
 
         self._build_components(MyMapper)
 
@@ -749,7 +749,7 @@ class TestMapperBinding(TransactionComponentRegistryCase):
             _inherit = "base.import.mapper"
             _apply_on = "res.partner"
 
-            direct = [(external_to_m2o("country"), "country_id")]
+            direct = [(external_to_m2o("country"), "country_id")]  # noqa: RUF012
 
         self._build_components(MyMapper)
 
@@ -771,7 +771,7 @@ class TestMapperBinding(TransactionComponentRegistryCase):
             _inherit = "base.import.mapper"
             _apply_on = "res.currency.rate"
 
-            direct = [("name", "name")]
+            direct = [("name", "name")]  # noqa: RUF012
 
             @mapping
             def price(self, record):
@@ -787,9 +787,9 @@ class TestMapperBinding(TransactionComponentRegistryCase):
             _inherit = "base.import.mapper"
             _apply_on = "res.currency"
 
-            direct = [("name", "name")]
+            direct = [("name", "name")]  # noqa: RUF012
 
-            children = [("lines", "line_ids", "res.currency.rate")]
+            children = [("lines", "line_ids", "res.currency.rate")]  # noqa: RUF012
 
         self._build_components(LineMapper, MyMapper)
 
@@ -829,7 +829,7 @@ class TestMapperBinding(TransactionComponentRegistryCase):
             _inherit = "base.import.mapper"
             _apply_on = "res.currency.rate"
 
-            direct = [("name", "name")]
+            direct = [("name", "name")]  # noqa: RUF012
 
             @mapping
             def price(self, record):
@@ -853,9 +853,9 @@ class TestMapperBinding(TransactionComponentRegistryCase):
             _inherit = "base.import.mapper"
             _apply_on = "res.currency"
 
-            direct = [("name", "name")]
+            direct = [("name", "name")]  # noqa: RUF012
 
-            children = [("lines", "line_ids", "res.currency.rate")]
+            children = [("lines", "line_ids", "res.currency.rate")]  # noqa: RUF012
 
         self._build_components(LineMapper, LineImportMapChild, MyMapper)
 
@@ -912,9 +912,9 @@ class TestMapperBinding(TransactionComponentRegistryCase):
             _inherit = "base.import.mapper"
             _apply_on = "res.currency"
 
-            direct = [("name", "name")]
+            direct = [("name", "name")]  # noqa: RUF012
 
-            children = [("lines", "line_ids", "res.currency.rate")]
+            children = [("lines", "line_ids", "res.currency.rate")]  # noqa: RUF012
 
         self._build_components(ObjectMapper, SaleLineImportMapChild, LineMapper)
 

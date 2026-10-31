@@ -23,7 +23,7 @@ class RecordLocker(Component):
     """
 
     _name = "base.record.locker"
-    _inherit = ["base.connector"]
+    _inherit = ["base.connector"]  # noqa: RUF012
     _usage = "record.locker"
 
     def lock(self, records, seconds=None, ignore_retry=True):

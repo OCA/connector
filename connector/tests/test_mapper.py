@@ -605,7 +605,7 @@ class TestMapper(TransactionComponentRegistryCase):
     def test_map_options(self):
         """Test MapOptions"""
         options = MapOptions({"xyz": "abc"}, k=1)
-        options.l = 2  # noqa: E741
+        options.l = 2
         self.assertEqual(options["xyz"], "abc")
         self.assertEqual(options["k"], 1)
         self.assertEqual(options["l"], 2)

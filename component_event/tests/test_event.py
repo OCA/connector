@@ -6,10 +6,7 @@ from unittest import mock
 from odoo.tests.common import BaseCase, tagged
 
 from odoo.addons.component.core import Component
-from odoo.addons.component.tests.common import (
-    ComponentRegistryCase,
-    TransactionComponentRegistryCase,
-)
+from odoo.addons.component.tests.common import TransactionComponentRegistryCase
 from odoo.addons.component_event.components.event import skip_if
 from odoo.addons.component_event.core import EventWorkContext
 
@@ -138,7 +135,7 @@ class TestEventWorkContext(BaseCase):
         self.assertEqual(self.components_registry, work2.components_registry)
 
 
-class TestEvent(ComponentRegistryCase):
+class TestEvent(TransactionComponentRegistryCase):
     """Test Events Components"""
 
     def setUp(self):
@@ -154,6 +151,10 @@ class TestEvent(ComponentRegistryCase):
             model_name="res.users", env=env, components_registry=self.comp_registry
         )
         self.collecter = self.comp_registry["base.event.collecter"](self.work)
+
+    def tearDown(self):
+        self._teardown_registry(self)
+        super().tearDown()
 
     def test_event(self):
         class MyEventListener(Component):
@@ -294,7 +295,7 @@ class TestEvent(ComponentRegistryCase):
         # events even if we built a new one: it means the cache works
         collection = mock.MagicMock(name="base.collection")
         collection._name = "base.collection"
-        collection.env = mock.MagicMock()
+        collection.env = mock.MagicMock(context={})
         work = EventWorkContext(
             model_name="res.users",
             collection=collection,

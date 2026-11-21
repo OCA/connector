@@ -145,6 +145,7 @@ Contributors
 - Eric Antones at NuoBiT Solutions S.L.
 - Asier Neira at Factor Libre S.L.
 - Nguyen Minh Chien at Trobz.
+- Mohamed Triki at QoQa Services SA
 
 Other credits
 -------------
